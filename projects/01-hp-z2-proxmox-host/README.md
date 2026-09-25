@@ -10,14 +10,15 @@ Move my lab onto a dedicated machine that can run multiple isolated systems whil
 
 | Component | Recorded detail |
 | --- | --- |
-| Host | HP Z2 workstation |
-| Processor | Intel Core i7-9700 |
+| System model | HP Z2 SFF G4 Workstation |
+| Processor | Intel Core i7-8700 @ 3.20 GHz; 6 cores, 12 logical processors |
+| Installed RAM | 24 GB |
 | Hypervisor | Proxmox VE 9.2.2, installed on the host |
 | Proxmox node | `pve01` |
 | Network bridge | `vmbr0` |
 | Storage shown in Proxmox | `local` and `local-lvm` |
 
-The installed RAM capacity, host disk layout, firmware settings, and installation media are not recorded here yet; I will add them when I check them on the host.
+The model, processor, and RAM above were recorded in Windows System Information and Task Manager screenshots from before the Proxmox installation. Those screenshots also show a Samsung SSD 860 EVO 500 GB and an HGST HDD of approximately 1 TB. I have not yet checked the disk layout or installed RAM from Proxmox, so the current disk assignments are still to be confirmed. The installation media and Proxmox boot mode have not been recorded.
 
 ## What I set up
 
@@ -42,6 +43,6 @@ The installed RAM capacity, host disk layout, firmware settings, and installatio
 
 ## Next documentation
 
-- Record and verify the Z2's installed RAM, physical disks, and Proxmox disk layout.
+- Confirm the Z2's installed RAM and physical disks from Proxmox, including which disk holds the hypervisor and VM storage.
 - Add the exact installation and recovery steps once I have checked them.
 - Document host updates, backups, and network configuration as I configure them.

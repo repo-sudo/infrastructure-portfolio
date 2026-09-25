@@ -1,6 +1,6 @@
 # Infrastructure portfolio
 
-I am documenting hands-on infrastructure and cloud projects as I build them. Current work covers Proxmox and Linux; Windows Server and Azure projects will be added as they are completed. My focus is networking, security, and automation.
+I am documenting hands-on infrastructure and cloud projects as I build them. Current work covers Proxmox and Linux; Windows Server and Azure projects will be added as they are completed. My focus is networking, security, AI and automation.
 
 ## Projects
 

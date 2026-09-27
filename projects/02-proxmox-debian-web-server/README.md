@@ -1,6 +1,6 @@
 # Debian web server on Proxmox
 
-A Debian virtual machine running Nginx and serving a static HTML portfolio page on the local network. This project covers the first web server build, basic deployment, and the first host firewall checkpoint.
+A Debian virtual machine running Nginx and serving a static HTML portfolio page on the local network. This project covers the first web server build, a repeatable deployment script, and the first host firewall checkpoint.
 
 ## Why I built it
 
@@ -18,6 +18,7 @@ I wanted a dedicated place to host my portfolio and to practise creating a VM, i
 | Web server | Nginx |
 | Site | A single static HTML file in `/var/www/html/index.html` |
 | Administration | SSH from the main PC as `webadmin` |
+| Deployment | PowerShell script from the main PC using `scp` and `ssh` |
 
 ## What I did
 
@@ -29,6 +30,24 @@ I wanted a dedicated place to host my portfolio and to practise creating a VM, i
 6. Reloaded the page in the browser and confirmed that the custom site appeared.
 7. Installed UFW, enabled the firewall, and allowed only the access needed for this stage: SSH and HTTP.
 8. Verified from the main PC that SSH still worked and the website still loaded after the firewall was active.
+9. Created a PowerShell deployment script to copy the local HTML file to `web01`, move it into the Nginx document root, and reload Nginx.
+
+## Deployment workflow
+
+At first, I updated the website manually: copy the file, log in to the server, move it into `/var/www/html`, and reload Nginx. I replaced those manual steps with a small PowerShell script on the main PC.
+
+The workflow is:
+
+| Step | Action |
+| --- | --- |
+| 1 | Edit `index.html` locally on the Windows PC |
+| 2 | Use `scp` to upload it to `/tmp/index.html` on `web01` |
+| 3 | Use SSH to run a remote command on `web01` |
+| 4 | Copy the uploaded file into `/var/www/html/index.html` |
+| 5 | Reload Nginx so the latest site is served |
+| 6 | Verify the page in a browser at `http://192.168.0.70` |
+
+This made the deployment repeatable and reduced copy-and-paste work. The script currently still requires interactive passwords, including a root password through `su`, so it is a first working version rather than a final production-style deployment process.
 
 ## Firewall configuration
 
@@ -49,6 +68,8 @@ I also learned that the Proxmox noVNC console handles clipboard input differentl
 
 While configuring UFW, some administrative commands were not found from the root shell because `/usr/sbin` was not in the current `PATH`. Running the commands with their full path, such as `/usr/sbin/ufw`, allowed the configuration to continue.
 
+PowerShell also blocked the deployment script at first because script execution was restricted. I ran it with a one-time execution policy bypass rather than changing the system policy permanently.
+
 ## How I verified it
 
 - Nginx served its default page after installation.
@@ -56,6 +77,7 @@ While configuring UFW, some administrative commands were not found from the root
 - A browser on the local network displayed the custom portfolio page.
 - UFW reported `Status: active`.
 - SSH and HTTP remained reachable after the firewall was enabled.
+- The PowerShell deployment script uploaded the local HTML file and refreshed the website successfully.
 
 ## What I learned
 
@@ -64,14 +86,15 @@ While configuring UFW, some administrative commands were not found from the root
 - SSH is useful for administration, while file transfer over SSH is a practical way to deploy a small static site.
 - Firewall changes should be verified from another session or client so administration access is not accidentally lost.
 - A working service is not complete just because it runs; access control and testing are part of the build.
+- Even a small script can turn a manual process into a repeatable deployment workflow.
 
 ## AI assistance
 
-I used Codex to help interpret command output, suggest Nginx and UFW checks, explain errors, and draft this documentation. I ran the commands, reviewed the results, and verified the server access myself.
+I used Codex to help interpret command output, suggest Nginx and UFW checks, explain errors, draft the deployment script, and write this documentation. I ran the commands, reviewed the results, and verified the server access myself.
 
 ## Next steps
 
-- Add a clearer deployment process for future changes to the page.
+- Improve the deployment process so it does not require full root access for every update.
 - Decide how the VM's address will be kept stable long term.
 - Add HTTPS when a domain name or local certificate plan is ready.
 - Restrict administrative access further, ideally through VPN or a dedicated management network.

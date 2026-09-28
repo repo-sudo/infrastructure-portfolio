@@ -97,9 +97,16 @@ PowerShell also blocked the deployment script at first because script execution 
 
 I used Codex to help interpret command output, suggest Nginx and UFW checks, explain errors, draft the deployment scripts, add the separate HTML pages, and write this documentation. I ran the commands, reviewed the results, and verified the server access myself.
 
+## Project status
+
+Complete for local LAN hosting.
+
+The VM is running, Nginx is active, the static pages are present in `/var/www/html/`, the host firewall allows only the required access for this stage, and deployment from the Windows PC is automated through SSH keys, PowerShell, and a clickable launcher.
+
+This project is intentionally closed at the local hosting stage. Public DNS, HTTPS, remote access hardening, and publishing the site beyond the LAN will be treated as a separate follow-up project.
+
 ## Next steps
 
+- Start a separate public hosting phase when DNS, HTTPS, and remote access design are ready.
 - Keep the deployment scripts under review as the site grows.
 - Decide how the VM's address will be kept stable long term.
-- Add HTTPS when a domain name or local certificate plan is ready.
-- Restrict administrative access further, ideally through VPN or a dedicated management network.

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="About David Garciarena's infrastructure learning lab and documentation approach.">
+  <title>About | David Garciarena Infrastructure Lab</title>
+  <style>
+    :root {
+      --bg:#f2f5f8; --surface:#fff; --ink:#17283d; --muted:#627286;
+      --line:#d8e0e9; --blue:#2463d3; --blue-dark:#17469c;
+      --pale:#e8f0fc; --green:#198263; --mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+      --sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;color:var(--ink);font:16px/1.65 var(--sans);
+      background-color:var(--bg);
+      background-image:linear-gradient(rgba(31,69,112,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(31,69,112,.035) 1px,transparent 1px);
+      background-size:32px 32px;
+    }
+    a{color:inherit}
+    .wrap{width:min(1100px,calc(100% - 40px));margin:auto}
+    .mono,.eyebrow,.status,.tag,.date,.nav a,.meta{font-family:var(--mono)}
+    header{padding:18px 0;border-bottom:1px solid var(--line);background:rgba(255,255,255,.88)}
+    .nav{display:flex;justify-content:space-between;align-items:center;gap:24px}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:800;letter-spacing:-.03em}
+    .logo{display:grid;place-items:center;width:38px;height:38px;background:var(--blue);color:#fff;font-family:var(--mono);font-weight:800}
+    .brand small{display:block;color:var(--muted);font:10px var(--mono);letter-spacing:.09em;text-transform:uppercase}
+    .links{display:flex;gap:22px;flex-wrap:wrap}
+    .links a{font-size:12px;color:var(--muted);text-decoration:none}
+    .links a:hover{color:var(--blue)}
+    main{padding-top:34px}
+    .hero{display:grid;grid-template-columns:1.4fr .75fr;gap:38px;padding:clamp(28px,6vw,64px);background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 32px rgba(24,48,78,.06)}
+    .eyebrow{margin:0 0 13px;color:var(--blue);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase}
+    h1{max-width:680px;margin:0;font-size:clamp(38px,6vw,66px);line-height:1.03;letter-spacing:-.06em}
+    .hero-copy{max-width:630px;margin:20px 0 26px;color:var(--muted);font-size:17px}
+    .button{display:inline-flex;align-items:center;gap:10px;padding:11px 15px;background:var(--blue);color:#fff;text-decoration:none;font:12px var(--mono);font-weight:700}
+    .button:hover{background:var(--blue-dark)}
+    .snapshot{align-self:center;border:1px solid var(--line);background:#f8fafc}
+    .snapshot-head{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);font:10px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .live{color:var(--green)}
+    .snapshot dl{margin:0;padding:8px 14px}
+    .snapshot dl div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #e8edf2}
+    .snapshot dl div:last-child{border:0}
+    .snapshot dt{color:var(--muted);font:11px var(--mono)}
+    .snapshot dd{margin:0;text-align:right;font:11px var(--mono);font-weight:700}
+    .section{padding-top:58px}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:19px}
+    h2{margin:0;font-size:30px;letter-spacing:-.045em}
+    .intro{max-width:620px;margin:7px 0 0;color:var(--muted);font-size:14px}
+    .count{color:var(--muted);font:11px var(--mono)}
+    .projects{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .card{background:var(--surface);border:1px solid var(--line);padding:21px;transition:border-color .15s,transform .15s}
+    .card:hover{border-color:#9ab5e4;transform:translateY(-2px)}
+    .card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:21px}
+    .project-id{color:var(--blue);font:11px var(--mono);font-weight:700}
+    .tag{padding:4px 7px;border:1px solid var(--line);color:var(--muted);font-size:9px;text-transform:uppercase}
+    .tag.active{border-color:#b8dfd1;background:#eff9f5;color:var(--green)}
+    .card h3{margin:0 0 8px;font-size:18px;letter-spacing:-.025em}
+    .card p{min-height:70px;margin:0;color:var(--muted);font-size:13px}
+    .text-link{display:inline-block;margin-top:16px;color:var(--blue);font:11px var(--mono);font-weight:700;text-decoration:none}
+    .text-link:hover{text-decoration:underline}
+    .posts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .post{display:grid;grid-template-columns:112px 1fr;gap:18px;padding:22px;background:var(--surface);border:1px solid var(--line)}
+    .date{color:var(--muted);font-size:10px;line-height:1.5}
+    .post h3{margin:0 0 7px;font-size:17px;letter-spacing:-.02em}
+    .post p{margin:0;color:var(--muted);font-size:13px}
+    .post .text-link{margin-top:12px}
+    .lessons{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+    .lesson{padding:20px;background:var(--surface);border:1px solid var(--line)}
+    .lesson h3{margin:0 0 9px;font-size:15px;letter-spacing:-.02em}
+    .lesson p{margin:0;color:var(--muted);font-size:13px}
+    .about{display:grid;grid-template-columns:.7fr 1.3fr;gap:25px;padding:25px;background:#e8eef6;border:1px solid #d2ddeb}
+    .about h2{font-size:24px}
+    .about p{margin:0;color:#4f6175;font-size:14px}
+    footer{margin-top:58px;padding:20px 0 30px;border-top:1px solid var(--line);color:var(--muted);font:10px var(--mono)}
+    .footer-inner{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+    @media(max-width:800px){.hero{grid-template-columns:1fr}.projects{grid-template-columns:1fr}.card p{min-height:0}.posts{grid-template-columns:1fr}.lessons{grid-template-columns:1fr}}
+    @media(max-width:560px){.nav{align-items:flex-start;flex-direction:column}.links{gap:15px}.post{grid-template-columns:1fr;gap:7px}.section{padding-top:44px}.wrap{width:min(100% - 28px,1100px)}}
+  
+    .page-hero{padding:42px;background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 32px rgba(24,48,78,.06)}
+    .page-hero h1{font-size:clamp(34px,5vw,56px)}
+    .page-copy{max-width:760px;margin:16px 0 0;color:var(--muted);font-size:16px}
+    .page-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .secondary{background:#eef4ff;color:var(--blue);border:1px solid #c8d8f5}
+    .secondary:hover{background:#dfeaff;color:var(--blue-dark)}
+    .detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .detail-card{background:var(--surface);border:1px solid var(--line);padding:22px}
+    .detail-card h3{margin:0 0 8px;font-size:18px;letter-spacing:-.025em}
+    .detail-card p{margin:0;color:var(--muted);font-size:14px}
+    .detail-card ul{margin:12px 0 0;padding-left:19px;color:var(--muted);font-size:14px}
+    .timeline{display:grid;gap:14px}
+    .timeline .post{grid-template-columns:126px 1fr}
+    .callout{margin-top:14px;padding:18px;background:#eef4ff;border:1px solid #c8d8f5;color:#405873;font-size:14px}
+    .back-link{display:inline-block;margin-bottom:18px;color:var(--blue);font:11px var(--mono);font-weight:700;text-decoration:none}
+    @media(max-width:800px){.detail-grid{grid-template-columns:1fr}.timeline .post{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="index.html"><span class="logo">DG</span><span>David Garciarena<small>Infrastructure lab / personal portfolio</small></span></a>
+      <div class="links">
+        <a href="projects.html">01 / PROJECTS</a>
+        <a href="lab-notes.html">02 / LAB NOTES</a>
+        <a href="about.html" aria-current="page">03 / ABOUT</a>
+        <a href="https://github.com/repo-sudo" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
+      </div>
+    </nav>
+  </header>
+  <main class="wrap">
+
+    <section class="page-hero">
+      <a class="back-link" href="index.html">← BACK HOME</a>
+      <p class="eyebrow">Purpose / 03</p>
+      <h1>About this lab</h1>
+      <p class="page-copy">This is a personal infrastructure learning lab used to practise administration tasks, understand how systems fit together, and keep a clear record of progress.</p>
+    </section>
+
+    <section class="section">
+      <div class="detail-grid">
+        <article class="detail-card">
+          <h3>Why I built it</h3>
+          <p>I am using hands-on projects to build practical infrastructure skills across Linux, Windows Server, networking, virtualisation, automation, and cloud.</p>
+        </article>
+        <article class="detail-card">
+          <h3>How I work</h3>
+          <p>I build the system, test it, break parts of it, fix the issue, then document the commands, decisions, and lessons in GitHub.</p>
+        </article>
+        <article class="detail-card">
+          <h3>Current stack</h3>
+          <ul>
+            <li>HP Z2 SFF host</li>
+            <li>Proxmox VE hypervisor</li>
+            <li>Debian 13 web server VM</li>
+            <li>Nginx static website</li>
+            <li>PowerShell deployment from Windows</li>
+          </ul>
+        </article>
+        <article class="detail-card">
+          <h3>AI assistance</h3>
+          <p>AI is used as a learning assistant for planning, command explanation, troubleshooting, and documentation. The lab work is still manually executed, tested, and verified.</p>
+        </article>
+      </div>
+      <div class="callout">The environment is intentionally small, but the workflow mirrors real infrastructure habits: change control, verification, backups, restore testing, firewall rules, and clear documentation.</div>
+    </section>
+
+  </main>
+  <footer class="wrap"><div class="footer-inner"><span>DAVID GARCIARENA / HOME LAB JOURNAL</span><span>STATIC HTML · BUILT WITH CODEX</span></div></footer>
+</body>
+</html>

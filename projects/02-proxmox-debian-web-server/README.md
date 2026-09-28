@@ -1,6 +1,6 @@
 # Debian web server on Proxmox
 
-A Debian virtual machine running Nginx and serving a static HTML portfolio page on the local network. This project covers the first web server build, a repeatable deployment script, and the first host firewall checkpoint.
+A Debian virtual machine running Nginx and serving a small static HTML portfolio on the local network. This project covers the first web server build, host firewall setup, multi-page static site deployment, SSH key-based authentication, and a repeatable deployment workflow from Windows.
 
 ## Why I built it
 
@@ -16,9 +16,9 @@ I wanted a dedicated place to host my portfolio and to practise creating a VM, i
 | VM resources | 2 vCPUs, 2 GiB RAM, 32 GiB virtual disk |
 | Networking | VirtIO adapter connected to Proxmox bridge `vmbr0`; LAN address `192.168.0.70` |
 | Web server | Nginx |
-| Site | A single static HTML file in `/var/www/html/index.html` |
+| Site | Static HTML pages served from `/var/www/html/` |
 | Administration | SSH from the main PC as `webadmin` |
-| Deployment | PowerShell script from the main PC using `scp` and `ssh` |
+| Deployment | PowerShell script and clickable `.bat` launcher using `scp` over SSH |
 
 ## What I did
 
@@ -30,24 +30,25 @@ I wanted a dedicated place to host my portfolio and to practise creating a VM, i
 6. Reloaded the page in the browser and confirmed that the custom site appeared.
 7. Installed UFW, enabled the firewall, and allowed only the access needed for this stage: SSH and HTTP.
 8. Verified from the main PC that SSH still worked and the website still loaded after the firewall was active.
-9. Created a PowerShell deployment script to copy the local HTML file to `web01`, move it into the Nginx document root, and reload Nginx.
+9. Created a PowerShell deployment script to copy the local HTML files to the Nginx document root.
+10. Split the site into separate static pages for Projects, Lab Notes, and About.
+11. Created an ED25519 SSH key pair and added the public key to `web01` for passwordless deployment.
+12. Created a clickable `.bat` launcher so the deployment can be run from Windows without typing the command each time.
 
 ## Deployment workflow
 
-At first, I updated the website manually: copy the file, log in to the server, move it into `/var/www/html`, and reload Nginx. I replaced those manual steps with a small PowerShell script on the main PC.
+At first, I updated the website manually: copy the file, log in to the server, move it into `/var/www/html`, and reload Nginx. I replaced those manual steps with a PowerShell deployment script from the main PC.
 
-The workflow is:
+The current workflow is:
 
 | Step | Action |
 | --- | --- |
-| 1 | Edit `index.html` locally on the Windows PC |
-| 2 | Use `scp` to upload it to `/tmp/index.html` on `web01` |
-| 3 | Use SSH to run a remote command on `web01` |
-| 4 | Copy the uploaded file into `/var/www/html/index.html` |
-| 5 | Reload Nginx so the latest site is served |
-| 6 | Verify the page in a browser at `http://192.168.0.70` |
+| 1 | Edit the static HTML files locally on the Windows PC |
+| 2 | Run `deploy-web01.ps1` or double-click `deploy-web01.bat` |
+| 3 | Use `scp` over SSH to copy all `.html` files to `/var/www/html/` |
+| 4 | Verify the homepage and subpages in a browser |
 
-This made the deployment repeatable and reduced copy-and-paste work. The script currently still requires interactive passwords, including a root password through `su`, so it is a first working version rather than a final production-style deployment process.
+Because this is a static Nginx site, replacing the HTML files does not require a service reload. SSH key-based authentication is now configured, so deployment runs without entering the `webadmin` password.
 
 ## Firewall configuration
 
@@ -77,7 +78,9 @@ PowerShell also blocked the deployment script at first because script execution 
 - A browser on the local network displayed the custom portfolio page.
 - UFW reported `Status: active`.
 - SSH and HTTP remained reachable after the firewall was enabled.
-- The PowerShell deployment script uploaded the local HTML file and refreshed the website successfully.
+- The PowerShell deployment script uploaded all local HTML pages successfully.
+- SSH key-based login worked from the Windows PC to `web01`.
+- The clickable `.bat` launcher successfully ran the deployment script.
 
 ## What I learned
 
@@ -87,14 +90,16 @@ PowerShell also blocked the deployment script at first because script execution 
 - Firewall changes should be verified from another session or client so administration access is not accidentally lost.
 - A working service is not complete just because it runs; access control and testing are part of the build.
 - Even a small script can turn a manual process into a repeatable deployment workflow.
+- SSH keys improve the deployment workflow by removing repeated password prompts while avoiding password-based automation.
+- A static site can grow from one file into a small multi-page portfolio without needing a framework or database.
 
 ## AI assistance
 
-I used Codex to help interpret command output, suggest Nginx and UFW checks, explain errors, draft the deployment script, and write this documentation. I ran the commands, reviewed the results, and verified the server access myself.
+I used Codex to help interpret command output, suggest Nginx and UFW checks, explain errors, draft the deployment scripts, add the separate HTML pages, and write this documentation. I ran the commands, reviewed the results, and verified the server access myself.
 
 ## Next steps
 
-- Improve the deployment process so it does not require full root access for every update.
+- Keep the deployment scripts under review as the site grows.
 - Decide how the VM's address will be kept stable long term.
 - Add HTTPS when a domain name or local certificate plan is ready.
 - Restrict administrative access further, ideally through VPN or a dedicated management network.

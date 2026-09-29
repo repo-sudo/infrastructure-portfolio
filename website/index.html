@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="David Garciarena's infrastructure portfolio: Proxmox, Debian, Nginx, deployment automation, networking, and documented lab notes.">
+  <meta name="description" content="David Garciarena's infrastructure portfolio: Proxmox, Debian, Nginx, Windows Server migration, deployment automation, and lab notes.">
   <title>David Garciarena | Infrastructure Lab</title>
   <style>
     :root {
@@ -136,12 +136,19 @@
           <p>Set up separate backup storage, scheduled VM backups, and restored the web server into an isolated test VM to verify it still served the site.</p>
           <a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/projects/03-proxmox-backup-and-recovery/README.md" target="_blank" rel="noopener noreferrer">OPEN PROJECT ↗</a>
         </article>
+        <article class="card">
+          <div class="card-top"><span class="project-id">LAB-004</span><span class="tag active">Complete</span></div>
+          <h3>Windows Server migration</h3>
+          <p>Added DC02, fixed replication, DNS, and RPC, transferred all five FSMO roles, joined a client, and demoted DC01 cleanly.</p>
+          <a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/projects/04-windows-server-domain-controller-migration/README.md" target="_blank" rel="noopener noreferrer">OPEN PROJECT ↗</a>
+        </article>
       </div>
     </section>
 
     <section id="journal" class="section">
       <div class="section-head"><div><p class="eyebrow">Field notes / 04</p><h2>Progress log</h2><p class="intro">What I tried, what broke, and what I learned along the way.</p></div><a class="text-link" href="lab-notes.html">VIEW LAB NOTES →</a></div>
       <div class="posts">
+        <article class="post"><time class="date" datetime="2026-09-29">2026-09-29<br>ENTRY 006</time><div><h3>Completing the domain-controller migration</h3><p>I added DC02, resolved replication, DNS, and RPC issues, transferred all five FSMO roles, joined a client to the domain, and demoted DC01 cleanly. DC02 is now the sole domain controller for elephant.test.</p><a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/projects/04-windows-server-domain-controller-migration/README.md" target="_blank" rel="noopener noreferrer">READ PROJECT ↗</a></div></article>
         <article class="post"><time class="date" datetime="2026-09-28">2026-09-28<br>ENTRY 005</time><div><h3>Passwordless deployment from Windows</h3><p>I added an ED25519 SSH key for <code>webadmin</code>, updated the deployment script to copy all HTML pages with <code>scp</code>, and created a clickable Windows launcher for the site update workflow.</p><a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/projects/02-proxmox-debian-web-server/README.md" target="_blank" rel="noopener noreferrer">READ PROJECT ↗</a></div></article>
         <article class="post"><time class="date" datetime="2026-09-27">2026-09-27<br>ENTRY 004</time><div><h3>Securing and automating the web server</h3><p>I enabled UFW on <code>web01</code>, allowed only SSH and HTTP, then created a PowerShell script to upload the site files. The site stayed reachable after the firewall and deployment changes.</p><a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/projects/02-proxmox-debian-web-server/README.md" target="_blank" rel="noopener noreferrer">READ PROJECT ↗</a></div></article>
         <article class="post"><time class="date" datetime="2026-09-25">2026-09-25<br>ENTRY 003</time><div><h3>Testing the backup, not just creating it</h3><p>I backed up the Debian web server, restored it as a separate VM with its network disconnected, and checked that Nginx served the site locally. Codex helped me understand the commands and troubleshoot the setup.</p><a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/projects/03-proxmox-backup-and-recovery/README.md" target="_blank" rel="noopener noreferrer">READ PROJECT ↗</a></div></article>

@@ -149,9 +149,8 @@
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const page = new DOMParser().parseFromString(await response.text(), "text/html");
         const allItems = Array.from(page.querySelectorAll(selector));
-        const latest = newestAtEnd
-          ? allItems.slice(-limit).reverse()
-          : allItems.slice(0, limit);
+        const latest = allItems.slice(-limit);
+        if (newestAtEnd) latest.reverse();
         if (!latest.length) throw new Error("No items found");
 
         target.replaceChildren(...latest.map(item => document.importNode(item, true)));

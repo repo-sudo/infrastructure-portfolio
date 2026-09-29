@@ -1,42 +1,49 @@
 # Windows domain backup and recovery
 
-**Status:** Planned
+**Project:** 005
+
+**Status:** In progress — scheduled backup configured; restore testing pending.
 
 ## Goal
 
-Create and test a dependable backup and recovery process for the Elephant SA Windows domain after its domain-controller migration. The domain is `elephant.test`, and DC02 is currently its sole domain controller.
+Create and verify a dependable backup and recovery process for the Elephant SA Windows domain after its domain-controller migration. The domain is `elephant.test`, and DC02 is its sole domain controller.
 
 ## Lab environment
 
-- HP Z2 SFF running Proxmox VE on `pve01`
-- DC02, a Windows Server virtual machine and the current domain controller
-- `elephant.test`, a fictional-company Active Directory lab
-- Separate 1 TB HGST hard drive reserved for backup and recovery work
+- HP Z2 SFF running Proxmox VE on node `pve01`.
+- The live web and Windows Server VMs are stored on the host SSD.
+- DC02 is the Windows Server virtual machine and domain controller for `elephant.test`.
+- A separate 1 TB HGST hard drive is dedicated to backup storage in Proxmox, mounted as `hdd-backups`.
+- A 100 GB virtual disk for Windows Server Backup is stored on that HDD and attached to DC02.
 
-## Planned work
+## Backup design
 
-1. Record DC02's current configuration and check the health of Active Directory and DNS before taking a backup.
-2. Choose a backup method that covers both the Windows Server system and the directory recovery needs. Document what each backup can and cannot recover.
-3. Configure the backup destination on the dedicated HGST drive and set a practical schedule and retention policy.
-4. Run a backup and confirm that it completed and can be read from the backup storage.
-5. Restore a copy of DC02 into an isolated test environment with its network disconnected from the live lab.
-6. Verify that the restored server boots and that the documented Windows Server, Active Directory, and DNS recovery checks succeed.
-7. Record the recovery steps, evidence, time taken, and any remaining gaps.
+Windows Server Backup runs inside DC02. The scheduled job is configured as a **Full Server** backup with **VSS Full Backup**, including bare-metal recovery, system state, and the server volumes. It writes to the attached 100 GB virtual backup disk and runs daily at **03:00**.
 
-## Safety and scope
+Proxmox-level VM backup files are also stored on the same HDD. The guest-level and Proxmox-level backups provide different recovery options, but they share the same physical disk.
 
-DC02 is the only domain controller for `elephant.test`. Any restore test must remain isolated from the live network to avoid introducing a duplicate domain controller. This project will document the supported recovery process used for the selected Windows Server version before performing the test.
+## Work completed
 
-The separate backup disk protects against failure of the host's primary storage, but it remains in the same physical host. This project does not claim protection against loss of the whole host or backup disk.
+1. Added the 100 GB virtual backup disk from Proxmox storage `hdd-backups` to DC02. Windows Server Backup reports a usable capacity of 99.86 GB.
+2. Created the daily Full Server backup schedule. The first scheduled run is shown as 30 September 2026 at 03:00.
+3. Ran a manual backup using the scheduled settings on 29 September 2026. Windows Server Backup reported **Successful** at 17:48.
+4. The backup transferred **16.08 GB**. The listed EFI system partition, C: volume, system state, and bare-metal recovery items all completed.
+5. The Windows Server Backup dashboard shows one copy on the destination, using 16.08 GB of 99.86 GB.
 
-## Current status
+## Protection boundary
 
-The domain-controller migration is complete, and DC02 holds the domain role. This backup project has only been created: no Windows domain backup or restore test has been recorded yet.
+The live VMs are on the SSD and the backup destination is on a separate HDD, so the backup should remain available if the SSD fails. The same HDD also holds Proxmox backup files, and both drives are inside the Z2. This setup does not protect against failure or loss of the backup HDD or the whole host.
 
-## Completion evidence
+## Remaining validation
 
-- Backup job or command and successful completion evidence.
-- Backup files visible on the dedicated backup storage.
-- Isolated restore test with the network disconnected.
-- Successful boot and recorded Active Directory and DNS validation.
-- Recovery notes that another person could follow.
+1. Check that the first automatic run on 30 September completes successfully.
+2. Perform a controlled restore test in an isolated environment, with the recovered domain controller disconnected from the live network.
+3. Record the restore procedure, results, and evidence before marking the project complete.
+
+## Safety
+
+DC02 is currently the only domain controller for `elephant.test`. Any recovered copy must stay disconnected from the live network to avoid introducing a duplicate domain controller.
+
+## AI assistance
+
+I used Codex to discuss backup options, follow the Windows Server Backup GUI workflow, and draft these notes. I performed the configuration and ran the backup in my own lab.

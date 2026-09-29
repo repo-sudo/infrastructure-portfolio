@@ -1,45 +1,35 @@
 # Windows Server domain controller migration
 
-**Status:** The FSMO role transfer is complete. Post-migration DNS and replication validation remains open.
+**Status:** Complete
 
 ## Overview
 
-I moved the lab's domain-controller workload from a VMware-based Windows Server VM to a replacement Windows Server VM on Proxmox. The goal was to introduce the new controller into the existing lab domain, transfer the operations roles, and check directory, DNS, and replication health afterward.
+I migrated the lab's domain-controller workload from a VMware-based Windows Server VM, DC01, to DC02 running on Proxmox. The domain is `elephant.test`.
 
-## Work completed
+The goal was to add the replacement controller, restore healthy replication, transfer the operations roles, verify client access, and retire the original controller cleanly.
 
-- Built the replacement Windows Server VM on Proxmox and joined it to the lab domain.
-- Promoted it as a domain controller with Active Directory Domain Services and DNS.
-- Transferred all five FSMO roles to the replacement controller.
-- Connected remotely to run post-migration checks.
-- Ran `netdom query fsmo`, `repadmin /replsummary`, and `dcdiag`.
+## Migration steps
 
-The FSMO check confirmed that all five roles were held by the replacement controller.
+1. Added DC02 as a new domain controller in `elephant.test`.
+2. Fixed the replication, DNS, and RPC issues between the controllers.
+3. Transferred all five FSMO roles to DC02.
+4. Joined a client to the domain.
+5. Demoted DC01 cleanly.
+6. Confirmed DC02 is now the only domain controller in `elephant.test`.
 
-## Validation findings
+## Verification
 
-The role transfer completed, but the latest health checks did not show a clean migration:
-
-- Replication checks reported DNS resolution failures between the controllers.
-- Domain-controller diagnostics flagged replication, DNS-related events, and other system events for follow-up.
-- The replacement controller passed several core checks, including connectivity, advertising, SYSVOL, Netlogons, and object replication in the captured run.
-
-A successful role transfer is only one milestone. The old controller should remain available until DNS and replication are healthy and fresh validation checks pass.
+- `netdom query fsmo` showed all five FSMO roles on `dc02.elephant.test`.
+- Replication, DNS, and RPC issues were resolved before retiring DC01.
+- A client joined the domain successfully.
+- DC01 was demoted, leaving DC02 as the sole domain controller.
 
 ## What I learned
 
-- A domain-controller migration has separate stages: adding the replacement, transferring FSMO roles, validating DNS and replication, and retiring the old controller.
-- `netdom query fsmo` confirms role ownership; it does not confirm replication health.
-- `repadmin /replsummary` and `dcdiag` provide useful post-migration evidence and can expose issues that a successful role-transfer command does not.
-- DNS is essential to domain-controller discovery and Active Directory replication.
-
-## Next steps
-
-1. Review DNS configuration and domain-controller locator records on both controllers.
-2. Confirm that both controllers can resolve each other and their required DNS records.
-3. Re-run `repadmin /replsummary` and `dcdiag` after correcting DNS.
-4. Verify client logon, Group Policy, and DNS resolution against the replacement controller.
-5. Retire the old controller only after replication is healthy and remaining domain services have been checked.
+- Adding the new controller is only the first stage of a migration; replication and name resolution must work before moving roles.
+- `netdom query fsmo` confirms role ownership, while replication checks provide separate evidence about directory health.
+- Testing with a domain client helps verify the replacement controller in normal use.
+- The old controller should be demoted only after the replacement is healthy and its role in the domain has been checked.
 
 ## AI assistance
 

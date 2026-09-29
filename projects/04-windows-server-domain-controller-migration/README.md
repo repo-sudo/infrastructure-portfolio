@@ -6,6 +6,8 @@
 
 I moved the domain-controller workload for `elephant.test` from DC01, a VMware Windows Server VM, to DC02 on Proxmox. The migration involved more than promoting a replacement server: the VMs were on different virtual networks, Windows Firewall interfered with connectivity tests, and DNS locator records had to work before Active Directory replication could stay healthy.
 
+The lab models **Elephant SA**, a fictional company, with the Active Directory domain `elephant.test`. Its directory represents company users and security groups, along with the domain computer accounts needed by its client machines. The migration had to preserve access to this directory data while moving the domain-controller role; it did not involve real company or employee data.
+
 ## Network topology and reachability
 
 DC01 was attached to VMware's host-only VMnet network (VMnet2). DC02 ran on the Proxmox host and used a Proxmox bridge. A host-only network and a Proxmox bridge are separate network segments unless there is a bridge, route, or other connection between them.

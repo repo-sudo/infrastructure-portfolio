@@ -102,7 +102,7 @@
       <div>
         <p class="eyebrow">Infrastructure lab / build log</p>
         <h1>Learning infrastructure by building it.</h1>
-        <p class="hero-copy">A practical record of the systems I set up, the issues I troubleshoot, and the skills I develop across virtualisation, networking, Windows Server, and Linux.</p>
+        <p class="hero-copy">A practical record of the systems I set up, the issues I troubleshoot, and the skills I develop across virtualisation, network segmentation, firewall policy, Windows Server, and Linux.</p>
         <a class="button" href="projects.html">BROWSE PROJECTS <span aria-hidden="true">→</span></a>
       </div>
       <aside class="snapshot" aria-label="Current lab snapshot">
@@ -133,14 +133,14 @@
       </div>
       <p class="eyebrow" style="margin-top:30px">Concepts in practice</p>
       <div class="lessons">
-        <div class="lesson"><h3>Virtual resources</h3><p>Proxmox runs on the Z2 and allocates virtual CPUs, memory, and disk to each guest. A virtual CPU shares time on the host processor; it is not a dedicated physical core.</p></div>
-        <div class="lesson"><h3>Bridge + address</h3><p>The VM's VirtIO adapter connects through <code>vmbr0</code> to the local network. The bridge carries the traffic; DHCP assigns the VM an IP address so other devices can reach it.</p></div>
-        <div class="lesson"><h3>ISO + virtual disk</h3><p>The Debian ISO on <code>local</code> boots the installer. After installation, Debian and the website live on the VM's virtual disk, independent of the installer ISO.</p></div>
+        <div class="lesson"><h3>Virtual resources</h3><p>Proxmox runs on the Z2 and allocates virtual CPUs, memory, storage, and network adapters to each guest while keeping services separated.</p></div>
+        <div class="lesson"><h3>Segmentation</h3><p>VLAN 10 separates lab infrastructure from the home LAN. OPNsense provides routing, DHCP, and firewall rules between trusted devices and lab services.</p></div>
+        <div class="lesson"><h3>Recovery habits</h3><p>Firewall configuration backups, static addressing, documented rules, and repeatable deployment steps make the lab easier to restore after changes.</p></div>
       </div>
     </section>
 
     <section id="about" class="section">
-      <div class="about"><div><p class="eyebrow">Purpose / 03</p><h2>Practice. Record. Iterate.</h2></div><p>This is my personal infrastructure learning lab. I use it to practise administration tasks, understand how systems fit together, and keep a clear record of my progress. My lab uses fictional environments to practise infrastructure tasks and document what I learn.</p></div>
+      <div class="about"><div><p class="eyebrow">Purpose / 03</p><h2>Practice. Record. Iterate.</h2></div><p>This is my personal infrastructure learning lab. I use it to practise administration tasks, understand how systems fit together, and keep a clear record of progress across servers, networking, firewall rules, deployment automation, and recovery planning. The lab uses fictional environments to practise infrastructure tasks and document what I learn.</p></div>
     </section>
   </main>
 

@@ -10,6 +10,6 @@ I am documenting hands-on infrastructure and cloud projects as I build them. Cur
 4. [Windows Server domain controller migration](projects/04-windows-server-domain-controller-migration/README.md)  completed the move to DC02, resolved replication, DNS, and RPC issues, transferred all FSMO roles, joined a client, and demoted DC01.
 5. [Windows domain backup and recovery](projects/05-windows-domain-backup-and-recovery/README.md)  configured daily Windows Server Backup for DC02 and verified the first full-server backup; the scheduled run and restore test remain to be verified.
 6. [Managed switch, VLAN, and OPNsense firewall lab](projects/06-managed-switch-vlan-lab/README.md)  installed a managed switch, created a tagged infrastructure VLAN, routed it with OPNsense, configured DHCP and firewall rules, and troubleshot web access from the home LAN.
-7. [OPNsense configuration backup](projects/07-opnsense-configuration-backup/README.md)  documented the firewall configuration backup process, backup naming convention, sensitive-data handling, and future restore-test plan.
+7. [OPNsense config backup + recovery](projects/07-opnsense-configuration-backup/README.md)  downloaded and stored an encrypted firewall configuration backup privately, documented sensitive-data handling, and planned a safe restore test.
 
 More project documentation will be added as the lab grows.

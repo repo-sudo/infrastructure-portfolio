@@ -13,7 +13,7 @@ Build a Linux-based home control server for local camera monitoring and future s
 | OS | Debian Linux |
 | Runtime | Docker + Docker Compose |
 | Application | Frigate |
-| Camera input | Local RTSP/ONVIF stream |
+| Camera | cam01 |
 | Access | Local network only |
 
 ## What I Built
@@ -22,7 +22,7 @@ Build a Linux-based home control server for local camera monitoring and future s
 - Installed Docker and Docker Compose to run Frigate as a containerised service.
 - Created persistent Frigate folders under `/opt/frigate` for configuration and storage.
 - Deployed Frigate using a `docker-compose.yml` file.
-- Added a local camera stream to Frigate using a dedicated camera account.
+- Added `cam01` to Frigate.
 - Reserved DHCP addresses for the Frigate server and camera so the service remains stable after reboots or lease changes.
 
 ## Why Docker Compose
@@ -31,12 +31,12 @@ Frigate can be started with a long one-line Docker command, but Compose is easie
 
 ## Current Result
 
-Frigate is running on `hcc01` and the local camera stream is visible in the Frigate web interface.
+Frigate is running on `hcc01` and `cam01` is visible in the Frigate web interface.
 
 ## Next Steps
 
 - Tune recording, event retention, and detection settings.
 - Review storage usage before enabling long retention.
-- Rename camera entries consistently.
+- Keep camera naming consistent, starting with `cam01`.
 - Move cameras to a dedicated camera/IoT VLAN with no direct internet access.
-- Allow only the Frigate server to reach the camera RTSP/ONVIF services.
+- Allow only the Frigate server to reach the camera service.

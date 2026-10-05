@@ -1,4 +1,4 @@
-# Home control camera server with Frigate
+# Home Control Hub with Frigate
 
 ## Goal
 
@@ -9,7 +9,7 @@ Build a Linux-based home control server for local camera monitoring and future s
 | Component | Value |
 | --- | --- |
 | Hypervisor | Proxmox VE |
-| VM name | hcc01 |
+| VM name | hch01 |
 | OS | Debian Linux |
 | Runtime | Docker + Docker Compose |
 | Application | Frigate |
@@ -18,7 +18,7 @@ Build a Linux-based home control server for local camera monitoring and future s
 
 ## What I Built
 
-- Created a dedicated Debian VM named `hcc01` for home control and camera services.
+- Created a dedicated Debian VM named `hch01` for home control and camera services.
 - Installed Docker and Docker Compose to run Frigate as a containerised service.
 - Created persistent Frigate folders under `/opt/frigate` for configuration and storage.
 - Deployed Frigate using a `docker-compose.yml` file.
@@ -31,7 +31,7 @@ Frigate can be started with a long one-line Docker command, but Compose is easie
 
 ## Current Result
 
-Frigate is running on `hcc01`, with `cam01` and `cam02` visible in the Frigate web interface.
+Frigate is running on `hch01`, with `cam01` and `cam02` visible in the Frigate web interface.
 
 ## Next Steps
 

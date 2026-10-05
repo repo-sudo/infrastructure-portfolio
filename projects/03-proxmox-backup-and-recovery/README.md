@@ -1,4 +1,4 @@
-# Proxmox backup and recovery test
+# Debian web server backup and recovery test
 
 I set up backup storage for a Proxmox virtual machine and tested a restore of my Debian web server. The goal was to verify that a backup could start and serve the website, rather than rely on a successful backup task alone.
 

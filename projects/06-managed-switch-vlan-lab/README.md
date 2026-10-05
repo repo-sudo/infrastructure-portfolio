@@ -8,7 +8,7 @@
 
 Add a managed switch to the home lab and use it to practise VLANs, tagged links, virtual-machine networking, routing, DHCP, and firewall rules with OPNsense.
 
-The main outcome was moving the Debian web server into a dedicated Web Services VLAN while keeping controlled access from my main PC on the home LAN.
+The first outcome was moving the Debian web server into a dedicated Web Services VLAN while keeping controlled access from my main PC on the home LAN. The lab then expanded with VLAN 20 for the Home Control Hub so camera and smart-home services can be separated from the web server.
 
 ## Lab equipment
 
@@ -17,6 +17,7 @@ The main outcome was moving the Debian web server into a dedicated Web Services 
 - Virgin Media Hub 3 for the existing home network and internet connection
 - OPNsense VM named `fw01`
 - Debian/Nginx VM named `web01`
+- Debian/Frigate VM named `hch01`
 
 ## Final network layout
 
@@ -26,7 +27,9 @@ The main outcome was moving the Debian web server into a dedicated Web Services 
 | OPNsense WAN | Home-LAN-facing firewall interface |
 | OPNsense LAN | Gateway for the Web Services VLAN |
 | VLAN 10 - Web Services | Dedicated network for the Debian/Nginx web server |
+| VLAN 20 - Home Control Hub | Dedicated network for `hch01`, Frigate, and future home-control services |
 | web01 | Debian/Nginx web server inside VLAN 10 |
+| hch01 | Debian/Frigate Home Control Hub inside VLAN 20 |
 | Proxmox bridge | VLAN-aware bridge carrying tagged VM traffic |
 | Managed switch | Carries home LAN and tagged lab VLAN traffic to the Z2 |
 
@@ -39,11 +42,15 @@ Managed switch
     |
 HP Z2 / Proxmox VLAN-aware bridge
     |
-OPNsense routes between the home LAN and VLAN 10
+OPNsense routes between the home LAN and VLANs
     |
-VLAN 10 - Web Services
+    +-- VLAN 10 - Web Services
+    |       |
+    |       +-- web01 Debian/Nginx server
     |
-web01 Debian/Nginx server
+    +-- VLAN 20 - Home Control Hub
+            |
+            +-- hch01 Debian/Frigate server
 ```
 
 ## What I configured
@@ -52,12 +59,15 @@ web01 Debian/Nginx server
 2. Created VLAN 10 for web server traffic.
 3. Configured the Z2 switch port to carry tagged lab VLAN traffic.
 4. Enabled VLAN awareness on the Proxmox bridge.
-5. Built `fw01` as an OPNsense VM with one interface facing the home LAN and one interface for the lab VLAN.
+5. Built `fw01` as an OPNsense VM with one interface facing the home LAN and one interface for the lab VLANs.
 6. Enabled DHCP on the OPNsense lab interface.
-7. Moved `web01` into the lab VLAN and confirmed it received an address from OPNsense.
-8. Added a persistent route on the Windows PC so traffic for the lab subnet is sent to OPNsense.
+7. Moved `web01` into VLAN 10 and confirmed it received an address from OPNsense.
+8. Added a persistent route on the Windows PC so traffic for the VLAN 10 subnet is sent to OPNsense.
 9. Created explicit firewall rules for OPNsense GUI access and web access to `web01`.
 10. Used OPNsense firewall logs and Windows TCP tests to troubleshoot failed access.
+11. Created VLAN 20 for the Home Control Hub and moved `hch01` into that segment.
+12. Added a persistent Windows route for VLAN 20 through OPNsense.
+13. Created aliases and a scoped firewall rule so `hch01` can reach `cam01` and `cam02` without opening broad access to the whole lab.
 
 ## Chronological build notes
 
@@ -104,6 +114,19 @@ from Windows, which showed the TCP connection was failing even though the firewa
 
 OPNsense firewall logs showed the main PC's HTTP traffic reaching the firewall. The fix was enabling **Disable reply-to** on the WAN rule for the web server. After applying that rule and clearing states, the website loaded from the main PC.
 
+### 5. Adding VLAN 20 for the Home Control Hub
+
+After VLAN 10 was stable, I created VLAN 20 for the Home Control Hub. `hch01` moved into this VLAN so Frigate and future home-control services are not mixed with the web server.
+
+The important lesson was that there are two different paths to think about:
+
+| Path | Purpose |
+| --- | --- |
+| Main PC to `hch01` | Opens the Frigate web interface |
+| `hch01` to `cam01` / `cam02` | Pulls the local camera streams |
+
+The main PC needed its own persistent route for the VLAN 20 subnet through OPNsense. Separately, OPNsense needed a rule on the VLAN 20 interface so `hch01` could reach the camera aliases.
+
 ## What I learned
 
 - VLAN tagging, routing, DHCP, firewall policy, and client routes all have to line up for cross-subnet access to work.
@@ -113,6 +136,8 @@ OPNsense firewall logs showed the main PC's HTTP traffic reaching the firewall. 
 - Temporarily disabling the firewall can prove a firewall problem, but it is not a fix.
 - OPNsense WAN rules can need **Disable reply-to** when the WAN interface is being used as an internal routed path from a private home LAN.
 - Opening only HTTP to `web01` is better practice than creating broad allow rules or adding ping just for convenience.
+- Accessing an application UI is not the same as proving the application can reach its own backend devices or streams.
+- Firewall rules must be applied after saving; an unapplied rule can look correct while still doing nothing.
 
 ## Current result
 
@@ -120,13 +145,14 @@ The main PC can access:
 
 - The OPNsense web GUI through a specific firewall rule.
 - The website on `web01` through a specific HTTP rule.
+- The Frigate interface on `hch01` through the VLAN 20 route and firewall policy.
 
-The route, VLAN, DHCP, firewall rule, and OPNsense `reply-to` behaviour are documented as part of the project.
+The route, VLAN, DHCP, firewall rule, and OPNsense `reply-to` behaviour are documented as part of the project. VLAN 10 is now focused on web services, while VLAN 20 is focused on the Home Control Hub.
 
 ## Next steps
 
 - Keep VLAN 10 focused on web services, starting with `web01`.
-- Create VLAN 20 for the Home Control Hub, including `hch01` and camera-related services.
+- Keep VLAN 20 focused on the Home Control Hub, including `hch01` and camera-related services.
 - Create VLAN 30 later for infrastructure and management services such as DNS, monitoring, or admin tooling.
 - Keep firewall rules narrow between the home LAN, VPN clients, and each VLAN.
 

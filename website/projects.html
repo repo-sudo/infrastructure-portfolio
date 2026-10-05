@@ -157,8 +157,8 @@
         </article>
         <article class="card">
           <div class="card-top"><span class="project-id">LAB-006</span><span class="tag active">Routed</span></div>
-          <h3>Managed switch + OPNsense VLAN</h3>
-          <p>Built an infrastructure VLAN with a managed switch and Proxmox, routed it through OPNsense, enabled DHCP, and fixed controlled web access from the home LAN.</p>
+          <h3>Web Services VLAN with OPNsense</h3>
+          <p>Built VLAN 10 as a dedicated Web Services VLAN for <code>web01</code>, routed it through OPNsense, enabled DHCP, and fixed controlled access from the home LAN.</p>
           <a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/projects/06-managed-switch-vlan-lab/README.md" target="_blank" rel="noopener noreferrer">OPEN PROJECT ↗</a>
         </article>
         <article class="card">
@@ -180,7 +180,7 @@
       <div class="section-head"><div><p class="eyebrow">Planned next / roadmap</p><h2>Upcoming labs</h2></div></div>
       <div class="detail-grid">
         <article class="detail-card"><h3>Internal DNS</h3><p>Create internal name resolution for the fictional Elephant SA environment and document troubleshooting tests.</p></article>
-        <article class="detail-card"><h3>Future VLAN expansion</h3><p>Add separate networks for Active Directory, sandbox testing, cameras/IoT, and management after the infrastructure VLAN is stable.</p></article>
+        <article class="detail-card"><h3>Future VLAN expansion</h3><p>Add VLAN 20 for the Home Control Hub and VLAN 30 for infrastructure/management services after the web services VLAN is stable.</p></article>
         <article class="detail-card"><h3>Cloud + IaC</h3><p>Rebuild part of the lab in cloud using infrastructure as code, then compare home and cloud approaches.</p></article>
       </div>
     </section>

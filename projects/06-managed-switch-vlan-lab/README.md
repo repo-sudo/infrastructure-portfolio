@@ -8,7 +8,7 @@
 
 Add a managed switch to the home lab and use it to practise VLANs, tagged links, virtual-machine networking, routing, DHCP, and firewall rules with OPNsense.
 
-The main outcome was moving the Debian web server into a dedicated infrastructure VLAN while keeping controlled access from my main PC on the home LAN.
+The main outcome was moving the Debian web server into a dedicated Web Services VLAN while keeping controlled access from my main PC on the home LAN.
 
 ## Lab equipment
 
@@ -24,9 +24,9 @@ The main outcome was moving the Debian web server into a dedicated infrastructur
 | --- | --- |
 | Main PC | Admin workstation on the home LAN |
 | OPNsense WAN | Home-LAN-facing firewall interface |
-| OPNsense LAN | Gateway for the lab infrastructure VLAN |
-| Infrastructure VLAN | Server/lab VM network |
-| web01 | Debian/Nginx web server inside the infrastructure VLAN |
+| OPNsense LAN | Gateway for the Web Services VLAN |
+| VLAN 10 - Web Services | Dedicated network for the Debian/Nginx web server |
+| web01 | Debian/Nginx web server inside VLAN 10 |
 | Proxmox bridge | VLAN-aware bridge carrying tagged VM traffic |
 | Managed switch | Carries home LAN and tagged lab VLAN traffic to the Z2 |
 
@@ -39,9 +39,9 @@ Managed switch
     |
 HP Z2 / Proxmox VLAN-aware bridge
     |
-OPNsense routes between the home LAN and infrastructure VLAN
+OPNsense routes between the home LAN and VLAN 10
     |
-Infrastructure VLAN
+VLAN 10 - Web Services
     |
 web01 Debian/Nginx server
 ```
@@ -49,7 +49,7 @@ web01 Debian/Nginx server
 ## What I configured
 
 1. Installed the managed switch and connected it to the lab.
-2. Created an infrastructure VLAN for server traffic.
+2. Created VLAN 10 for web server traffic.
 3. Configured the Z2 switch port to carry tagged lab VLAN traffic.
 4. Enabled VLAN awareness on the Proxmox bridge.
 5. Built `fw01` as an OPNsense VM with one interface facing the home LAN and one interface for the lab VLAN.
@@ -61,28 +61,28 @@ web01 Debian/Nginx server
 
 ## Chronological build notes
 
-### 1. Creating the infrastructure VLAN
+### 1. Creating VLAN 10 for web services
 
-I created a dedicated infrastructure VLAN on the managed switch and enabled VLAN-aware bridging in Proxmox. The goal was to stop placing every VM directly on the home LAN and start separating lab server traffic into its own network.
+I created VLAN 10 on the managed switch and enabled VLAN-aware bridging in Proxmox. The goal was to stop placing the Debian web server directly on the home LAN and start separating web service traffic into its own network.
 
 The important distinction was that a VLAN is only Layer 2 separation. It does not automatically provide DHCP, a default gateway, DNS, internet access, or firewall policy. Those services came later from OPNsense.
 
 ### 2. Enabling routing and DHCP with OPNsense
 
-I installed OPNsense as `fw01` and used it as the router/firewall between the home LAN and the infrastructure VLAN. The WAN side stayed on the home network, while the LAN side became the gateway for the lab VLAN.
+I installed OPNsense as `fw01` and used it as the router/firewall between the home LAN and VLAN 10. The WAN side stayed on the home network, while the LAN side became the gateway for VLAN 10.
 
 I enabled DHCP on the OPNsense lab interface. After fixing VLAN tagging and DHCP, `web01` received a correct lab-VLAN address instead of an APIPA address.
 
 ### 3. Adding controlled access from the main PC
 
-The main PC lives outside the lab VLAN, so Windows needed a persistent route for the lab subnet through OPNsense. Then OPNsense needed specific WAN rules, not broad access.
+The main PC lives outside VLAN 10, so Windows needed a persistent route for the VLAN 10 subnet through OPNsense. Then OPNsense needed specific WAN rules, not broad access.
 
 | Source | Destination | Port | Purpose |
 | --- | --- | --- | --- |
 | Main PC | This Firewall | HTTPS | OPNsense GUI access |
 | Main PC | `web01` | HTTP 80 | Website access |
 
-This allowed the main PC to administer OPNsense and load the web server without opening the lab VLAN generally to the home network.
+This allowed the main PC to administer OPNsense and load the web server without opening VLAN 10 generally to the home network.
 
 ### 4. Troubleshooting the website rule
 
@@ -125,10 +125,10 @@ The route, VLAN, DHCP, firewall rule, and OPNsense `reply-to` behaviour are docu
 
 ## Next steps
 
-- Reserve or statically assign important server IPs in the infrastructure VLAN.
-- Keep general server services such as file server, monitoring, or Pi-hole/AdGuard in the infrastructure VLAN.
-- Build a separate VLAN for the Windows/Active Directory lab.
-- Add future camera/IoT and management VLANs only when the current VLAN design is stable.
+- Keep VLAN 10 focused on web services, starting with `web01`.
+- Create VLAN 20 for the Home Control Hub, including `hch01` and camera-related services.
+- Create VLAN 30 later for infrastructure and management services such as DNS, monitoring, or admin tooling.
+- Keep firewall rules narrow between the home LAN, VPN clients, and each VLAN.
 
 ## AI assistance
 

@@ -113,8 +113,9 @@
           <div><dt>Managed switch</dt><dd>TP-Link Omada SG2008P</dd></div>
           <div><dt>Firewall/router</dt><dd>OPNsense VM</dd></div>
           <div><dt>Networks</dt><dd>Home LAN + VLAN 10 Web + VLAN 20 HCH</dd></div>
+          <div><dt>Remote access</dt><dd>WireGuard VPN</dd></div>
           <div><dt>Workloads</dt><dd>Linux, Windows Server + Frigate</dd></div>
-          <div><dt>Focus</dt><dd>Segmentation, recovery, automation</dd></div>
+          <div><dt>Focus</dt><dd>Segmentation, recovery, VPN</dd></div>
         </dl>
       </aside>
     </section>
@@ -135,7 +136,7 @@
       <div class="lessons">
         <div class="lesson"><h3>Virtual resources</h3><p>Proxmox runs on the Z2 and allocates virtual CPUs, memory, storage, and network adapters to each guest while keeping services separated.</p></div>
         <div class="lesson"><h3>Segmentation</h3><p>VLAN 10 separates the web server from the home LAN, while VLAN 20 now hosts the Home Control Hub. OPNsense rules decide which systems can cross between segments.</p></div>
-        <div class="lesson"><h3>Recovery habits</h3><p>Firewall configuration backups, VM restore tests, static addressing, documented rules, and repeatable deployment steps make the lab easier to restore after changes.</p></div>
+        <div class="lesson"><h3>Remote access</h3><p>WireGuard provides controlled access from outside the house, while OPNsense rules decide which VPN clients can reach specific internal services.</p></div>
       </div>
     </section>
 

@@ -11,6 +11,7 @@ I am documenting hands-on infrastructure and cloud projects as I build them. Cur
 5. [Windows domain backup and recovery](projects/05-windows-domain-backup-and-recovery/README.md)  configured daily Windows Server Backup for DC02 and verified the first full-server backup; the scheduled run and restore test remain to be verified.
 6. [Managed switch, VLAN, and OPNsense firewall lab](projects/06-managed-switch-vlan-lab/README.md)  installed a managed switch, created VLAN 10 as a Web Services VLAN, routed it with OPNsense, configured DHCP and firewall rules, and troubleshot controlled web access from the home LAN.
 7. [OPNsense config backup + recovery](projects/07-opnsense-configuration-backup/README.md)  downloaded and stored an encrypted firewall configuration backup privately, documented sensitive-data handling, and planned a safe restore test.
-8. [Home Control Hub with Frigate](projects/08-home-control-frigate-server/README.md)  created `hch01` as a Debian-based Home Control Hub, installed Docker and Frigate, connected `cam01` and `cam02`, and reserved stable DHCP addresses.
+8. [Home Control Hub with Frigate](projects/08-home-control-frigate-server/README.md)  created `hch01` as a Debian-based Home Control Hub in VLAN 20, installed Docker and Frigate, connected `cam01` and `cam02`, and controlled local stream access through OPNsense.
+9. [Home Control Hub backup and recovery test](projects/09-home-control-hub-backup-and-recovery/README.md)  created a Proxmox backup of `hch01`, restored it as a separate test VM, and verified the recovered Debian, Docker, and Frigate state without overwriting the live service.
 
 More project documentation will be added as the lab grows.

@@ -13,6 +13,6 @@ I am documenting hands-on infrastructure and cloud projects as I build them. Cur
 7. [OPNsense config backup + recovery](projects/07-opnsense-configuration-backup/README.md)  downloaded and stored an encrypted firewall configuration backup privately, documented sensitive-data handling, and planned a safe restore test.
 8. [Home Control Hub with Frigate](projects/08-home-control-frigate-server/README.md)  created `hch01` as a Debian-based Home Control Hub in VLAN 20, installed Docker and Frigate, connected `cam01` and `cam02`, and controlled local stream access through OPNsense.
 9. [Home Control Hub backup and recovery test](projects/09-home-control-hub-backup-and-recovery/README.md)  created a Proxmox backup of `hch01`, restored it as a separate test VM, and verified the recovered Debian, Docker, and Frigate state without overwriting the live service.
-10. [Remote VPN access with OPNsense WireGuard](projects/10-remote-vpn-access-opnsense-wireguard/README.md)  configured WireGuard on OPNsense, forwarded UDP 51820 through the Virgin Hub, fixed the peer key mismatch, and verified phone access to Frigate over mobile data.
+10. [Remote VPN access to Home Control Hub with WireGuard](projects/10-remote-vpn-access-opnsense-wireguard/README.md)  configured OPNsense WireGuard so a phone on mobile data can securely reach Frigate on `hch01` in VLAN 20, using a Virgin Hub UDP 51820 port forward and a scoped VPN firewall rule instead of exposing the service publicly.
 
 More project documentation will be added as the lab grows.

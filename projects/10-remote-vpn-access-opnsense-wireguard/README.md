@@ -1,8 +1,8 @@
-# Project 010: Remote VPN access with OPNsense WireGuard
+# Project 010: Remote VPN access to Home Control Hub with WireGuard
 
 ## Goal
 
-Create secure remote access into the home lab from a phone on mobile data without exposing Frigate, cameras, or internal web interfaces directly to the internet.
+Create secure remote access from a phone on mobile data to the Home Control Hub in VLAN 20 using OPNsense WireGuard, without exposing Frigate, cameras, or internal web interfaces directly to the internet.
 
 The final target was limited access from `phone01` to the Home Control Hub service on `hch01`.
 
@@ -12,17 +12,17 @@ The final target was limited access from `phone01` to the Home Control Hub servi
 | --- | --- |
 | Firewall/router | OPNsense VM `fw01` |
 | Upstream router | Virgin Media Hub 3 |
-| OPNsense WAN address | `192.168.0.77` |
+| OPNsense WAN endpoint | `fw01` WAN-side address behind the Virgin Hub |
 | VPN technology | WireGuard |
 | WireGuard instance | `wg_lab_remote` |
 | WireGuard interface | `wg0` |
 | WireGuard listen port | UDP `51820` |
-| VPN subnet | `10.99.99.0/24` |
-| OPNsense tunnel address | `10.99.99.1/24` |
+| VPN network | Dedicated WireGuard tunnel network |
+| OPNsense tunnel endpoint | `fw01` WireGuard tunnel address |
 | Phone peer | `phone01` |
-| Phone tunnel address | `10.99.99.2/32` |
+| Phone tunnel endpoint | `phone01` WireGuard tunnel address |
 | Target service | `hch01` Frigate |
-| Target address | `10.20.20.177:5000` |
+| Target endpoint | `hch01` Frigate web interface |
 | Target network | VLAN 20 - Home Control Hub |
 
 ## What I Built
@@ -30,8 +30,8 @@ The final target was limited access from `phone01` to the Home Control Hub servi
 - Enabled WireGuard on OPNsense using a dedicated server instance.
 - Created a phone peer named `phone01`.
 - Configured the phone with a QR-generated WireGuard profile.
-- Added a Virgin Hub port forward for UDP `51820` to `192.168.0.77`.
-- Created an OPNsense WAN rule to allow inbound WireGuard traffic to `192.168.0.77:51820`.
+- Added a Virgin Hub port forward for UDP `51820` to `fw01`.
+- Created an OPNsense WAN rule to allow inbound WireGuard traffic to the `fw01` WAN endpoint.
 - Used split-tunnel routing so the phone only sends selected lab traffic through the VPN.
 - Added an internal VPN firewall rule allowing `phone01` to reach Frigate on `hch01`.
 - Verified the phone could open Frigate from mobile data.
@@ -47,13 +47,13 @@ Public IP / Virgin Hub
     |
 UDP 51820 port forward
     |
-OPNsense WAN - 192.168.0.77
+fw01 WAN endpoint
     |
-wg0 / 10.99.99.1
+WireGuard tunnel on fw01
     |
 VLAN 20
     |
-hch01 / 10.20.20.177:5000
+hch01 Frigate web interface
 ```
 
 ## Working Rules
@@ -64,7 +64,7 @@ hch01 / 10.20.20.177:5000
 | --- | --- |
 | Protocol | UDP |
 | External port | `51820` |
-| Internal address | `192.168.0.77` |
+| Internal address | `fw01` WAN endpoint |
 | Internal port | `51820` |
 
 ### OPNsense WAN rule
@@ -74,11 +74,11 @@ hch01 / 10.20.20.177:5000
 | Interface | WAN |
 | Protocol | UDP |
 | Source | Any |
-| Destination | `192.168.0.77` |
+| Destination | `fw01` WAN endpoint |
 | Destination port | `51820` |
 | Purpose | Allow the WireGuard handshake to reach OPNsense |
 
-The destination is `192.168.0.77` because the Virgin Hub forwards the incoming WireGuard packet to OPNsense's WAN-side address.
+The destination is the `fw01` WAN endpoint because the Virgin Hub forwards the incoming WireGuard packet to OPNsense's WAN-side address.
 
 ### OPNsense WireGuard rule
 
@@ -86,9 +86,9 @@ The destination is `192.168.0.77` because the Virgin Hub forwards the incoming W
 | --- | --- |
 | Interface | `wg0` / WireGuard |
 | Protocol | TCP |
-| Source | `10.99.99.2` |
-| Destination | `10.20.20.177` |
-| Destination port | `5000` |
+| Source | `phone01` tunnel endpoint |
+| Destination | `hch01` |
+| Destination port | Frigate web interface |
 | Purpose | Allow `phone01` to reach Frigate on `hch01` |
 
 This rule is separate from the WAN rule. The WAN rule builds the VPN tunnel; the WireGuard rule controls what the VPN client can access after the tunnel is up.
@@ -97,7 +97,7 @@ This rule is separate from the WAN rule. The WAN rule builds the VPN tunnel; the
 
 ### Wrong WAN destination
 
-The WAN rule initially used the wrong destination. The correct destination in this lab is `192.168.0.77`, the OPNsense WAN-side address behind the Virgin Hub.
+The WAN rule initially used the wrong destination. The correct destination in this lab is the `fw01` WAN-side address behind the Virgin Hub.
 
 Firewall logs confirmed when UDP `51820` traffic from the phone reached OPNsense and matched the allow rule.
 
@@ -109,7 +109,7 @@ Generating a fresh peer and scanning a new QR code fixed the key mismatch and pr
 
 ### Missing internal VPN rule
 
-After the handshake worked, Frigate still did not open from the phone. OPNsense logs showed traffic arriving on `wg0` from `10.99.99.2` to `10.20.20.177:5000`, but being blocked by the default deny rule.
+After the handshake worked, Frigate still did not open from the phone. OPNsense logs showed traffic arriving on `wg0` from `phone01` to `hch01`, but being blocked by the default deny rule.
 
 Adding a scoped pass rule on the WireGuard interface fixed the final access problem.
 

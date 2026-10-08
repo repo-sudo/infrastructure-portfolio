@@ -185,14 +185,20 @@
           <p>Built secure phone access to Frigate on <code>hch01</code> in VLAN 20 through OPNsense WireGuard, using a Virgin Hub WireGuard port forward, a corrected peer configuration, and a scoped VPN firewall rule.</p>
           <a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/projects/10-remote-vpn-access-opnsense-wireguard/README.md" target="_blank" rel="noopener noreferrer">OPEN PROJECT ↗</a>
         </article>
+        <article class="card">
+          <div class="card-top"><span class="project-id">LAB-011</span><span class="tag active">Live</span></div>
+          <h3>Internal DNS server with BIND</h3>
+          <p>Built <code>dns01</code> as a dedicated BIND DNS server in VLAN 30, created the <code>internal</code> zone, distributed DNS through DHCP options, and verified browser and SSH access by hostname.</p>
+          <a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/projects/11-internal-dns-server-bind/README.md" target="_blank" rel="noopener noreferrer">OPEN PROJECT ↗</a>
+        </article>
       </div>
     </section>
 
     <section class="section">
       <div class="section-head"><div><p class="eyebrow">Planned next / roadmap</p><h2>Upcoming labs</h2></div></div>
       <div class="detail-grid">
-        <article class="detail-card"><h3>Internal DNS</h3><p>Create internal name resolution for the fictional Elephant SA environment and document troubleshooting tests.</p></article>
-        <article class="detail-card"><h3>Internal monitoring</h3><p>Add visibility into the lab with service checks, device status, and simple alerts for important infrastructure.</p></article>
+        <article class="detail-card"><h3>Internal monitoring</h3><p>Add visibility into the lab with service checks, device status, DNS health, and simple alerts for important infrastructure.</p></article>
+        <article class="detail-card"><h3>Reverse DNS</h3><p>Add reverse lookup zones when they become useful for troubleshooting, logging, and cleaner infrastructure documentation.</p></article>
         <article class="detail-card"><h3>Cloud + IaC</h3><p>Rebuild part of the lab in cloud using infrastructure as code, then compare home and cloud approaches.</p></article>
       </div>
     </section>

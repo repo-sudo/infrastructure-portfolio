@@ -2,6 +2,10 @@
 
 I am documenting hands-on infrastructure and cloud projects as I build them. Current work covers Proxmox, Linux, Windows Server, OPNsense, VLANs, and backup/recovery, with Azure projects planned as the lab grows. My focus is networking, security, AI, and automation.
 
+## Network topology
+
+The [current logical topology](docs/network-topology.md) shows the home LAN, VLANs 10/20/30, OPNsense boundaries, internal DNS and restricted remote VPN access without publishing addressing or configuration details.
+
 ## Projects
 
 1. [HP Z2 infrastructure host and Proxmox installation](projects/01-hp-z2-proxmox-host/README.md)  set up the dedicated host, installed Proxmox VE, and prepared the platform for virtual machines.

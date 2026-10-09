@@ -28,30 +28,13 @@ The first outcome was moving the Debian web server into a dedicated Web Services
 | OPNsense LAN | Gateway for the Web Services VLAN |
 | VLAN 10 - Web Services | Dedicated network for the Debian/Nginx web server |
 | VLAN 20 - Home Control Hub | Dedicated network for `hch01`, Frigate, and future home-control services |
+| VLAN 30 - Infrastructure | Dedicated network for `dns01`, BIND, and future infrastructure services |
 | web01 | Debian/Nginx web server inside VLAN 10 |
 | hch01 | Debian/Frigate Home Control Hub inside VLAN 20 |
 | Proxmox bridge | VLAN-aware bridge carrying tagged VM traffic |
 | Managed switch | Carries home LAN and tagged lab VLAN traffic to the Z2 |
 
-```text
-Home router
-    |
-Home LAN
-    |
-Managed switch
-    |
-HP Z2 / Proxmox VLAN-aware bridge
-    |
-OPNsense routes between the home LAN and VLANs
-    |
-    +-- VLAN 10 - Web Services
-    |       |
-    |       +-- web01 Debian/Nginx server
-    |
-    +-- VLAN 20 - Home Control Hub
-            |
-            +-- hch01 Debian/Frigate server
-```
+The lab has since expanded to VLAN 30, internal DNS and remote VPN access for two trusted phones. See the [current logical network topology](../../docs/network-topology.md) for the complete diagram.
 
 ## What I configured
 
@@ -153,7 +136,7 @@ The route, VLAN, DHCP, firewall rule, and OPNsense `reply-to` behaviour are docu
 
 - Keep VLAN 10 focused on web services, starting with `web01`.
 - Keep VLAN 20 focused on the Home Control Hub, including `hch01` and camera-related services.
-- Create VLAN 30 later for infrastructure and management services such as DNS, monitoring, or admin tooling.
+- Keep VLAN 30 focused on infrastructure services, starting with `dns01`; add monitoring as the next service.
 - Keep firewall rules narrow between the home LAN, VPN clients, and each VLAN.
 
 ## AI assistance

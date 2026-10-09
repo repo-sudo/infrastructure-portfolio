@@ -14,7 +14,8 @@ I wanted a dedicated place to host my portfolio and to practise creating a VM, i
 | VM | `web01` (VM 100) |
 | Guest OS | Debian 13 |
 | VM resources | 2 vCPUs, 2 GiB RAM, 32 GiB virtual disk |
-| Networking | VirtIO adapter connected to Proxmox bridge `vmbr0`; LAN address `192.168.0.70` |
+| Initial networking | VirtIO adapter on Proxmox bridge `vmbr0`; originally deployed directly on the home LAN |
+| Current networking | VLAN 10 - Web Services, routed and protected by OPNsense |
 | Web server | Nginx |
 | Site | Static HTML pages served from `/var/www/html/` |
 | Administration | SSH from the main PC as `webadmin` |
@@ -59,7 +60,7 @@ The server is reachable on the LAN, so I added a basic host firewall instead of 
 | `OpenSSH` | Remote administration from the main PC |
 | `Nginx HTTP` | Serving the website over HTTP on port 80 |
 
-After enabling UFW, `ufw status` showed the firewall as active with `OpenSSH` and `Nginx HTTP` allowed for IPv4 and IPv6. I then confirmed that a new SSH session from the main PC could still connect and that the website was still reachable in a browser at `http://192.168.0.70`.
+During the original home-LAN deployment, `ufw status` showed the firewall as active with `OpenSSH` and `Nginx HTTP` allowed for IPv4 and IPv6. I confirmed that a new SSH session from the main PC still connected and that the website remained reachable. Project 006 later moved `web01` into VLAN 10 behind OPNsense.
 
 ## Problems I solved
 

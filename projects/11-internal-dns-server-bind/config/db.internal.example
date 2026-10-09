@@ -1,0 +1,16 @@
+; Reference example. TEST-NET addresses below are placeholders.
+; Replace EVERY address with your actual service address before use.
+$TTL 300
+@ IN SOA dns.internal. hostmaster.internal. (
+    2026100901 ; increment after each zone edit
+    3600       ; refresh
+    600        ; retry
+    604800     ; expire
+    300        ; negative cache TTL
+)
+@   IN NS dns.internal.
+dns IN A 192.0.2.30
+fw  IN A 192.0.2.1
+pve IN A 192.0.2.2
+web IN A 192.0.2.10
+hch IN A 192.0.2.20

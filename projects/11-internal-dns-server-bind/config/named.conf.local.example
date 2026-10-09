@@ -1,0 +1,6 @@
+// Reference example, not an export of the live server.
+zone "internal" {
+    type primary;
+    file "/etc/bind/db.internal";
+    allow-transfer { none; };
+};

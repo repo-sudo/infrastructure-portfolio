@@ -188,3 +188,7 @@ Internal DNS is live. Lab services can now be reached by names instead of IP add
 ## AI assistance
 
 AI was used to guide the build, troubleshoot the VLAN/DHCP/DNS path, and structure the documentation. The OPNsense, Debian, BIND, Proxmox, and Windows configuration changes were performed manually in the lab and verified through DNS lookups, browser tests, and SSH by hostname.
+
+## Repository materials
+
+[BIND reference examples](config/README.md) provide a reusable zone declaration and zone file with placeholder addresses. These are newly authored examples, not live configuration exports.

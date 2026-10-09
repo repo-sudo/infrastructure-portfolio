@@ -86,3 +86,7 @@ OPNsense remains a separate case: its configuration export should be saved after
 ## AI assistance
 
 AI was used to guide the recovery checklist and structure the documentation. The Proxmox backup, restore, and BIND validation were performed manually in the lab and verified on the restored VM.
+
+## Repository materials
+
+[Evidence capture instructions](evidence/README.md) and a [read-only collector](scripts/collect-dns-evidence.sh) support the next restore test. No historical output or recovery timings have been invented.

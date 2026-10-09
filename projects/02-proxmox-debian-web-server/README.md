@@ -43,8 +43,8 @@ The current workflow is:
 
 | Step | Action |
 | --- | --- |
-| 1 | Edit the static HTML files locally on the Windows PC |
-| 2 | Run `deploy-web01.ps1` or double-click `deploy-web01.bat` |
+| 1 | Update and commit the HTML files in this repository's `website/` directory |
+| 2 | Run `update-and-deploy-web01.bat` to download the pages and invoke `deploy-web01.ps1` |
 | 3 | Use `scp` over SSH to copy all `.html` files to `/var/www/html/` |
 | 4 | Verify the homepage and subpages in a browser |
 
@@ -110,3 +110,7 @@ This project is intentionally closed at the local hosting stage. Public DNS, HTT
 - Start a separate public hosting phase when DNS, HTTPS, and remote access design are ready.
 - Keep the deployment scripts under review as the site grows.
 - Decide how the VM's address will be kept stable long term.
+
+## Published deployment scripts
+
+[Sanitised copies of the original scripts and run instructions](scripts/README.md) are committed alongside this project. Personal connection details are placeholders. The earlier LAN addressing above describes the initial build stage; configure the scripts with your current target. The instructions also describe the original scripts' error-handling limitations.

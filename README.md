@@ -15,5 +15,6 @@ I am documenting hands-on infrastructure and cloud projects as I build them. Cur
 9. [Home Control Hub backup and recovery test](projects/09-home-control-hub-backup-and-recovery/README.md)  created a Proxmox backup of `hch01`, restored it as a separate test VM, and verified the recovered Debian, Docker, and Frigate state without overwriting the live service.
 10. [Remote VPN access to Home Control Hub with WireGuard](projects/10-remote-vpn-access-opnsense-wireguard/README.md)  configured OPNsense WireGuard so a phone on mobile data can securely reach Frigate on `hch01` in VLAN 20, using a Virgin Hub UDP 51820 port forward and a scoped VPN firewall rule instead of exposing the service publicly.
 11. [Internal DNS server with BIND](projects/11-internal-dns-server-bind/README.md)  built `dns01` as a dedicated BIND DNS server in the infrastructure VLAN, created the `internal` zone, distributed it through DHCP options, and verified hostname access across the web, home-control, and main PC paths.
+12. [DNS server backup and recovery test](projects/12-dns-server-backup-and-recovery/README.md)  backed up `dns01`, restored it as an isolated test VM, validated BIND and the `internal` zone, and established the standard scheduled backup pattern for important lab servers.
 
 More project documentation will be added as the lab grows.

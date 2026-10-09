@@ -5,7 +5,7 @@ These sanitised scripts implement the website update workflow used for `web01`. 
 ## What the workflow does
 
 1. The batch launcher runs the PowerShell deployment script and propagates its exit code.
-2. PowerShell downloads the four pages from this repository into a unique temporary directory.
+2. PowerShell downloads the five pages from this repository into a unique temporary directory.
 3. Every file must exist, contain data, and include opening and closing HTML elements.
 4. Only after all four checks pass are the local working copies replaced.
 5. The validated staging files are uploaded to Nginx's document root with `scp`.
@@ -34,6 +34,6 @@ Double-click `update-and-deploy-web01.bat` to run the workflow.
 
 The script returns a nonzero exit code when configuration, download, validation or `scp` fails. The batch launcher reports that failure and returns exit code 1.
 
-The HTML checks detect empty files and common error responses, but they do not validate every link or visual detail. Deployment still replaces the four remote files through `scp`; browser verification remains the final check.
+The HTML checks detect empty files and common error responses, but they do not validate every link or visual detail. Deployment still replaces the five remote files through `scp`; browser verification remains the final check.
 
 The public version uses placeholders for personal paths and connection details. It was reviewed for control flow in the repository; live deployment requires the configured copy on the lab PC.

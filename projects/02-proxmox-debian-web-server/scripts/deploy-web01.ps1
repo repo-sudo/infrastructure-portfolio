@@ -7,7 +7,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $baseUrl = "https://raw.githubusercontent.com/repo-sudo/infrastructure-portfolio/main/website"
-$pages = @("index.html", "projects.html", "lab-notes.html", "about.html")
+$pages = @("index.html", "projects.html", "lab-notes.html", "about.html", "topology.html")
 $stagingFolder = Join-Path ([System.IO.Path]::GetTempPath()) ("web01-deploy-" + [guid]::NewGuid())
 
 try {

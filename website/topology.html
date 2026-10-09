@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="About David Garciarena's infrastructure learning lab and documentation approach.">
-  <title>About | David Garciarena Infrastructure Lab</title>
+  <meta name="description" content="Network topology for David Garciarena's infrastructure lab, including OPNsense, VLANs, Proxmox, internal DNS, and remote VPN access.">
+  <title>Topology | David Garciarena Infrastructure Lab</title>
   <style>
     :root {
       --bg:#f2f5f8; --surface:#fff; --ink:#17283d; --muted:#627286;
@@ -116,56 +116,125 @@
       <div class="links">
         <a href="projects.html">01 / PROJECTS</a>
         <a href="lab-notes.html">02 / LAB NOTES</a>
-        <a href="about.html" aria-current="page">03 / ABOUT</a>
-        <a href="topology.html">04 / TOPOLOGY</a>
+        <a href="about.html">03 / ABOUT</a>
+        <a href="topology.html" aria-current="page">04 / TOPOLOGY</a>
         <a href="https://github.com/repo-sudo" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
       </div>
     </nav>
   </header>
   <main class="wrap">
-
     <section class="page-hero">
       <a class="back-link" href="index.html">← BACK HOME</a>
-      <p class="eyebrow">Purpose / 03</p>
-      <h1>About this lab</h1>
-      <p class="page-copy">This is a personal infrastructure learning lab used to practise server administration, network segmentation, firewall policy, deployment automation, and recovery habits in a small but realistic environment.</p>\n      <div class="page-actions"><a class="button" href="#topology">VIEW LAB TOPOLOGY <span aria-hidden="true">↓</span></a></div>
+      <p class="eyebrow">Architecture / 04</p>
+      <h1>Lab topology</h1>
+      <p class="page-copy">A clear view of how the home LAN, OPNsense firewall, Proxmox host, segmented services, internal DNS, and remote VPN access fit together.</p>
     </section>
 
-    <section class="section">
+    <section class="section" aria-labelledby="network-boundaries">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Traffic flow / 01</p>
+          <h2 id="network-boundaries">Network boundaries</h2>
+          <p class="intro">OPNsense separates the home network from three purpose-built VLANs and controls permitted access between them.</p>
+        </div>
+      </div>
+      <div class="topology-card">
+        <div class="topology-scroll" role="img" aria-label="Internet connects to the ISP router and home LAN. The home LAN contains the admin workstation and connects to the OPNsense virtual machine hosted on the HP Z2 Proxmox server. OPNsense controls VLAN 10 for web services, VLAN 20 for home control, and VLAN 30 for infrastructure services. Trusted mobile devices connect through remote VPN access.">
+          <svg class="topology-svg" viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#8fa3ba"/>
+              </marker>
+            </defs>
+
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 78 V120"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 178 V220"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M360 267 H275"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 294 V336"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 394 V420 H170 V448"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 394 V448"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 420 H790 V448"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M260 149 H390"/>
+            <text class="topology-label" x="325" y="137">REMOTE VPN</text>
+
+            <g>
+              <rect class="topology-node" x="390" y="24" width="180" height="54" rx="4"/>
+              <text class="topology-title" x="480" y="48">Internet</text>
+              <text class="topology-label" x="480" y="66">UPSTREAM</text>
+            </g>
+            <g>
+              <rect class="topology-node" x="390" y="120" width="180" height="58" rx="4"/>
+              <text class="topology-title" x="480" y="146">ISP router</text>
+              <text class="topology-label" x="480" y="165">HOME EDGE</text>
+            </g>
+            <g>
+              <rect class="topology-node" x="80" y="120" width="180" height="58" rx="4"/>
+              <text class="topology-title" x="170" y="146">Trusted mobile devices</text>
+              <text class="topology-label" x="170" y="165">REMOTE ACCESS</text>
+            </g>
+            <g>
+              <rect class="topology-node primary" x="360" y="220" width="240" height="74" rx="4"/>
+              <text class="topology-title" x="480" y="251">Home LAN</text>
+              <text class="topology-label" x="480" y="273">UPSTREAM LAB NETWORK</text>
+            </g>
+            <g>
+              <rect class="topology-node" x="65" y="232" width="210" height="70" rx="4"/>
+              <text class="topology-title" x="170" y="260">Admin workstation</text>
+              <text class="topology-label" x="170" y="281">SSH · WEB INTERFACES</text>
+            </g>
+            <g>
+              <rect class="topology-node security" x="360" y="336" width="240" height="58" rx="4"/>
+              <text class="topology-title" x="480" y="358">OPNsense VM</text>
+              <text class="topology-label" x="480" y="378">ON HP Z2 / PROXMOX</text>
+            </g>
+            <g>
+              <rect class="topology-node" x="60" y="448" width="220" height="68" rx="4"/>
+              <text class="topology-title" x="170" y="475">VLAN 10</text>
+              <text class="topology-label" x="170" y="495">WEB SERVICES · WEB01</text>
+            </g>
+            <g>
+              <rect class="topology-node" x="370" y="448" width="220" height="68" rx="4"/>
+              <text class="topology-title" x="480" y="475">VLAN 20</text>
+              <text class="topology-label" x="480" y="495">HOME CONTROL · HCH01</text>
+            </g>
+            <g>
+              <rect class="topology-node" x="680" y="448" width="220" height="68" rx="4"/>
+              <text class="topology-title" x="790" y="475">VLAN 30</text>
+              <text class="topology-label" x="790" y="495">INFRASTRUCTURE · DNS01</text>
+            </g>
+          </svg>
+        </div>
+        <p class="topology-note">The HP Z2 runs Proxmox and hosts OPNsense, <code>web01</code>, <code>hch01</code>, and <code>dns01</code>. All access to the lab VLANs passes through the OPNsense VM. The diagram omits addresses, VPN configuration, management endpoints, and camera connection details.</p>
+        <a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/docs/network-topology.md" target="_blank" rel="noopener noreferrer">VIEW COMPLETE TOPOLOGY DOCUMENTATION ↗</a>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="topology-details">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">System roles / 02</p>
+          <h2 id="topology-details">How the lab fits together</h2>
+        </div>
+      </div>
       <div class="detail-grid">
         <article class="detail-card">
-          <h3>Why I built it</h3>
-          <p>I am using hands-on projects to build practical infrastructure skills across Linux, Windows Server, networking, virtualisation, automation, and cloud.</p>
+          <h3>HP Z2 / Proxmox</h3>
+          <p>The physical host runs Proxmox and provides the virtualisation and VLAN-aware networking layer for OPNsense and the service VMs.</p>
         </article>
         <article class="detail-card">
-          <h3>How I work</h3>
-          <p>I build the system, test it, break parts of it, fix the issue, then document the commands, decisions, and lessons in GitHub.</p>
+          <h3>OPNsense</h3>
+          <p>The firewall VM provides VLAN gateways, DHCP, inter-VLAN policy, and termination for trusted remote VPN access.</p>
         </article>
         <article class="detail-card">
-          <h3>Current stack</h3>
-          <ul>
-            <li>HP Z2 SFF host</li>
-            <li>Proxmox VE hypervisor</li>
-            <li>TP-Link Omada SG2008P managed switch</li>
-            <li>OPNsense firewall/router VM</li>
-            <li>VLAN 10 for web services</li>
-            <li>VLAN 20 for home-control services</li>
-            <li>VLAN 30 for infrastructure services</li>
-            <li>Linux and Windows Server virtual machines</li>
-            <li>Nginx static website on web01</li>
-            <li>PowerShell and SSH-based deployment workflow</li>
-          </ul>
+          <h3>Admin workstation</h3>
+          <p>The main administration point uses SSH and web interfaces to manage permitted infrastructure and services.</p>
         </article>
         <article class="detail-card">
-          <h3>AI assistance</h3>
-          <p>AI is used as a learning assistant for planning, command explanation, troubleshooting, and documentation. The lab work is still manually executed, tested, and verified.</p>
+          <h3>Internal DNS</h3>
+          <p><code>dns01</code> in VLAN 30 resolves internal service names. DNS requests from other VLANs pass through OPNsense.</p>
         </article>
       </div>
-      <div class="callout">The environment is intentionally small, but the workflow mirrors real infrastructure habits: change control, verification, configuration backups, restore planning, firewall rules, segmented networks, SSH key-based access, automation, and clear documentation.</div>
     </section>
-
-
-
   </main>
   <footer class="wrap"><div class="footer-inner"><span>DAVID GARCIARENA / HOME LAB JOURNAL</span><span>STATIC HTML · BUILT WITH CODEX</span></div></footer>
 </body>

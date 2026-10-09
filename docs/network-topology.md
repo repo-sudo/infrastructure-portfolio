@@ -9,7 +9,7 @@ flowchart TB
     internet["Internet"] --> router["ISP router"]
     mobile["Trusted mobile devices"] -->|Remote VPN| router
     router --> home["Home LAN"]
-    home --> admin["Main PC / Admin workstation"]
+    home --> admin["Admin workstation"]
     home --> firewall["OPNsense firewall"]
     firewall --> web["VLAN 10 / Web Services<br/>web01"]
     firewall --> control["VLAN 20 / Home Control<br/>hch01"]
@@ -35,7 +35,7 @@ The managed switch and the VLAN-aware Proxmox bridge carry the tagged networks. 
 
 | Source | Destination | Path |
 | --- | --- | --- |
-| Main PC / Admin workstation | Lab administration and permitted services | Home LAN → OPNsense → target VLAN |
+| Admin workstation | Lab administration and permitted services | Home LAN → OPNsense → target VLAN |
 | Trusted mobile devices | Permitted internal services | ISP router → remote VPN terminated by OPNsense → target VLAN |
 | `web01` and `hch01` | `dns01` | Source VLAN → OPNsense → VLAN 30 |
 | VLAN clients | Internet | Source VLAN → OPNsense → home LAN → ISP router |

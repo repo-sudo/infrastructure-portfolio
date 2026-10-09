@@ -5,7 +5,7 @@ This diagram shows the lab's logical structure without including addressing, VPN
 ```mermaid
 flowchart TB
     internet["Internet"] --> router["ISP router"]
-    mobile["Trusted mobile devices"] -->|Remote VPN access| router
+    mobile["Trusted mobile devices"] -->|VPN; terminates on OPNsense| router
     router --> home["Home LAN"]
     home --> pc["Main PC / Admin workstation"]
     home --> switch["Managed switch"]
@@ -30,11 +30,11 @@ flowchart TB
     end
 
     switch -->|Tagged VLAN trunk| bridge
-    home -->|WAN-side and VPN traffic| firewall
-    mobile -.->|VPN through OPNsense| firewall
-    firewall -.->|Permitted service access| hch
-    dns -.->|Internal DNS| web
-    dns -.->|Internal DNS| hch
+    home -->|WAN-side traffic and VPN path| firewall
+    firewall -.->|Permitted VPN service access| hch
+    web -.->|DNS query| firewall
+    hch -.->|DNS query| firewall
+    firewall -.->|Allowed DNS traffic| dns
 ```
 
 ## Network roles
@@ -52,7 +52,7 @@ flowchart TB
 
 ## Security boundary
 
-OPNsense terminates remote VPN access and restricts traffic between the home LAN, the three VLANs and VPN clients. Internal DNS provides service names across permitted paths.
+OPNsense terminates remote VPN access and restricts traffic between the home LAN, the three VLANs and VPN clients. DNS queries from VLANs 10 and 20 traverse OPNsense before reaching `dns01` in VLAN 30. Internal DNS provides service names only across those permitted paths.
 
 This topology document intentionally omits addresses, public-facing connection details, VPN configuration, management endpoints, device identifiers and camera connection details. Individual project records may retain private RFC1918 addresses where they explain a historical build or troubleshooting step.
 

@@ -1,17 +1,39 @@
 # Windows deployment scripts
 
-These copies come from the original scripts supplied by the lab owner on 9 October 2026. Personal paths, the SSH username and server address are replaced with placeholders; the original workflow is preserved. The batch filename's duplicate-download suffix has been removed.
+These sanitised scripts implement the website update workflow used for `web01`. Set the connection placeholders before running them; passwords and private keys do not belong in the repository.
+
+## What the workflow does
+
+1. The batch launcher runs the PowerShell deployment script and propagates its exit code.
+2. PowerShell downloads the four pages from this repository into a unique temporary directory.
+3. Every file must exist, contain data, and include opening and closing HTML elements.
+4. Only after all four checks pass are the local working copies replaced.
+5. The validated staging files are uploaded to Nginx's document root with `scp`.
+6. The temporary directory is removed whether the run succeeds or fails.
+
+A failed download or validation stops the workflow before `scp` runs, preventing a mixture of old and newly downloaded pages from being deployed.
 
 ## Setup
 
-Put both scripts in your website working directory. Set the batch file's `cd /d` path and PowerShell's `$LocalFolder` to that directory (the example uses `C:\Lab\Web`). Replace `YOUR_SSH_USER` and `YOUR_SERVER_IP` in the PowerShell script, including the displayed browser URLs.
+Keep both files in the same directory. In `deploy-web01.ps1`, configure:
 
-Requirements: Windows PowerShell, the OpenSSH client providing `scp`, GitHub access, SSH access to the target, and write permission on `/var/www/html/`. Use your existing SSH key setup and verify the server host key. Never commit passwords or private keys.
+- `$LocalFolder`: the folder that stores the downloaded website pages.
+- `$Server`: the SSH destination in `user@server` form.
+- `$RemotePath`: the Nginx document root, normally `/var/www/html/`.
 
-Double-click `update-and-deploy-web01.bat`. It downloads four pages from this repository's `main/website/` directory, then invokes `deploy-web01.ps1` to copy HTML files to Nginx's document root.
+Requirements:
 
-## Limitations and validation
+- Windows PowerShell and the Windows OpenSSH client providing `scp`.
+- Network access to GitHub and the server's SSH port.
+- Existing SSH authentication and permission to write to the remote path.
+- A previously verified SSH host key.
 
-The original batch does not stop after a failed download, so it could deploy mixed old and new files. PowerShell returns exit code 1 on an scp failure, but the batch does not explicitly propagate it. Files are replaced directly, not atomically.
+Double-click `update-and-deploy-web01.bat` to run the workflow.
 
-These public copies were inspected, not executed against the live server. They retain the original implementation's behaviour and require the placeholders to be filled in before use.
+## Failure handling
+
+The script returns a nonzero exit code when configuration, download, validation or `scp` fails. The batch launcher reports that failure and returns exit code 1.
+
+The HTML checks detect empty files and common error responses, but they do not validate every link or visual detail. Deployment still replaces the four remote files through `scp`; browser verification remains the final check.
+
+The public version uses placeholders for personal paths and connection details. It was reviewed for control flow in the repository; live deployment requires the configured copy on the lab PC.

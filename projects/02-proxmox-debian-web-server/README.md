@@ -113,4 +113,4 @@ This project is intentionally closed at the local hosting stage. Public DNS, HTT
 
 ## Published deployment scripts
 
-[Sanitised copies of the original scripts and run instructions](scripts/README.md) are committed alongside this project. Personal connection details are placeholders. The earlier LAN addressing above describes the initial build stage; configure the scripts with your current target. The instructions also describe the original scripts' error-handling limitations.
+[Sanitised deployment scripts and run instructions](scripts/README.md) are committed alongside this project. Personal connection details are placeholders. The workflow stages and validates every download before deployment, stops on failure, and returns a nonzero exit code to the launcher.

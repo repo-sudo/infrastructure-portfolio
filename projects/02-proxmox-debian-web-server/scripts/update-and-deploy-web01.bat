@@ -1,12 +1,18 @@
 @echo off
-cd /d C:\Lab\Web
+setlocal
+cd /d "%~dp0"
 
-echo Downloading latest website files from GitHub...
+echo Updating and deploying web01...
+powershell -NoProfile -ExecutionPolicy Bypass -File ".\deploy-web01.ps1"
 
-powershell -ExecutionPolicy Bypass -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/repo-sudo/infrastructure-portfolio/main/website/index.html' -OutFile 'index.html'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/repo-sudo/infrastructure-portfolio/main/website/projects.html' -OutFile 'projects.html'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/repo-sudo/infrastructure-portfolio/main/website/lab-notes.html' -OutFile 'lab-notes.html'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/repo-sudo/infrastructure-portfolio/main/website/about.html' -OutFile 'about.html'"
+if errorlevel 1 (
+    echo.
+    echo Deployment failed. No deployment was attempted unless every page downloaded and validated.
+    pause
+    exit /b 1
+)
 
-echo Deploying to web01...
-
-powershell -ExecutionPolicy Bypass -File .\deploy-web01.ps1
-
+echo.
+echo Deployment completed successfully.
 pause
+exit /b 0

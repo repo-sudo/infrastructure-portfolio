@@ -172,7 +172,7 @@
         </div>
       </div>
       <div class="topology-card">
-        <div class="topology-scroll" role="img" aria-label="Internet connects to the ISP router and home LAN. The home LAN contains the admin workstation and connects to OPNsense. OPNsense controls VLAN 10 for web services, VLAN 20 for home control, and VLAN 30 for infrastructure services. Trusted mobile devices connect through remote VPN access.">
+        <div class="topology-scroll" role="img" aria-label="Internet connects to the ISP router and home LAN. The home LAN contains the admin workstation and connects to the OPNsense virtual machine hosted on the HP Z2 Proxmox server. OPNsense controls VLAN 10 for web services, VLAN 20 for home control, and VLAN 30 for infrastructure services. Trusted mobile devices connect through remote VPN access.">
           <svg class="topology-svg" viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs>
               <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
@@ -217,8 +217,8 @@
             </g>
             <g>
               <rect class="topology-node security" x="360" y="336" width="240" height="58" rx="4"/>
-              <text class="topology-title" x="480" y="361">OPNsense</text>
-              <text class="topology-label" x="480" y="380">ROUTING · DHCP · FIREWALL · VPN</text>
+              <text class="topology-title" x="480" y="358">OPNsense VM</text>
+              <text class="topology-label" x="480" y="378">ON HP Z2 / PROXMOX</text>
             </g>
             <g>
               <rect class="topology-node" x="60" y="448" width="220" height="68" rx="4"/>
@@ -237,7 +237,7 @@
             </g>
           </svg>
         </div>
-        <p class="topology-note">All access to the lab VLANs passes through OPNsense. The diagram omits addresses, VPN configuration, management endpoints, and camera connection details.</p>
+        <p class="topology-note">The HP Z2 runs Proxmox and hosts OPNsense, <code>web01</code>, <code>hch01</code>, and <code>dns01</code>. All access to the lab VLANs passes through the OPNsense VM. The diagram omits addresses, VPN configuration, management endpoints, and camera connection details.</p>
         <a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/docs/network-topology.md" target="_blank" rel="noopener noreferrer">VIEW COMPLETE TOPOLOGY DOCUMENTATION ↗</a>
       </div>
     </section>

@@ -22,14 +22,14 @@ Every path into a lab VLAN passes through OPNsense. OPNsense routes traffic, ass
 
 ```mermaid
 flowchart TB
-    switch["Managed switch"] -->|Tagged VLAN trunk| host["Proxmox host"]
+    switch["Managed switch"] -->|Tagged VLAN trunk| host["HP Z2 / Proxmox host"]
     host --> firewall["OPNsense VM"]
     host --> web["web01 / Nginx"]
     host --> control["hch01 / Frigate"]
     host --> dns["dns01 / BIND"]
 ```
 
-The managed switch and the VLAN-aware Proxmox bridge carry the tagged networks. OPNsense is a VM on the same host as the service VMs.
+The managed switch and the VLAN-aware Proxmox bridge carry the tagged networks. The HP Z2 runs Proxmox; OPNsense and the service systems are virtual machines on that host.
 
 ## Important paths
 

@@ -1,59 +1,52 @@
 # Current lab network topology
 
-This diagram shows the lab's logical structure without including addressing, VPN parameters, management endpoints or device-specific details.
+The lab is easiest to understand in two views: the network boundaries and the virtual machines hosted by Proxmox. Addresses and connection details are intentionally omitted here.
+
+## Network boundaries
 
 ```mermaid
 flowchart TB
     internet["Internet"] --> router["ISP router"]
-    mobile["Trusted mobile devices"] -->|VPN; terminates on OPNsense| router
+    mobile["Trusted mobile devices"] -->|Remote VPN| router
     router --> home["Home LAN"]
-    home --> pc["Main PC / Admin workstation"]
-    home --> switch["Managed switch"]
-
-    subgraph proxmox["Proxmox host"]
-        bridge["VLAN-aware bridge"]
-        firewall["OPNsense VM"]
-        v10["VLAN 10 / Web Services"]
-        v20["VLAN 20 / Home Control"]
-        v30["VLAN 30 / Infrastructure"]
-        web["web01 / Nginx"]
-        hch["hch01 / Frigate"]
-        dns["dns01 / BIND"]
-
-        bridge --> firewall
-        firewall -->|Restricted traffic| v10
-        firewall -->|Restricted traffic| v20
-        firewall -->|Restricted traffic| v30
-        v10 --> web
-        v20 --> hch
-        v30 --> dns
-    end
-
-    switch -->|Tagged VLAN trunk| bridge
-    home -->|WAN-side traffic and VPN path| firewall
-    firewall -.->|Permitted VPN service access| hch
-    web -.->|DNS query| firewall
-    hch -.->|DNS query| firewall
-    firewall -.->|Allowed DNS traffic| dns
+    home --> admin["Main PC / Admin workstation"]
+    home --> firewall["OPNsense firewall"]
+    firewall --> web["VLAN 10 / Web Services<br/>web01"]
+    firewall --> control["VLAN 20 / Home Control<br/>hch01"]
+    firewall --> infra["VLAN 30 / Infrastructure<br/>dns01"]
 ```
+
+Every path into a lab VLAN passes through OPNsense. OPNsense routes traffic, assigns VLAN client addresses, enforces firewall policy and terminates remote VPN access.
+
+## Proxmox hosting
+
+```mermaid
+flowchart TB
+    switch["Managed switch"] -->|Tagged VLAN trunk| host["Proxmox host"]
+    host --> firewall["OPNsense VM"]
+    host --> web["web01 / Nginx"]
+    host --> control["hch01 / Frigate"]
+    host --> dns["dns01 / BIND"]
+```
+
+The managed switch and the VLAN-aware Proxmox bridge carry the tagged networks. OPNsense is a VM on the same host as the service VMs.
+
+## Important paths
+
+| Source | Destination | Path |
+| --- | --- | --- |
+| Main PC / Admin workstation | Lab administration and permitted services | Home LAN → OPNsense → target VLAN |
+| Trusted mobile devices | Permitted internal services | ISP router → remote VPN terminated by OPNsense → target VLAN |
+| `web01` and `hch01` | `dns01` | Source VLAN → OPNsense → VLAN 30 |
+| VLAN clients | Internet | Source VLAN → OPNsense → home LAN → ISP router |
 
 ## Network roles
 
-| Network or path | Role |
+| Network | Current role |
 | --- | --- |
-| Home LAN | Contains the main admin workstation and provides the upstream path for the lab firewall |
-| Main PC / Admin workstation | Primary control point for administering Proxmox, OPNsense and permitted lab services |
-| VLAN 10 | Web services, currently `web01` and Nginx |
-| VLAN 20 | Home-control services, currently `hch01` and Frigate |
-| VLAN 30 | Infrastructure services, currently `dns01` and BIND |
-| Remote VPN access | Restricted access from trusted mobile devices to permitted internal services through OPNsense |
-| OPNsense | Inter-VLAN routing, DHCP, firewall policy and VPN termination |
-| Managed switch and Proxmox networking | Tagged Layer 2 path between the physical host and virtual networks |
+| Home LAN | Admin workstation and upstream network for OPNsense |
+| VLAN 10 | Web services: `web01` and Nginx |
+| VLAN 20 | Home-control services: `hch01` and Frigate |
+| VLAN 30 | Infrastructure services: `dns01` and BIND |
 
-## Security boundary
-
-OPNsense terminates remote VPN access and restricts traffic between the home LAN, the three VLANs and VPN clients. DNS queries from VLANs 10 and 20 traverse OPNsense before reaching `dns01` in VLAN 30. Internal DNS provides service names only across those permitted paths.
-
-This topology document intentionally omits addresses, public-facing connection details, VPN configuration, management endpoints, device identifiers and camera connection details. Individual project records may retain private RFC1918 addresses where they explain a historical build or troubleshooting step.
-
-The diagram is logical rather than a physical cabling plan. The OPNsense firewall is a VM hosted on Proxmox and connected through its VLAN-aware networking layer.
+This topology document omits addresses, public-facing connection details, VPN configuration, management endpoints, device identifiers and camera connection details. Individual project records may retain private RFC1918 addresses when they explain a historical build or troubleshooting step.

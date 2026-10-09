@@ -7,7 +7,7 @@ flowchart TB
     internet["Internet"] --> router["ISP router"]
     phones["Two trusted phones"] -->|Remote VPN access| router
     router --> home["Home LAN"]
-    home --> pc["Main PC"]
+    home --> pc["Main PC / Admin workstation"]
     home --> switch["Managed switch"]
     switch -->|Tagged VLAN trunk| pve["Proxmox host"]
     home --> fw["OPNsense firewall/router"]
@@ -27,7 +27,8 @@ flowchart TB
 
 | Network or path | Role |
 | --- | --- |
-| Home LAN | Main workstation and upstream path for the lab firewall |
+| Home LAN | Contains the main admin workstation and provides the upstream path for the lab firewall |
+| Main PC / Admin workstation | Primary control point for administering Proxmox, OPNsense and permitted lab services |
 | VLAN 10 | Web services, currently `web01` and Nginx |
 | VLAN 20 | Home-control services, currently `hch01` and Frigate |
 | VLAN 30 | Infrastructure services, currently `dns01` and BIND |

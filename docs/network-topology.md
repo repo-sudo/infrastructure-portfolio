@@ -35,7 +35,7 @@ The managed switch and the VLAN-aware Proxmox bridge carry the tagged networks. 
 
 | Source | Destination | Path |
 | --- | --- | --- |
-| Admin workstation | Lab administration and permitted services | Home LAN → OPNsense → target VLAN |
+| Admin workstation | SSH and browser-based administration of permitted systems and services | Home LAN → OPNsense → target VLAN |
 | Trusted mobile devices | Permitted internal services | ISP router → remote VPN terminated by OPNsense → target VLAN |
 | `web01` and `hch01` | `dns01` | Source VLAN → OPNsense → VLAN 30 |
 | VLAN clients | Internet | Source VLAN → OPNsense → home LAN → ISP router |

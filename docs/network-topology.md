@@ -1,26 +1,40 @@
 # Current lab network topology
 
-This diagram shows the lab's logical structure without publishing addressing, VPN parameters, management endpoints or device-specific details.
+This diagram shows the lab's logical structure without including addressing, VPN parameters, management endpoints or device-specific details.
 
 ```mermaid
 flowchart TB
     internet["Internet"] --> router["ISP router"]
-    phones["Two trusted phones"] -->|Remote VPN access| router
+    mobile["Trusted mobile devices"] -->|Remote VPN access| router
     router --> home["Home LAN"]
     home --> pc["Main PC / Admin workstation"]
     home --> switch["Managed switch"]
-    switch -->|Tagged VLAN trunk| pve["Proxmox host"]
-    home --> fw["OPNsense firewall/router"]
-    pve --- fw
-    fw -->|Restricted inter-VLAN traffic| v10["VLAN 10 / Web Services"]
-    fw -->|Restricted inter-VLAN traffic| v20["VLAN 20 / Home Control"]
-    fw -->|Restricted inter-VLAN traffic| v30["VLAN 30 / Infrastructure"]
-    v10 --> web["web01 / Nginx"]
-    v20 --> hch["hch01 / Frigate"]
-    v30 --> dns["dns01 / BIND"]
+
+    subgraph proxmox["Proxmox host"]
+        bridge["VLAN-aware bridge"]
+        firewall["OPNsense VM"]
+        v10["VLAN 10 / Web Services"]
+        v20["VLAN 20 / Home Control"]
+        v30["VLAN 30 / Infrastructure"]
+        web["web01 / Nginx"]
+        hch["hch01 / Frigate"]
+        dns["dns01 / BIND"]
+
+        bridge --> firewall
+        firewall -->|Restricted traffic| v10
+        firewall -->|Restricted traffic| v20
+        firewall -->|Restricted traffic| v30
+        v10 --> web
+        v20 --> hch
+        v30 --> dns
+    end
+
+    switch -->|Tagged VLAN trunk| bridge
+    home -->|WAN-side and VPN traffic| firewall
+    mobile -.->|VPN through OPNsense| firewall
+    firewall -.->|Permitted service access| hch
     dns -.->|Internal DNS| web
     dns -.->|Internal DNS| hch
-    phones -.->|Permitted service access| hch
 ```
 
 ## Network roles
@@ -32,12 +46,14 @@ flowchart TB
 | VLAN 10 | Web services, currently `web01` and Nginx |
 | VLAN 20 | Home-control services, currently `hch01` and Frigate |
 | VLAN 30 | Infrastructure services, currently `dns01` and BIND |
-| Remote VPN access | Restricted access from two trusted phones to permitted internal services |
+| Remote VPN access | Restricted access from trusted mobile devices to permitted internal services through OPNsense |
 | OPNsense | Inter-VLAN routing, DHCP, firewall policy and VPN termination |
 | Managed switch and Proxmox networking | Tagged Layer 2 path between the physical host and virtual networks |
 
 ## Security boundary
 
-OPNsense restricts traffic between the home LAN, the three VLANs and remote VPN clients. Internal DNS provides service names across the permitted paths. The repository intentionally omits addresses, public-facing details, VPN configuration, management endpoints, device identifiers and camera connection details.
+OPNsense terminates remote VPN access and restricts traffic between the home LAN, the three VLANs and VPN clients. Internal DNS provides service names across permitted paths.
 
-The diagram is logical rather than a physical cabling plan. `fw01` runs as an OPNsense VM on the Proxmox host.
+This topology document intentionally omits addresses, public-facing connection details, VPN configuration, management endpoints, device identifiers and camera connection details. Individual project records may retain private RFC1918 addresses where they explain a historical build or troubleshooting step.
+
+The diagram is logical rather than a physical cabling plan. The OPNsense firewall is a VM hosted on Proxmox and connected through its VLAN-aware networking layer.

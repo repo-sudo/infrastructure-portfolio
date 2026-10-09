@@ -34,7 +34,7 @@ The first outcome was moving the Debian web server into a dedicated Web Services
 | Proxmox bridge | VLAN-aware bridge carrying tagged VM traffic |
 | Managed switch | Carries home LAN and tagged lab VLAN traffic to the Z2 |
 
-The lab has since expanded to VLAN 30, internal DNS and remote VPN access for two trusted phones. See the [current logical network topology](../../docs/network-topology.md) for the complete diagram.
+The lab has since expanded to VLAN 30, internal DNS and remote VPN access for trusted mobile devices. See the [current logical network topology](../../docs/network-topology.md) for the complete diagram.
 
 ## What I configured
 

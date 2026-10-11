@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [string]$LocalFolder = $PSScriptRoot,
+    [string]$LocalFolder = "",
     [string]$Server = "YOUR_SSH_USER@YOUR_SERVER_IP",
     [string]$RemotePath = "/var/www/html/",
     [string]$SiteUrl = "http://YOUR_SERVER_IP"
@@ -13,6 +13,15 @@ $headers = @{ "User-Agent" = "web01-website-updater"; "Cache-Control" = "no-cach
 $repository = "repo-sudo/infrastructure-portfolio"
 
 try {
+    if ([string]::IsNullOrWhiteSpace($LocalFolder)) {
+        $LocalFolder = $PSScriptRoot
+        if ([string]::IsNullOrWhiteSpace($LocalFolder)) {
+            $LocalFolder = Split-Path -Parent $MyInvocation.MyCommand.Path
+        }
+    }
+    if ([string]::IsNullOrWhiteSpace($LocalFolder)) {
+        throw "LocalFolder is empty. Pass the website folder explicitly."
+    }
     if ($Server -match "YOUR_" -or $Server -notmatch "@") {
         throw "Configure Server with your SSH user@host."
     }

@@ -1,39 +1,28 @@
 # Windows deployment scripts
 
-These sanitised scripts implement the website update workflow used for `web01`. Set the connection placeholders before running them; passwords and private keys do not belong in the repository.
+Keep both scripts in the same directory. Configure Server and SiteUrl in deploy-web01.ps1; LocalFolder defaults to that script's directory. Set RemotePath to the Nginx document root, normally /var/www/html/.
 
-## What the workflow does
+Double-click update-and-deploy-web01.bat. The BAT only launches PowerShell; all download, upload and verification logic lives in the PowerShell script.
 
-1. The batch launcher runs the PowerShell deployment script and propagates its exit code.
-2. PowerShell downloads the five pages from this repository into a unique temporary directory.
-3. Every file must exist, contain data, and include opening and closing HTML elements.
-4. Only after all four checks pass are the local working copies replaced.
-5. The validated staging files are uploaded to Nginx's document root with `scp`.
-6. The temporary directory is removed whether the run succeeds or fails.
+## Update process
 
-A failed download or validation stops the workflow before `scp` runs, preventing a mixture of old and newly downloaded pages from being deployed.
+1. Resolve the current main commit through GitHub's API using a unique request URL.
+2. Download all five pages from that exact commit into a temporary directory.
+3. Reject missing, empty or incomplete HTML files before any upload.
+4. Save local copies and upload only those five validated files through scp.
+5. Fetch each page from the configured website URL with unique query parameters.
+6. Compare each served file's SHA-256 hash with the corresponding downloaded file.
+7. Report success only when all five served pages match. Print the deployed commit and revision-specific page links.
+8. Remove temporary files on success or failure.
 
-## Setup
+## Requirements and limits
 
-Keep both files in the same directory. In `deploy-web01.ps1`, configure:
+- Windows PowerShell 5.1 or later and OpenSSH scp.
+- Access to GitHub's API, raw file hosting, the SSH server and the website.
+- Existing SSH authentication, a verified host key and write permission for the remote directory.
+- Public repository access; unauthenticated GitHub API rate limits apply.
+- Configure SiteUrl to the actual hostname or address you use to open the website.
 
-- `$LocalFolder`: the folder that stores the downloaded website pages.
-- `$Server`: the SSH destination in `user@server` form.
-- `$RemotePath`: the Nginx document root, normally `/var/www/html/`.
+Download failures stop before upload. Upload or verification failures return exit code 1. An interrupted upload can leave a partially updated remote website; this workflow does not provide atomic deployment or rollback. HTTP verification checks exact file content, not appearance or browser cache.
 
-Requirements:
-
-- Windows PowerShell and the Windows OpenSSH client providing `scp`.
-- Network access to GitHub and the server's SSH port.
-- Existing SSH authentication and permission to write to the remote path.
-- A previously verified SSH host key.
-
-Double-click `update-and-deploy-web01.bat` to run the workflow.
-
-## Failure handling
-
-The script returns a nonzero exit code when configuration, download, validation or `scp` fails. The batch launcher reports that failure and returns exit code 1.
-
-The HTML checks detect empty files and common error responses, but they do not validate every link or visual detail. Deployment still replaces the five remote files through `scp`; browser verification remains the final check.
-
-The public version uses placeholders for personal paths and connection details. It was reviewed for control flow in the repository; live deployment requires the configured copy on the lab PC.
+The public scripts use connection placeholders. Live validation requires the configured scripts on the lab PC.

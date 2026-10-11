@@ -103,6 +103,7 @@
     .topology-line{fill:none;stroke:#8fa3ba;stroke-width:2}
     .topology-node{fill:#fff;stroke:#c8d5e4;stroke-width:2}
     .topology-node.primary{fill:#e8f0fc;stroke:#8eafe4}
+    .topology-node.host{fill:#fff7ed;stroke:#e3b77d}
     .topology-node.security{fill:#eff9f5;stroke:#91cbb7}
     .topology-title{fill:#17283d;font:700 15px var(--sans);text-anchor:middle}
     .topology-vm{fill:#c47a38;font:700 12px var(--mono);text-anchor:middle}
@@ -141,7 +142,7 @@
       </div>
       <div class="topology-card">
         <div class="topology-scroll" role="img" aria-label="Internet connects to the ISP router and home LAN. The home LAN contains the admin workstation and connects to the OPNsense virtual machine hosted on the HP Z2 Proxmox server. OPNsense controls VLAN 10 for web services, VLAN 20 for home control, and VLAN 30 for infrastructure services. Trusted mobile devices connect through remote VPN access.">
-          <svg class="topology-svg" viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <svg class="topology-svg" viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs>
               <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
                 <path d="M0,0 L0,6 L9,3 z" fill="#8fa3ba"/>
@@ -151,10 +152,11 @@
             <path class="topology-line" marker-end="url(#arrow)" d="M480 78 V120"/>
             <path class="topology-line" marker-end="url(#arrow)" d="M480 178 V220"/>
             <path class="topology-line" marker-end="url(#arrow)" d="M360 267 H275"/>
-            <path class="topology-line" marker-end="url(#arrow)" d="M480 294 V336"/>
-            <path class="topology-line" marker-end="url(#arrow)" d="M480 414 V430 H170 V448"/>
-            <path class="topology-line" marker-end="url(#arrow)" d="M480 414 V448"/>
-            <path class="topology-line" marker-end="url(#arrow)" d="M480 430 H790 V448"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 294 V318"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 374 V398"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 464 V482 H170 V500"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 464 V500"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 482 H790 V500"/>
             <path class="topology-line" marker-end="url(#arrow)" d="M260 149 H390"/>
             <text class="topology-label" x="325" y="137">REMOTE VPN</text>
 
@@ -184,28 +186,32 @@
               <text class="topology-label" x="170" y="281">SSH · WEB INTERFACES</text>
             </g>
             <g>
-              <rect class="topology-node security" x="360" y="336" width="240" height="78" rx="4"/>
-              <text class="topology-title" x="480" y="356">OPNsense VM</text>
-              <text class="topology-label" x="480" y="376">On HP Z2 / Proxmox</text>
-              <text class="topology-label" x="480" y="396">DHCP · FIREWALL · ROUTING</text>
+              <rect class="topology-node host" x="360" y="318" width="240" height="56" rx="4"/>
+              <text class="topology-title" x="480" y="342">HP Z2</text>
+              <text class="topology-label" x="480" y="361">PROXMOX VE</text>
             </g>
             <g>
-              <rect class="topology-node" x="60" y="448" width="220" height="82" rx="4"/>
-              <text class="topology-title" x="170" y="475">VLAN 10</text>
-              <text class="topology-vm" x="170" y="495">WEB01</text>
-              <text class="topology-label" x="170" y="510">PERSONAL PORTFOLIO WEBSITE</text>
+              <rect class="topology-node security" x="360" y="398" width="240" height="66" rx="4"/>
+              <text class="topology-title" x="480" y="424">OPNsense VM</text>
+              <text class="topology-label" x="480" y="445">DHCP · FIREWALL · ROUTING</text>
             </g>
             <g>
-              <rect class="topology-node" x="370" y="448" width="220" height="82" rx="4"/>
-              <text class="topology-title" x="480" y="475">VLAN 20</text>
-              <text class="topology-vm" x="480" y="495">HCH01</text>
-              <text class="topology-label" x="480" y="510">SMART HOME CONTROL</text>
+              <rect class="topology-node" x="60" y="500" width="220" height="82" rx="4"/>
+              <text class="topology-title" x="170" y="527">VLAN 10</text>
+              <text class="topology-vm" x="170" y="547">WEB01</text>
+              <text class="topology-label" x="170" y="562">PERSONAL PORTFOLIO WEBSITE</text>
             </g>
             <g>
-              <rect class="topology-node" x="680" y="448" width="220" height="82" rx="4"/>
-              <text class="topology-title" x="790" y="475">VLAN 30</text>
-              <text class="topology-vm" x="790" y="495">DNS01 · MON01</text>
-              <text class="topology-label" x="790" y="510">DNS · KUMA MONITORING</text>
+              <rect class="topology-node" x="370" y="500" width="220" height="82" rx="4"/>
+              <text class="topology-title" x="480" y="527">VLAN 20</text>
+              <text class="topology-vm" x="480" y="547">HCH01</text>
+              <text class="topology-label" x="480" y="562">SMART HOME CONTROL</text>
+            </g>
+            <g>
+              <rect class="topology-node" x="680" y="500" width="220" height="82" rx="4"/>
+              <text class="topology-title" x="790" y="527">VLAN 30</text>
+              <text class="topology-vm" x="790" y="547">DNS01 · MON01</text>
+              <text class="topology-label" x="790" y="562">DNS · KUMA MONITORING</text>
             </g>
           </svg>
         </div>

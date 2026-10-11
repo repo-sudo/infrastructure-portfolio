@@ -4,23 +4,23 @@ This list tracks the next phase of the lab portfolio work: review, polish, accur
 
 ## Priority
 
-1. Website audit.
-2. Finish Project 05.
-3. Finish OPNsense backup after all recent changes.
-4. Audit all project READMEs for accuracy and tone.
-5. Review and redact anything too specific before recruiter exposure.
+- [ ] Website audit.
+- [ ] Finish Project 05.
+- [x] Finish OPNsense backup after all recent changes.
+- [ ] Audit all project READMEs for accuracy and tone.
+- [ ] Review and redact anything too specific before recruiter exposure.
 
 ## Automation and operations
 
-1. Add an Automation page to the website.
-2. Document the web deployment updater.
-3. Test the website updater after the latest HTML changes.
-4. Review the backup schedule standard for important VMs.
-5. Add Uptime Kuma notifications later.
+- [ ] Add an Automation page to the website.
+- [ ] Document the web deployment updater.
+- [ ] Test the website updater after the latest HTML changes.
+- [ ] Review the backup schedule standard for important VMs.
+- [ ] Add Uptime Kuma notifications later.
 
 ## Repository polish
 
-1. Check GitHub repo structure and README flow.
-2. Make sure project documentation matches the real lab.
-3. Keep the writing direct, honest, and in my own tone.
-4. Decide the next enhancement project instead of adding random new services.
+- [ ] Check GitHub repo structure and README flow.
+- [ ] Make sure project documentation matches the real lab.
+- [ ] Keep the writing direct, honest, and in my own tone.
+- [ ] Decide the next enhancement project instead of adding random new services.

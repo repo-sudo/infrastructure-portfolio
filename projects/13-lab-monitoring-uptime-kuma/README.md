@@ -87,11 +87,11 @@ nslookup <monitoring-hostname> <dns-server>
 
 `mon01` had a VLAN 30 address and could reach the internet, but the main PC could not SSH to it.
 
-The cause was that the main PC had persistent routes for VLAN 10 and VLAN 20, but not VLAN 30. After adding the route through `fw01`, the PC could reach `mon01`.
+The persistent route for VLAN 30 already existed. The missing piece was the OPNsense firewall rule allowing the main PC path to reach `mon01` for SSH and the Uptime Kuma web port.
 
 ### Firewall rules still mattered
 
-Routing alone was not enough. OPNsense also needed to allow the main PC path to reach the monitoring server on SSH and the Uptime Kuma web port.
+Routing alone was not enough. OPNsense still needed an explicit rule for the allowed management traffic to the monitoring server.
 
 This reinforced the same lesson from earlier VLAN projects: routing decides where traffic goes, but firewall policy decides whether it is allowed.
 

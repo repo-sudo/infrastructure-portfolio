@@ -101,6 +101,8 @@
     .build-row h3{margin:0 0 7px;font-size:18px;letter-spacing:-.025em}
     .build-path{margin:0 0 8px;color:#33475f;font:12px var(--mono);font-weight:700}
     .build-row p{margin:0;color:var(--muted);font-size:14px}
+    .stack-section{padding:32px;background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 32px rgba(24,48,78,.04)}
+    .stack-section .section-head{margin-bottom:18px}
     .stack-map{background:linear-gradient(180deg,#fff 0%,#f7faff 100%);border:1px solid var(--line)}
     .stack-layers{display:grid}
     .stack-layer{display:grid;grid-template-columns:84px 220px 1fr;gap:22px;align-items:center;padding:19px 24px;border-bottom:1px solid #e4ebf3}
@@ -115,7 +117,7 @@
     .timeline .post{grid-template-columns:126px 1fr}
     .callout{margin-top:14px;padding:18px;background:#eef4ff;border:1px solid #c8d8f5;color:#405873;font-size:14px}
     .back-link{display:inline-block;margin-bottom:18px;color:var(--blue);font:11px var(--mono);font-weight:700;text-decoration:none}
-    @media(max-width:800px){.hero-blueprint{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.build-row,.stack-layer{grid-template-columns:1fr;gap:8px}.stack-layer{padding:18px}.timeline .post{grid-template-columns:1fr}}
+    @media(max-width:800px){.hero-blueprint{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.build-row,.stack-layer{grid-template-columns:1fr;gap:8px}.stack-layer{padding:18px}.stack-section{padding:24px}.timeline .post{grid-template-columns:1fr}}
 
     .topology-card{padding:24px;background:var(--surface);border:1px solid var(--line)}
     .topology-scroll{overflow-x:auto;margin-top:20px;padding-bottom:4px}
@@ -146,7 +148,7 @@
 
     <section class="page-hero">
       <a class="back-link" href="index.html">← BACK HOME</a>
-      <p class="eyebrow">Purpose / 04</p>
+      <p class="eyebrow">Purpose / 01</p>
       <h1>About this lab</h1>
       <p class="page-copy">I am building this lab to turn infrastructure theory into something I can operate, break, recover, and explain.</p>
       <p class="page-copy">It started with one Proxmox host and a web server. It now includes segmented VLANs, an OPNsense firewall/router, internal DNS, backup testing, monitoring, and a deployment workflow.</p>
@@ -159,7 +161,7 @@
       <div class="page-actions"><a class="button" href="topology.html">VIEW LAB TOPOLOGY <span aria-hidden="true">→</span></a></div>
     </section>
 
-    <section class="section">
+    <section class="section stack-section">
       <div class="section-head">
         <div>
           <p class="eyebrow">Inventory / 02</p>

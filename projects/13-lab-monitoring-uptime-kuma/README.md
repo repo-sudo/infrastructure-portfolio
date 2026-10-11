@@ -87,7 +87,7 @@ nslookup <monitoring-hostname> <dns-server>
 
 `mon01` had a VLAN 30 address and could reach the internet, but the main PC could not SSH to it.
 
-The persistent route for VLAN 30 already existed. The missing piece was the OPNsense firewall rule allowing the main PC path to reach `mon01` for SSH and the Uptime Kuma web port.
+The persistent route for VLAN 30 already existed. The missing piece was the OPNsense firewall rule allowing the main PC path to reach `mon01` over SSH.
 
 ### Firewall rules still mattered
 

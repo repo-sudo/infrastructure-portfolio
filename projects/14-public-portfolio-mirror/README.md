@@ -93,9 +93,13 @@ Expected setup:
 
 ## Current Status
 
-Decision made: the portfolio should have a public static mirror, while `web01` remains internal.
+Live.
 
-The next implementation step is to enable the chosen static hosting option and verify that all pages load correctly from the public URL.
+The portfolio now has a public GitHub Pages mirror:
+
+[https://repo-sudo.github.io/infrastructure-portfolio/](https://repo-sudo.github.io/infrastructure-portfolio/)
+
+The public version is served over HTTPS from GitHub Pages, while `web01` remains the internal lab deployment target.
 
 ## Verification Checklist
 

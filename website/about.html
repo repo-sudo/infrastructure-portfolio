@@ -101,11 +101,16 @@
     .build-row h3{margin:0 0 7px;font-size:18px;letter-spacing:-.025em}
     .build-path{margin:0 0 8px;color:#33475f;font:12px var(--mono);font-weight:700}
     .build-row p{margin:0;color:var(--muted);font-size:14px}
+    .stack-ledger{background:var(--surface);border:1px solid var(--line)}
+    .stack-row{display:grid;grid-template-columns:190px 1fr;gap:24px;padding:15px 18px;border-bottom:1px solid #e8edf2}
+    .stack-row:last-child{border-bottom:0}
+    .stack-label{color:var(--blue);font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .stack-value{color:#33475f;font-size:14px}
     .timeline{display:grid;gap:14px}
     .timeline .post{grid-template-columns:126px 1fr}
     .callout{margin-top:14px;padding:18px;background:#eef4ff;border:1px solid #c8d8f5;color:#405873;font-size:14px}
     .back-link{display:inline-block;margin-bottom:18px;color:var(--blue);font:11px var(--mono);font-weight:700;text-decoration:none}
-    @media(max-width:800px){.hero-blueprint{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.build-row{grid-template-columns:1fr;gap:8px}.timeline .post{grid-template-columns:1fr}}
+    @media(max-width:800px){.hero-blueprint{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.build-row,.stack-row{grid-template-columns:1fr;gap:8px}.timeline .post{grid-template-columns:1fr}}
 
     .topology-card{padding:24px;background:var(--surface);border:1px solid var(--line)}
     .topology-scroll{overflow-x:auto;margin-top:20px;padding-bottom:4px}
@@ -179,15 +184,20 @@
     <section class="section">
       <div class="section-head">
         <div>
-          <p class="eyebrow">Current focus / 02</p>
-          <h2>What I am practising</h2>
+          <p class="eyebrow">Inventory / 02</p>
+          <h2>Lab stack</h2>
         </div>
       </div>
-      <div class="detail-grid">
-        <article class="detail-card"><h3>Infrastructure</h3><p>Linux servers, Windows Server, Proxmox, VLANs, DNS, firewall policy, backups, and monitoring.</p></article>
-        <article class="detail-card"><h3>Operations</h3><p>Change tracking, restore testing, SSH access, deployment scripts, troubleshooting notes, and configuration backups.</p></article>
-        <article class="detail-card"><h3>Documentation</h3><p>Each project records what I built, what failed, what I changed, and what I would improve next.</p></article>
-        <article class="detail-card"><h3>AI assistance</h3><p>AI helps with planning, command explanation, troubleshooting, and documentation structure. The lab work is manually executed, tested, and verified.</p></article>
+      <div class="stack-ledger">
+        <div class="stack-row"><div class="stack-label">Host</div><div class="stack-value">HP Z2 SFF</div></div>
+        <div class="stack-row"><div class="stack-label">Hypervisor</div><div class="stack-value">Proxmox VE</div></div>
+        <div class="stack-row"><div class="stack-label">Network edge</div><div class="stack-value">OPNsense VM · routing · DHCP · firewall rules · VLAN gateways</div></div>
+        <div class="stack-row"><div class="stack-label">Switching</div><div class="stack-value">TP-Link Omada SG2008P managed switch</div></div>
+        <div class="stack-row"><div class="stack-label">Networks</div><div class="stack-value">VLAN 10 Web · VLAN 20 Home Control · VLAN 30 Infrastructure</div></div>
+        <div class="stack-row"><div class="stack-label">Linux services</div><div class="stack-value">Debian · Nginx · BIND · Docker · Uptime Kuma</div></div>
+        <div class="stack-row"><div class="stack-label">Windows services</div><div class="stack-value">Windows Server · Active Directory lab</div></div>
+        <div class="stack-row"><div class="stack-label">Deployment</div><div class="stack-value">GitHub · PowerShell · SSH/SCP · website updater script</div></div>
+        <div class="stack-row"><div class="stack-label">Operations</div><div class="stack-value">Proxmox backups · OPNsense config exports · restore testing · monitoring checks · deployment scripts</div></div>
       </div>
     </section>
 

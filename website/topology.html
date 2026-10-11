@@ -201,7 +201,7 @@
             <g>
               <rect class="topology-node" x="680" y="448" width="220" height="68" rx="4"/>
               <text class="topology-title" x="790" y="475">VLAN 30</text>
-              <text class="topology-label" x="790" y="495">INFRASTRUCTURE · DNS01</text>
+              <text class="topology-label" x="790" y="495">INFRA · DNS01 · MON01</text>
             </g>
           </svg>
         </div>
@@ -231,8 +231,8 @@
           <p>The main administration point uses SSH and web interfaces to manage permitted infrastructure and services.</p>
         </article>
         <article class="detail-card">
-          <h3>Internal DNS</h3>
-          <p><code>dns01</code> in VLAN 30 resolves internal service names. DNS requests from other VLANs pass through OPNsense.</p>
+          <h3>Infrastructure services</h3>
+          <p><code>dns01</code> resolves internal service names, while <code>mon01</code> monitors core services, gateways, DNS, and internet reachability from VLAN 30.</p>
         </article>
       </div>
     </section>

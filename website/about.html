@@ -102,10 +102,6 @@
     .build-path{margin:0 0 8px;color:#33475f;font:12px var(--mono);font-weight:700}
     .build-row p{margin:0;color:var(--muted);font-size:14px}
     .stack-map{background:linear-gradient(180deg,#fff 0%,#f7faff 100%);border:1px solid var(--line)}
-    .stack-intro{display:grid;grid-template-columns:220px 1fr;gap:26px;padding:22px 24px;border-bottom:1px solid var(--line)}
-    .stack-intro strong{display:block;color:var(--ink);font-size:18px;letter-spacing:-.025em}
-    .stack-intro p{margin:5px 0 0;color:var(--muted);font-size:13px}
-    .stack-kicker{color:var(--blue);font:700 11px var(--mono);letter-spacing:.11em;text-transform:uppercase}
     .stack-layers{display:grid}
     .stack-layer{display:grid;grid-template-columns:84px 220px 1fr;gap:22px;align-items:start;padding:19px 24px;border-bottom:1px solid #e4ebf3}
     .stack-layer:last-child{border-bottom:0}
@@ -113,14 +109,13 @@
     .layer-index::after{content:"";display:block;width:26px;height:1px;background:#a9bfdf}
     .layer-title h3{margin:0 0 4px;font-size:17px;letter-spacing:-.025em}
     .layer-title p{margin:0;color:var(--muted);font-size:12px}
-    .tool-line{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:9px}
+    .tool-line{display:flex;flex-wrap:wrap;gap:8px}
     .tool-line span{display:inline-flex;align-items:center;min-height:27px;padding:4px 9px;background:#fff;border:1px solid #d9e3ef;color:#263d58;font:12px var(--mono)}
-    .layer-note{margin:0;color:#52667d;font-size:13px}
     .timeline{display:grid;gap:14px}
     .timeline .post{grid-template-columns:126px 1fr}
     .callout{margin-top:14px;padding:18px;background:#eef4ff;border:1px solid #c8d8f5;color:#405873;font-size:14px}
     .back-link{display:inline-block;margin-bottom:18px;color:var(--blue);font:11px var(--mono);font-weight:700;text-decoration:none}
-    @media(max-width:800px){.hero-blueprint{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.build-row,.stack-intro,.stack-layer{grid-template-columns:1fr;gap:8px}.stack-layer{padding:18px}.stack-intro{padding:18px}.timeline .post{grid-template-columns:1fr}}
+    @media(max-width:800px){.hero-blueprint{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.build-row,.stack-layer{grid-template-columns:1fr;gap:8px}.stack-layer{padding:18px}.timeline .post{grid-template-columns:1fr}}
 
     .topology-card{padding:24px;background:var(--surface);border:1px solid var(--line)}
     .topology-scroll{overflow-x:auto;margin-top:20px;padding-bottom:4px}
@@ -199,20 +194,12 @@
         </div>
       </div>
       <div class="stack-map">
-        <div class="stack-intro">
-          <div class="stack-kicker">What runs where</div>
-          <div>
-            <strong>A small infrastructure stack with clear layers.</strong>
-            <p>Physical host, virtual firewall, segmented networks, service VMs, and the scripts/checks that keep changes repeatable.</p>
-          </div>
-        </div>
         <div class="stack-layers">
           <article class="stack-layer">
             <div class="layer-index">01</div>
             <div class="layer-title"><h3>Compute base</h3><p>Where the lab lives</p></div>
             <div>
               <div class="tool-line"><span>HP Z2 SFF</span><span>Proxmox VE</span><span>VM storage + backups</span></div>
-              <p class="layer-note">The Z2 provides the always-on host, while Proxmox runs the Linux and Windows service VMs.</p>
             </div>
           </article>
           <article class="stack-layer">
@@ -220,7 +207,6 @@
             <div class="layer-title"><h3>Network control</h3><p>Routing and policy</p></div>
             <div>
               <div class="tool-line"><span>OPNsense VM</span><span>DHCP</span><span>Firewall rules</span><span>VLAN gateways</span></div>
-              <p class="layer-note">OPNsense is the lab boundary: it hands out VLAN addresses, routes between networks, and decides what traffic is allowed.</p>
             </div>
           </article>
           <article class="stack-layer">
@@ -228,7 +214,6 @@
             <div class="layer-title"><h3>Segments</h3><p>Service separation</p></div>
             <div>
               <div class="tool-line"><span>VLAN 10 Web</span><span>VLAN 20 Home Control</span><span>VLAN 30 Infrastructure</span><span>SG2008P trunk</span></div>
-              <p class="layer-note">Each service group has its own network instead of everything sitting on the same flat LAN.</p>
             </div>
           </article>
           <article class="stack-layer">
@@ -236,7 +221,6 @@
             <div class="layer-title"><h3>Services</h3><p>Workloads being operated</p></div>
             <div>
               <div class="tool-line"><span>Debian</span><span>Nginx</span><span>BIND DNS</span><span>Docker</span><span>Uptime Kuma</span><span>Windows Server / AD</span></div>
-              <p class="layer-note">The lab now includes web hosting, internal DNS, monitoring, home-control services, and a Windows Server learning environment.</p>
             </div>
           </article>
           <article class="stack-layer">
@@ -244,7 +228,6 @@
             <div class="layer-title"><h3>Operations</h3><p>How changes stay repeatable</p></div>
             <div>
               <div class="tool-line"><span>GitHub</span><span>PowerShell</span><span>SSH/SCP</span><span>Updater script</span><span>Restore tests</span><span>Config exports</span></div>
-              <p class="layer-note">Backups, deployment scripts, monitoring checks, and restore practice turn the lab from a build into something operated.</p>
             </div>
           </article>
         </div>

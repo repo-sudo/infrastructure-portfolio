@@ -84,6 +84,7 @@
     .page-hero h1{font-size:clamp(34px,5vw,56px)}
     .page-copy{max-width:760px;margin:16px 0 0;color:var(--muted);font-size:16px}
     .page-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .topology-hero-section{padding-top:0}
     .secondary{background:#eef4ff;color:var(--blue);border:1px solid #c8d8f5}
     .secondary:hover{background:#dfeaff;color:var(--blue-dark)}
     .detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
@@ -94,7 +95,6 @@
     .timeline{display:grid;gap:14px}
     .timeline .post{grid-template-columns:126px 1fr}
     .callout{margin-top:14px;padding:18px;background:#eef4ff;border:1px solid #c8d8f5;color:#405873;font-size:14px}
-    .back-link{display:inline-block;margin-bottom:18px;color:var(--blue);font:11px var(--mono);font-weight:700;text-decoration:none}
     @media(max-width:800px){.detail-grid{grid-template-columns:1fr}.timeline .post{grid-template-columns:1fr}}
 
     .topology-card{padding:24px;background:var(--surface);border:1px solid var(--line)}
@@ -127,10 +127,15 @@
     </nav>
   </header>
   <main class="wrap">
-    <section class="page-hero">
-      <a class="back-link" href="index.html">← BACK HOME</a>
-      <p class="eyebrow">Architecture / 03</p>
-      <h1>Lab topology</h1>
+    <section class="section topology-hero-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Architecture / 01</p>
+        </div>
+      </div>
+      <div class="page-hero">
+        <h1>Lab topology</h1>
+      </div>
     </section>
 
     <section class="section">

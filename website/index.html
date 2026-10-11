@@ -32,7 +32,7 @@
     .links a{font-size:12px;color:var(--muted);text-decoration:none}
     .links a:hover{color:var(--blue)}
     main{padding-top:34px}
-    .hero{display:grid;grid-template-columns:1.4fr .75fr;gap:38px;padding:clamp(28px,6vw,64px);background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 32px rgba(24,48,78,.06)}
+    .hero{display:grid;grid-template-columns:1.2fr .95fr;gap:38px;padding:clamp(28px,6vw,64px);background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 32px rgba(24,48,78,.06)}
     .eyebrow{margin:0 0 13px;color:var(--blue);font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase}
     h1{max-width:680px;margin:0;font-size:clamp(38px,6vw,66px);line-height:1.03;letter-spacing:-.06em}
     .hero-copy{max-width:630px;margin:20px 0 26px;color:var(--muted);font-size:17px}
@@ -109,14 +109,12 @@
       <aside class="snapshot" aria-label="Current lab snapshot">
         <div class="snapshot-head"><span>Lab snapshot</span><span class="live">● ONLINE</span></div>
         <dl>
-          <div><dt>Host</dt><dd>HP Z2 SFF G4</dd></div>
-          <div><dt>Hypervisor</dt><dd>Proxmox VE</dd></div>
-          <div><dt>Managed switch</dt><dd>TP-Link Omada SG2008P</dd></div>
-          <div><dt>Firewall/router</dt><dd>OPNsense VM</dd></div>
+          <div><dt>Host</dt><dd>HP Z2 / Proxmox</dd></div>
+          <div><dt>Boundary</dt><dd>OPNsense firewall</dd></div>
           <div><dt>Networks</dt><dd>Home LAN + VLANs 10 / 20 / 30</dd></div>
-          <div><dt>Access</dt><dd>SSH + WireGuard VPN</dd></div>
-          <div><dt>Services</dt><dd>Web, home control, DNS, monitoring + AD</dd></div>
-          <div><dt>Focus</dt><dd>Segmentation, backups, VPN + service health</dd></div>
+          <div><dt>Access</dt><dd>SSH + WireGuard</dd></div>
+          <div><dt>Services</dt><dd>Web, DNS, monitoring, home control</dd></div>
+          <div><dt>Focus</dt><dd>Segmentation, backups, recovery</dd></div>
         </dl>
       </aside>
     </section>

@@ -84,6 +84,10 @@
     .page-hero h1{font-size:clamp(34px,5vw,56px)}
     .page-copy{max-width:760px;margin:16px 0 0;color:var(--muted);font-size:16px}
     .page-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .hero-blueprint{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:24px;max-width:880px}
+    .blueprint-item{padding:14px;background:#f8fafc;border:1px solid var(--line)}
+    .blueprint-item dt{margin:0 0 6px;color:var(--blue);font:11px var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+    .blueprint-item dd{margin:0;color:#33475f;font-size:13px}
     .secondary{background:#eef4ff;color:var(--blue);border:1px solid #c8d8f5}
     .secondary:hover{background:#dfeaff;color:var(--blue-dark)}
     .detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
@@ -95,7 +99,7 @@
     .timeline .post{grid-template-columns:126px 1fr}
     .callout{margin-top:14px;padding:18px;background:#eef4ff;border:1px solid #c8d8f5;color:#405873;font-size:14px}
     .back-link{display:inline-block;margin-bottom:18px;color:var(--blue);font:11px var(--mono);font-weight:700;text-decoration:none}
-    @media(max-width:800px){.detail-grid{grid-template-columns:1fr}.timeline .post{grid-template-columns:1fr}}
+    @media(max-width:800px){.hero-blueprint{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.timeline .post{grid-template-columns:1fr}}
 
     .topology-card{padding:24px;background:var(--surface);border:1px solid var(--line)}
     .topology-scroll{overflow-x:auto;margin-top:20px;padding-bottom:4px}
@@ -128,7 +132,14 @@
       <a class="back-link" href="index.html">← BACK HOME</a>
       <p class="eyebrow">Purpose / 04</p>
       <h1>About this lab</h1>
-      <p class="page-copy">This lab is my record of moving from theory into practice. I build small infrastructure systems, troubleshoot the parts that fail, and document what changed along the way.</p>
+      <p class="page-copy">I am building this lab to turn infrastructure theory into something I can operate, break, recover, and explain.</p>
+      <p class="page-copy">It started with one Proxmox host and a web server. It now includes segmented VLANs, an OPNsense firewall/router, internal DNS, backup testing, monitoring, and a deployment workflow.</p>
+      <dl class="hero-blueprint">
+        <div class="blueprint-item"><dt>Host</dt><dd>HP Z2 running Proxmox VE.</dd></div>
+        <div class="blueprint-item"><dt>Network edge</dt><dd>OPNsense VM providing routing, DHCP, firewall rules, and VLAN gateways.</dd></div>
+        <div class="blueprint-item"><dt>Core services</dt><dd>Portfolio website, Home Control Hub, internal DNS, and Uptime Kuma monitoring.</dd></div>
+        <div class="blueprint-item"><dt>Current focus</dt><dd>Recovery testing, network segmentation, monitoring, and deployment automation.</dd></div>
+      </dl>
       <div class="page-actions"><a class="button" href="topology.html">VIEW LAB TOPOLOGY <span aria-hidden="true">→</span></a></div>
     </section>
 

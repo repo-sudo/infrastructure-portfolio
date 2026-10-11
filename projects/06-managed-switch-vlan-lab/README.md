@@ -6,7 +6,7 @@
 
 ## Goal
 
-Add a managed switch to the home lab and use it to practise VLANs, tagged links, virtual-machine networking, routing, DHCP, and firewall rules with OPNsense.
+Separate the virtual lab services into VLANs using Proxmox, and configure OPNsense for routing, DHCP, and firewall policy. Adding and configuring a managed switch was part of the build, but physical-switch VLAN settings are only needed where those VLANs cross physical ports.
 
 The first outcome was moving the Debian web server into a dedicated Web Services VLAN while keeping controlled access from my main PC on the home LAN. The lab then expanded with VLAN 20 for the Home Control Hub so camera and smart-home services can be separated from the web server.
 
@@ -32,15 +32,15 @@ The first outcome was moving the Debian web server into a dedicated Web Services
 | web01 | Debian/Nginx web server inside VLAN 10 |
 | hch01 | Debian/Frigate Home Control Hub inside VLAN 20 |
 | Proxmox bridge | VLAN-aware bridge carrying tagged VM traffic |
-| Managed switch | Carries home LAN and tagged lab VLAN traffic to the Z2 |
+| Managed switch | Connects physical devices and the home LAN to the Z2; configured VLAN membership applies to frames crossing its ports |
 
 The lab has since expanded to VLAN 30, internal DNS and remote VPN access for trusted mobile devices. See the [current logical network topology](../../docs/network-topology.md) for the complete diagram.
 
 ## What I configured
 
 1. Installed the managed switch and connected it to the lab.
-2. Created VLAN 10 for web server traffic.
-3. Configured the Z2 switch port to carry tagged lab VLAN traffic.
+2. Configured VLAN 10 for web server traffic in Proxmox and created a matching VLAN entry in Omada.
+3. Configured the Z2 switch port to allow tagged lab VLANs on the physical uplink; this does not mean internal VM traffic traverses the switch.
 4. Enabled VLAN awareness on the Proxmox bridge.
 5. Built `fw01` as an OPNsense VM with one interface facing the home LAN and one interface for the lab VLANs.
 6. Enabled DHCP on the OPNsense lab interface.
@@ -56,7 +56,9 @@ The lab has since expanded to VLAN 30, internal DNS and remote VPN access for tr
 
 ### 1. Creating VLAN 10 for web services
 
-I created VLAN 10 on the managed switch and enabled VLAN-aware bridging in Proxmox. The goal was to stop placing the Debian web server directly on the home LAN and start separating web service traffic into its own network.
+I configured VLAN 10 in Proxmox, enabled VLAN-aware bridging, and created a matching VLAN entry on the managed switch. The goal was to move the Debian web server away from the home LAN into a separate virtual network.
+
+The virtual VLAN provides Layer 2 separation within Proxmox. Omada port membership governs VLAN frames crossing the physical switch; it is not required for communication between VMs and OPNsense that stays inside the Z2. Inter-VLAN traffic can also stay inside Proxmox when fw01 routes between virtual interfaces.
 
 The important distinction was that a VLAN is only Layer 2 separation. It does not automatically provide DHCP, a default gateway, DNS, internet access, or firewall policy. Those services came later from OPNsense.
 
@@ -112,6 +114,8 @@ The main PC needed its own persistent route for the VLAN 20 subnet through OPNse
 
 ## What I learned
 
+- Proxmox VLAN settings provide virtual Layer 2 separation; OPNsense provides routing and firewall policy between networks.
+- Physical-switch VLAN membership matters only where VLAN frames cross its ports. Matching VLAN entries in Omada do not make the switch part of every internal VM path.
 - VLAN tagging, routing, DHCP, firewall policy, and client routes all have to line up for cross-subnet access to work.
 - APIPA on a VM usually means DHCP is not reaching it or not configured correctly.
 - A Windows route can be correct while the firewall still blocks or mishandles the traffic.

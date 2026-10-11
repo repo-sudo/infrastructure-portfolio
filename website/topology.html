@@ -204,7 +204,7 @@
             </g>
           </svg>
         </div>
-        <p class="topology-note">The HP Z2 runs Proxmox and hosts OPNsense, <code>web01</code>, <code>hch01</code>, and <code>dns01</code>. All access to the lab VLANs passes through the OPNsense VM. The diagram omits addresses, VPN configuration, management endpoints, and camera connection details.</p>
+        <p class="topology-note">The HP Z2 runs Proxmox and hosts OPNsense, <code>web01</code>, <code>hch01</code>, and <code>dns01</code>. OPNsense provides the gateway and firewall policy for routed access between the home LAN and lab VLANs, between lab VLANs, and from remote VPN clients. Devices in the same VLAN can communicate directly without passing through OPNsense. The diagram omits addresses, VPN configuration, management endpoints, and camera connection details.</p>
         <a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/docs/network-topology.md" target="_blank" rel="noopener noreferrer">VIEW COMPLETE TOPOLOGY DOCUMENTATION ↗</a>
       </div>
     </section>
@@ -219,7 +219,7 @@
       <div class="detail-grid">
         <article class="detail-card">
           <h3>HP Z2 / Proxmox</h3>
-          <p>The physical host runs Proxmox and provides the virtualisation and VLAN-aware networking layer for OPNsense and the service VMs.</p>
+          <p>The physical host runs Proxmox and provides virtual VLAN connectivity for OPNsense and the service VMs. VM traffic, including traffic routed between VLANs by OPNsense, can remain inside the Z2.</p>
         </article>
         <article class="detail-card">
           <h3>OPNsense</h3>
@@ -232,6 +232,10 @@
         <article class="detail-card">
           <h3>Internal DNS</h3>
           <p><code>dns01</code> in VLAN 30 resolves internal service names. DNS requests from other VLANs pass through OPNsense.</p>
+        </article>
+        <article class="detail-card">
+          <h3>Physical switch / Omada SG2008P</h3>
+          <p>The switch connects external wired devices and the home LAN to the Z2 through a physical Ethernet uplink. Its VLAN settings apply to frames crossing physical ports. Matching Omada VLAN entries are not required for traffic that stays inside Proxmox.</p>
         </article>
       </div>
     </section>

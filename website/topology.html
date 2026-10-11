@@ -101,10 +101,12 @@
     .topology-scroll{overflow-x:auto;margin-top:20px;padding-bottom:4px}
     .topology-svg{display:block;min-width:760px;width:100%;height:auto}
     .topology-line{fill:none;stroke:#8fa3ba;stroke-width:2}
+    .topology-host-boundary{fill:#fffaf5;stroke:#e3b77d;stroke-width:2;stroke-dasharray:6 6}
     .topology-node{fill:#fff;stroke:#c8d5e4;stroke-width:2}
     .topology-node.primary{fill:#e8f0fc;stroke:#8eafe4}
-    .topology-node.host{fill:#fff7ed;stroke:#e3b77d}
     .topology-node.security{fill:#eff9f5;stroke:#91cbb7}
+    .topology-host-title{fill:#8d4f19;font:700 12px var(--mono)}
+    .topology-host-label{fill:#9a6a3f;font:10px var(--mono)}
     .topology-title{fill:#17283d;font:700 15px var(--sans);text-anchor:middle}
     .topology-vm{fill:#c47a38;font:700 12px var(--mono);text-anchor:middle}
     .topology-label{fill:#627286;font:11px var(--mono);text-anchor:middle}
@@ -129,7 +131,7 @@
       <a class="back-link" href="index.html">← BACK HOME</a>
       <p class="eyebrow">Architecture / 03</p>
       <h1>Lab topology</h1>
-      <p class="page-copy">A logical map of the lab: the home network feeds the Proxmox host, OPNsense provides the routed boundary, and each VLAN has a clear service role.</p>
+      <p class="page-copy">A logical map of the lab: OPNsense provides the routed boundary, each VLAN has a clear service role, and the HP Z2 / Proxmox boundary shows where the lab VMs run.</p>
     </section>
 
     <section class="section">
@@ -142,13 +144,18 @@
               </marker>
             </defs>
 
+            <g>
+              <rect class="topology-host-boundary" x="35" y="318" width="890" height="270" rx="6"/>
+              <text class="topology-host-title" x="60" y="342">HP Z2 / PROXMOX VE</text>
+              <text class="topology-host-label" x="60" y="361">ALL LAB VMS RUN HERE</text>
+            </g>
+
             <path class="topology-line" marker-end="url(#arrow)" d="M480 78 V120"/>
             <path class="topology-line" marker-end="url(#arrow)" d="M480 178 V220"/>
-            <path class="topology-line" marker-end="url(#arrow)" d="M360 267 H275"/>
-            <path class="topology-line" marker-end="url(#arrow)" d="M480 294 V318"/>
-            <path class="topology-line" marker-end="url(#arrow)" d="M480 374 V398"/>
-            <path class="topology-line" marker-end="url(#arrow)" d="M480 464 V482 H170 V500"/>
-            <path class="topology-line" marker-end="url(#arrow)" d="M480 464 V500"/>
+            <path class="topology-line" d="M360 267 H275"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 294 V350"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 416 V482 H170 V500"/>
+            <path class="topology-line" marker-end="url(#arrow)" d="M480 416 V500"/>
             <path class="topology-line" marker-end="url(#arrow)" d="M480 482 H790 V500"/>
             <path class="topology-line" marker-end="url(#arrow)" d="M260 149 H390"/>
             <text class="topology-label" x="325" y="137">REMOTE VPN</text>
@@ -179,14 +186,9 @@
               <text class="topology-label" x="170" y="281">SSH · WEB INTERFACES</text>
             </g>
             <g>
-              <rect class="topology-node host" x="360" y="318" width="240" height="56" rx="4"/>
-              <text class="topology-title" x="480" y="342">HP Z2</text>
-              <text class="topology-label" x="480" y="361">PROXMOX VE</text>
-            </g>
-            <g>
-              <rect class="topology-node security" x="360" y="398" width="240" height="66" rx="4"/>
-              <text class="topology-title" x="480" y="424">OPNsense VM</text>
-              <text class="topology-label" x="480" y="445">DHCP · FIREWALL · ROUTING</text>
+              <rect class="topology-node security" x="360" y="350" width="240" height="66" rx="4"/>
+              <text class="topology-title" x="480" y="376">OPNsense VM</text>
+              <text class="topology-label" x="480" y="397">DHCP · FIREWALL · ROUTING</text>
             </g>
             <g>
               <rect class="topology-node" x="60" y="500" width="220" height="82" rx="4"/>

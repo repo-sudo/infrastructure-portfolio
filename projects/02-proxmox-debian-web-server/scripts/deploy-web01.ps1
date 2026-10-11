@@ -46,7 +46,8 @@ try {
     }
 
     Write-Host "All pages downloaded and validated. Deploying to web01..."
-    $uploadFiles = $pages | ForEach-Object { Join-Path $stagingFolder $_ }\n    & scp @uploadFiles "${Server}:${RemotePath}"
+    $uploadFiles = $pages | ForEach-Object { Join-Path $stagingFolder $_ }
+    & scp @uploadFiles "${Server}:${RemotePath}"
     if ($LASTEXITCODE -ne 0) {
         throw "scp failed with exit code $LASTEXITCODE."
     }

@@ -128,40 +128,52 @@
       <a class="back-link" href="index.html">← BACK HOME</a>
       <p class="eyebrow">Purpose / 04</p>
       <h1>About this lab</h1>
-      <p class="page-copy">This is a personal infrastructure learning lab used to practise server administration, network segmentation, firewall policy, deployment automation, and recovery habits in a small but realistic environment.</p>\n      <div class="page-actions"><a class="button" href="#topology">VIEW LAB TOPOLOGY <span aria-hidden="true">↓</span></a></div>
+      <p class="page-copy">This lab is my record of moving from theory into practice. I build small infrastructure systems, troubleshoot the parts that fail, and document what changed along the way.</p>
+      <div class="page-actions"><a class="button" href="topology.html">VIEW LAB TOPOLOGY <span aria-hidden="true">→</span></a></div>
     </section>
 
     <section class="section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Journey / 01</p>
+          <h2>How the lab grew</h2>
+          <p class="intro">The lab started as a dedicated host and a web server. It has grown into a segmented environment with DNS, backups, monitoring, and a public record of the work.</p>
+        </div>
+      </div>
       <div class="detail-grid">
         <article class="detail-card">
-          <h3>Why I built it</h3>
-          <p>I am using hands-on projects to build practical infrastructure skills across Linux, Windows Server, networking, virtualisation, automation, and cloud.</p>
+          <h3>01 / Foundation</h3>
+          <p>I started with an HP Z2 running Proxmox VE, then built a Debian web server with Nginx to host this portfolio.</p>
         </article>
         <article class="detail-card">
-          <h3>How I work</h3>
-          <p>I build the system, test it, break parts of it, fix the issue, then document the commands, decisions, and lessons in GitHub.</p>
+          <h3>02 / Segmentation</h3>
+          <p>I added a managed switch, VLANs, OPNsense routing, firewall rules, and controlled access from my admin workstation.</p>
         </article>
         <article class="detail-card">
-          <h3>Current stack</h3>
-          <ul>
-            <li>HP Z2 SFF host</li>
-            <li>Proxmox VE hypervisor</li>
-            <li>TP-Link Omada SG2008P managed switch</li>
-            <li>OPNsense firewall/router VM</li>
-            <li>VLAN 10 for web services</li>
-            <li>VLAN 20 for home-control services</li>
-            <li>VLAN 30 for infrastructure services</li>
-            <li>Linux and Windows Server virtual machines</li>
-            <li>Nginx static website on web01</li>
-            <li>PowerShell and SSH-based deployment workflow</li>
-          </ul>
+          <h3>03 / Services</h3>
+          <p>I added service VMs for the portfolio website, Home Control Hub, internal DNS, and Uptime Kuma monitoring.</p>
         </article>
         <article class="detail-card">
-          <h3>AI assistance</h3>
-          <p>AI is used as a learning assistant for planning, command explanation, troubleshooting, and documentation. The lab work is still manually executed, tested, and verified.</p>
+          <h3>04 / Operations</h3>
+          <p>I test backups, export firewall configuration, document restore steps, and improve the deployment workflow as the lab changes.</p>
         </article>
       </div>
-      <div class="callout">The environment is intentionally small, but the workflow mirrors real infrastructure habits: change control, verification, configuration backups, restore planning, firewall rules, segmented networks, SSH key-based access, automation, and clear documentation.</div>
+      <div class="callout">I am not presenting this as enterprise infrastructure. I am presenting it as evidence of how I learn: build the thing, test it, break or misconfigure something, fix it, and document the lesson properly.</div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Current focus / 02</p>
+          <h2>What I am practising</h2>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <article class="detail-card"><h3>Infrastructure</h3><p>Linux servers, Windows Server, Proxmox, VLANs, DNS, firewall policy, backups, and monitoring.</p></article>
+        <article class="detail-card"><h3>Operations</h3><p>Change tracking, restore testing, SSH access, deployment scripts, troubleshooting notes, and configuration backups.</p></article>
+        <article class="detail-card"><h3>Documentation</h3><p>Each project records what I built, what failed, what I changed, and what I would improve next.</p></article>
+        <article class="detail-card"><h3>AI assistance</h3><p>AI helps with planning, command explanation, troubleshooting, and documentation structure. The lab work is manually executed, tested, and verified.</p></article>
+      </div>
     </section>
 
 

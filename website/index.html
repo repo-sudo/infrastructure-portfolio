@@ -115,8 +115,8 @@
           <div><dt>Firewall/router</dt><dd>OPNsense VM</dd></div>
           <div><dt>Networks</dt><dd>Home LAN + VLANs 10 / 20 / 30</dd></div>
           <div><dt>Access</dt><dd>SSH + WireGuard VPN</dd></div>
-          <div><dt>Services</dt><dd>Web, HCH, DNS + Windows Server</dd></div>
-          <div><dt>Focus</dt><dd>Segmentation, recovery, VPN + DNS</dd></div>
+          <div><dt>Services</dt><dd>Web, HCH, DNS, monitoring + Windows Server</dd></div>
+          <div><dt>Focus</dt><dd>Segmentation, recovery, VPN, DNS + monitoring</dd></div>
         </dl>
       </aside>
     </section>
@@ -137,7 +137,7 @@
       <div class="lessons">
         <div class="lesson"><h3>Virtual resources</h3><p>Proxmox runs on the Z2 and allocates virtual CPUs, memory, storage, and network adapters to each guest while keeping services separated.</p></div>
         <div class="lesson"><h3>Segmentation</h3><p>VLAN 10 separates the web server, VLAN 20 hosts the Home Control Hub, and VLAN 30 holds infrastructure services. OPNsense rules decide which systems can cross between segments.</p></div>
-        <div class="lesson"><h3>Name resolution</h3><p><code>dns01</code> now provides internal DNS, so lab services can be opened and administered by hostname instead of memorised IP addresses.</p></div>
+        <div class="lesson"><h3>Name resolution</h3><p><code>dns01</code> provides internal DNS, while <code>mon01</code> checks whether important services, VLAN gateways, and DNS paths are reachable.</p></div>
       </div>
     </section>
 

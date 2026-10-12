@@ -12,8 +12,11 @@ This avoids relying on browser-side JavaScript for the most important preview se
 - Source lab notes: `website/lab-notes.html`
 - Target homepage: `website/index.html`
 - Script: `scripts/update-homepage-latest.ps1`
+- Double-click launcher: `scripts/update-homepage-latest.bat`
 
-Run it from the repository root with:
+Double-click `update-homepage-latest.bat` for the normal Windows workflow.
+
+Run the PowerShell script from the repository root with:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\update-homepage-latest.ps1"

@@ -180,15 +180,15 @@
       <div class="automation-hero">
         <div>
           <p class="eyebrow">Automation / 01</p>
-          <h1>Repeatable work, verified results.</h1>
-          <p class="page-copy">This page tracks the scripts and operating routines that reduce fragile manual work in the lab. The focus is practical: update the site, verify what changed, keep recovery steps repeatable, and make routine checks easier to trust.</p>
+          <h1>Automation projects from the lab.</h1>
+          <p class="page-copy">This page collects the scripts, scheduled tasks, checks, and repeatable workflows I build around the lab. Some are finished, some are active, and some are planned as the environment grows.</p>
+          <p class="page-copy">The goal is practical automation: reduce repeated manual steps, make changes safer, and prove that important services, backups, and deployments behave the way they should.</p>
         </div>
         <aside class="automation-panel" aria-label="Automation snapshot">
-          <div class="automation-stat"><span>Current scope</span><span>Website deployment</span></div>
-          <div class="automation-stat"><span>Public mirror</span><span>GitHub Pages</span></div>
-          <div class="automation-stat"><span>Internal target</span><span>web01 / Nginx</span></div>
-          <div class="automation-stat"><span>Verification</span><span>Hash checks</span></div>
-          <div class="automation-stat"><span>Next area</span><span>Backups + monitoring</span></div>
+          <div class="automation-stat"><span>Current project</span><span>Website deployment</span></div>
+          <div class="automation-stat"><span>Next candidates</span><span>Backups + monitoring</span></div>
+          <div class="automation-stat"><span>Tools in use</span><span>PowerShell, GitHub, SSH</span></div>
+          <div class="automation-stat"><span>Focus</span><span>Repeatability + verification</span></div>
         </aside>
       </div>
     </section>
@@ -196,9 +196,30 @@
     <section class="section">
       <div class="section-head">
         <div>
-          <p class="eyebrow">Deployment flow / 02</p>
-          <h2>How website updates move</h2>
-          <p class="intro">The workflow now resolves the latest GitHub commit, downloads the pages from that exact revision, uploads them to web01, and checks the served files afterward.</p>
+          <p class="eyebrow">Projects / 02</p>
+          <h2>Automation work</h2>
+          <p class="intro">A growing list of lab automation projects, starting with deployment and expanding into monitoring, backups, and routine operations.</p>
+        </div>
+      </div>
+      <table class="automation-table">
+        <thead>
+          <tr><th>Project</th><th>Status</th><th>Purpose</th><th>Next step</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Website deployment automation</td><td>Active</td><td>Download the site from one GitHub commit, upload it to web01, and verify the served pages.</td><td>Keep the internal deployment script aligned as pages are added.</td></tr>
+          <tr><td>Backup verification routines</td><td>Planned</td><td>Make backup checks more consistent after VM, DNS, and firewall restore tests.</td><td>Define what must be verified after each backup or restore.</td></tr>
+          <tr><td>Monitoring checks</td><td>Planned</td><td>Use monitoring to confirm important lab services are reachable and behaving as expected.</td><td>Document Uptime Kuma checks and failure actions.</td></tr>
+          <tr><td>Configuration exports</td><td>Planned</td><td>Keep key service and firewall configurations easier to recover and compare over time.</td><td>Decide which exports should be manual, scheduled, or versioned.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Featured project / 03</p>
+          <h2>Website deployment flow</h2>
+          <p class="intro">The first automation project came from a real problem: updates appeared inconsistent because the browser, GitHub raw files, and web01 were not always being checked clearly.</p>
         </div>
       </div>
       <div class="pipeline">
@@ -233,48 +254,28 @@
     <section class="section">
       <div class="section-head">
         <div>
-          <p class="eyebrow">Runbook / 03</p>
-          <h2>What the automation protects against</h2>
+          <p class="eyebrow">Standards / 04</p>
+          <h2>What counts as useful automation</h2>
         </div>
       </div>
       <div class="runbook">
         <article class="runbook-block">
-          <h3>Problems already found</h3>
+          <h3>It should remove a real friction point</h3>
           <ul class="runbook-list">
-            <li>Browser cache made old pages look like failed deployments.</li>
-            <li>Downloading individual files without a commit reference could mix versions.</li>
-            <li>Scripts reported success before proving the website was serving the new files.</li>
+            <li>Repeated commands that are easy to mistype.</li>
+            <li>Checks that are easy to forget after a change.</li>
+            <li>Recovery steps that need to work under pressure.</li>
           </ul>
         </article>
         <article class="runbook-block">
-          <h3>Current rules</h3>
+          <h3>It should prove the result</h3>
           <ul class="runbook-list">
-            <li>Deploy from one resolved commit, not a moving branch URL.</li>
-            <li>Validate every page before upload.</li>
-            <li>Verify every served page after upload before calling the run successful.</li>
+            <li>Do not just report that a command ran.</li>
+            <li>Check the service, file, page, backup, or route afterwards.</li>
+            <li>Document what failed and what the script now protects against.</li>
           </ul>
         </article>
       </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Backlog / 04</p>
-          <h2>Automation roadmap</h2>
-        </div>
-      </div>
-      <table class="automation-table">
-        <thead>
-          <tr><th>Area</th><th>Current state</th><th>Next improvement</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Website deployment</td><td>Scripted download, upload, and verification for the static site.</td><td>Add automation.html to the internal deployment script and keep page checks consistent.</td></tr>
-          <tr><td>Public publishing</td><td>GitHub Pages mirrors the site publicly over HTTPS.</td><td>Keep public and internal copies aligned after every site change.</td></tr>
-          <tr><td>Monitoring</td><td>Uptime Kuma is part of the lab stack.</td><td>Document checks for core services and turn failures into clear action steps.</td></tr>
-          <tr><td>Backups</td><td>Restore tests are documented in project records.</td><td>Standardise backup schedules and add verification notes after each restore test.</td></tr>
-        </tbody>
-      </table>
     </section>
 
   </main>

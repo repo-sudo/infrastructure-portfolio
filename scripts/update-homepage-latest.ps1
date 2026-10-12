@@ -1,9 +1,24 @@
 [CmdletBinding()]
 param(
-    [string]$WebsiteFolder = (Join-Path $PSScriptRoot "..\website")
+    [string]$WebsiteFolder
 )
 
 $ErrorActionPreference = "Stop"
+
+if ([string]::IsNullOrWhiteSpace($WebsiteFolder)) {
+    if (-not [string]::IsNullOrWhiteSpace($PSScriptRoot)) {
+        $WebsiteFolder = Join-Path $PSScriptRoot "..\website"
+    }
+    elseif (Test-Path -LiteralPath (Join-Path (Get-Location) "website") -PathType Container) {
+        $WebsiteFolder = Join-Path (Get-Location) "website"
+    }
+    else {
+        $WebsiteFolder = Get-Location
+    }
+}
+
+$WebsiteFolder = [IO.Path]::GetFullPath($WebsiteFolder)
+Write-Host "Using website folder: $WebsiteFolder"
 
 $indexPath = Join-Path $WebsiteFolder "index.html"
 $projectsPath = Join-Path $WebsiteFolder "projects.html"

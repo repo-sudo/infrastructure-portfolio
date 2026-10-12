@@ -132,11 +132,11 @@
       <div class="posts" id="latest-notes" aria-live="polite">
         <p class="intro">Loading the latest notes…</p>
       </div>
-      <p class="eyebrow" style="margin-top:30px">Concepts in practice</p>
+      <p class="eyebrow" style="margin-top:30px">Operational concepts</p>
       <div class="lessons">
-        <div class="lesson"><h3>Virtual resources</h3><p>Proxmox runs on the Z2 and allocates virtual CPUs, memory, storage, and network adapters to each guest while keeping services separated.</p></div>
-        <div class="lesson"><h3>Segmentation</h3><p>VLAN 10 separates the web server, VLAN 20 hosts the Home Control Hub, and VLAN 30 holds infrastructure services. OPNsense rules decide which systems can cross between segments.</p></div>
-        <div class="lesson"><h3>Name resolution</h3><p><code>dns01</code> provides internal DNS, while <code>mon01</code> checks whether important services, VLAN gateways, and DNS paths are reachable.</p></div>
+        <div class="lesson"><h3>Virtualisation layer</h3><p>Proxmox provides the compute layer for the lab, separating workloads into VMs with their own storage, network interfaces, and recovery paths.</p></div>
+        <div class="lesson"><h3>Network segmentation</h3><p>VLAN 10, VLAN 20, and VLAN 30 separate public-facing, home-control, and infrastructure services, with OPNsense controlling traffic between them.</p></div>
+        <div class="lesson"><h3>Service operations</h3><p>Internal DNS, monitoring, backups, deployment scripts, and restore tests make the lab easier to operate, verify, and recover when something changes.</p></div>
       </div>
     </section>
 
@@ -190,4 +190,5 @@
     });
   </script>
 </body>
+<!-- homepage-concepts-refresh: 2026-10-12T18:17:34.843Z -->
 </html>

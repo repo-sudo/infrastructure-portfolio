@@ -8,7 +8,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\deploy-web01.ps1"
 if errorlevel 1 goto failed
 
 echo.
-echo All six website pages updated, homepage latest sections refreshed, and web01 verified.
+echo All six website pages updated and verified.
 pause
 exit /b 0
 

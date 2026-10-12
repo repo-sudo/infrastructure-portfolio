@@ -155,8 +155,8 @@
     .automation-project h3{margin:0 0 9px;font-size:19px;letter-spacing:-.025em}
     .automation-project p{margin:0;color:var(--muted);font-size:14px}
     .automation-footer{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-top:auto;padding-top:18px}
-    .automation-meta{display:flex;flex:1;flex-wrap:wrap;gap:8px;margin:0;padding-top:0}
-    .automation-meta span{display:inline-flex;padding:4px 8px;background:#f8fafc;border:1px solid #d9e3ef;color:#405873;font:11px var(--mono)}
+    .automation-meta{display:flex;flex:1;flex-wrap:wrap;align-items:flex-start;gap:8px;margin:0;padding-top:0}
+    .automation-meta span{display:inline-flex;align-items:center;min-height:27px;padding:4px 8px;background:#f8fafc;border:1px solid #d9e3ef;color:#405873;font:11px var(--mono);white-space:nowrap}
     .automation-project .text-link{align-self:auto;margin-top:0;padding-top:0;white-space:nowrap}
     @media(max-width:800px){.automation-projects{grid-template-columns:1fr}.automation-project{min-height:0}}
     @media(max-width:900px){.pipeline{grid-template-columns:1fr}.pipeline-step{min-height:0}.pipeline-step::after{display:none}.automation-hero,.runbook{grid-template-columns:1fr}}
@@ -232,7 +232,7 @@
           </div>
           <h3>Backup verification routines</h3>
           <p>Standard checks for VM, DNS, and firewall backup jobs so a backup is not treated as successful until recovery evidence exists.</p>
-          <div class="automation-meta"><span>Proxmox</span><span>Restore tests</span><span>Runbook</span></div>
+          <div class="automation-footer"><div class="automation-meta"><span>Proxmox</span><span>Restore tests</span><span>Runbook</span></div></div>
         </article>
         <article class="automation-project">
           <div class="automation-project-top">
@@ -241,7 +241,7 @@
           </div>
           <h3>Monitoring response checks</h3>
           <p>Service checks and failure notes for the lab so monitoring is connected to action, not just a dashboard showing red or green.</p>
-          <div class="automation-meta"><span>Uptime Kuma</span><span>HTTP checks</span><span>Internal services</span></div>
+          <div class="automation-footer"><div class="automation-meta"><span>Uptime Kuma</span><span>HTTP checks</span><span>Internal services</span></div></div>
         </article>
         <article class="automation-project">
           <div class="automation-project-top">
@@ -250,7 +250,7 @@
           </div>
           <h3>Configuration export workflow</h3>
           <p>A repeatable way to export and track important service or firewall configuration before and after meaningful lab changes.</p>
-          <div class="automation-meta"><span>OPNsense</span><span>Config exports</span><span>Change record</span></div>
+          <div class="automation-footer"><div class="automation-meta"><span>OPNsense</span><span>Config exports</span><span>Change record</span></div></div>
         </article>
       </div>
     </section>

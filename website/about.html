@@ -47,6 +47,7 @@
     .snapshot dt{color:var(--muted);font:11px var(--mono)}
     .snapshot dd{margin:0;text-align:right;font:11px var(--mono);font-weight:700}
     .section{padding-top:58px}
+    .hero-section{padding-top:0}
     .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:19px}
     h2{margin:0;font-size:30px;letter-spacing:-.045em}
     .intro{max-width:620px;margin:7px 0 0;color:var(--muted);font-size:14px}
@@ -150,10 +151,16 @@
   </header>
   <main class="wrap">
 
-    <section class="page-hero">
-      <p class="eyebrow">Purpose / 01</p>
-      <h1>About</h1>
-      <p class="page-copy">This lab is where I learn networking and systems administration by running services I rely on, then documenting the decisions, checks, and recovery work.</p>
+    <section class="section hero-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Purpose / 01</p>
+        </div>
+      </div>
+      <div class="page-hero">
+        <h1>About</h1>
+        <p class="page-copy">This lab is where I learn networking and systems administration by running services I rely on, then documenting the decisions, checks, and recovery work.</p>
+      </div>
     </section>
 
     <section class="section">

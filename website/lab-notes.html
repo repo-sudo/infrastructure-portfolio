@@ -181,11 +181,12 @@
     </section>
 
     <section class="section">
-      <div class="section-head"><div><p class="eyebrow">Concepts in practice</p><h2>What this lab is teaching</h2></div></div>
+      <div class="section-head"><div><p class="eyebrow">Operational concepts</p>
+          <h2>What the lab demonstrates</h2></div></div>
       <div class="lessons">
-        <div class="lesson"><h3>Virtual resources</h3><p>Proxmox allocates virtual CPUs, memory, and disk to each guest. A vCPU shares time on the host processor; it is not a dedicated physical core.</p></div>
-        <div class="lesson"><h3>Bridge + address</h3><p>The VM's VirtIO adapter connects through <code>vmbr0</code> to the local network. The bridge carries the traffic; DHCP assigns the VM an IP address.</p></div>
-        <div class="lesson"><h3>ISO + virtual disk</h3><p>The ISO boots the installer. After installation, the operating system and website live on the VM's virtual disk.</p></div>
+        <div class="lesson"><h3>Virtualisation layer</h3><p>Proxmox provides the compute layer for the lab, separating workloads into VMs with their own storage, network interfaces, and recovery paths.</p></div>
+        <div class="lesson"><h3>Network segmentation</h3><p>VLAN 10, VLAN 20, and VLAN 30 separate public-facing, home-control, and infrastructure services, with OPNsense controlling traffic between them.</p></div>
+        <div class="lesson"><h3>Service operations</h3><p>Internal DNS, monitoring, backups, deployment scripts, and restore tests make the lab easier to operate, verify, and recover when something changes.</p></div>
       </div>
     </section>
 

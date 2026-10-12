@@ -12,7 +12,6 @@ This avoids relying on browser-side JavaScript for the most important preview se
 - Source lab notes: `website/lab-notes.html`
 - Target homepage: `website/index.html`
 - Script: `scripts/update-homepage-latest.ps1`
-- Deployment wrapper: `scripts/deploy-web01.ps1`
 
 Projects and lab notes are kept oldest-to-newest in their source pages. The script takes the last three project cards and the last four lab-note entries, preserving that same ascending order.
 
@@ -21,7 +20,7 @@ Projects and lab notes are kept oldest-to-newest in their source pages. The scri
 - Keep the homepage static instead of loading latest content with JavaScript.
 - Use marker comments in `index.html` so the generated sections are easy to find and replace.
 - Treat `projects.html` and `lab-notes.html` as the source of truth instead of maintaining duplicate homepage cards manually.
-- Run the homepage refresh inside the web01 deployment flow so the update button confirms the generated homepage was implemented before upload.
+- Keep this automation independent from the web01 deployment script so the content-refresh step can be tested on its own.
 
 ## Problems found
 
@@ -31,10 +30,11 @@ Projects and lab notes are kept oldest-to-newest in their source pages. The scri
 
 ## Verification
 
-After running the deployment wrapper, verify that:
+After running the script, verify that:
 
-- `index.html` contains LAB-012, LAB-013, and LAB-014 in order.
-- `index.html` contains ENTRY 041, ENTRY 042, ENTRY 043, and ENTRY 044 in order.
+- `website/index.html` contains LAB-012, LAB-013, and LAB-014 in order.
+- `website/index.html` contains ENTRY 041, ENTRY 042, ENTRY 043, and ENTRY 044 in order.
 - The homepage no longer depends on the JavaScript fetch block for those sections.
-- The deployment output confirms: `Homepage latest sections refreshed.`
-- The final success message confirms all six served pages match the deployed files.
+- The output confirms: `Homepage latest sections updated.`
+
+A separate launcher can run this script first and then run the web01 deployment automation.

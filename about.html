@@ -115,7 +115,13 @@
     .timeline{display:grid;gap:14px}
     .timeline .post{grid-template-columns:126px 1fr}
     .callout{margin-top:14px;padding:18px;background:#eef4ff;border:1px solid #c8d8f5;color:#405873;font-size:14px}
-    @media(max-width:800px){.hero-blueprint{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.build-row,.stack-layer{grid-template-columns:1fr;gap:8px}.stack-layer{padding:18px}.timeline .post{grid-template-columns:1fr}}
+    .contact-block{display:grid;grid-template-columns:.8fr 1.2fr;gap:24px;padding:24px;background:var(--surface);border:1px solid var(--line)}
+    .contact-block h2{font-size:26px}
+    .contact-block p{margin:0;color:var(--muted);font-size:14px}
+    .contact-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .contact-actions .button{background:#eef4ff;color:var(--blue);border:1px solid #c8d8f5}
+    .contact-actions .button:hover{background:#dfeaff;color:var(--blue-dark)}
+    @media(max-width:800px){.hero-blueprint{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.build-row,.stack-layer,.contact-block{grid-template-columns:1fr;gap:8px}.stack-layer{padding:18px}.timeline .post{grid-template-columns:1fr}}
 
     .topology-card{padding:24px;background:var(--surface);border:1px solid var(--line)}
     .topology-scroll{overflow-x:auto;margin-top:20px;padding-bottom:4px}
@@ -213,6 +219,21 @@
     </section>
 
 
+
+    <section class="section">
+      <div class="contact-block">
+        <div>
+          <p class="eyebrow">Contact / 03</p>
+          <h2>Get in touch</h2>
+        </div>
+        <div>
+          <p>I am open to infrastructure, cloud, and support opportunities where practical troubleshooting, documentation, and steady operations matter.</p>
+          <div class="contact-actions">
+            <a class="button" href="https://github.com/repo-sudo" target="_blank" rel="noopener noreferrer">GITHUB PROFILE <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
 
   </main>
   <footer class="wrap"><div class="footer-inner"><span>DAVID GARCIARENA / HOME LAB JOURNAL</span><span>STATIC HTML · BUILT WITH CODEX</span></div></footer>

@@ -1,22 +1,22 @@
 @echo off
 setlocal
 
-set "SCRIPT_DIR=%~dp0"
-set "WEBSITE_FOLDER=%SCRIPT_DIR%..\website"
+set "WEBSITE_FOLDER=C:\Users\admin\Documents\Labs\Web"
+set "SCRIPT_URL=https://raw.githubusercontent.com/repo-sudo/infrastructure-portfolio/main/scripts/update-homepage-latest.ps1"
+set "SCRIPT_FILE=%TEMP%\update-homepage-latest.ps1"
 
-if exist "%SCRIPT_DIR%index.html" set "WEBSITE_FOLDER=%SCRIPT_DIR%"
-if exist "%SCRIPT_DIR%website\index.html" set "WEBSITE_FOLDER=%SCRIPT_DIR%website"
+if not exist "%WEBSITE_FOLDER%" goto missing_folder
 
-set "PS_SCRIPT=%SCRIPT_DIR%update-homepage-latest.ps1"
-if not exist "%PS_SCRIPT%" set "PS_SCRIPT=%SCRIPT_DIR%scripts\update-homepage-latest.ps1"
+echo Downloading latest homepage sync script from GitHub...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Invoke-WebRequest -UseBasicParsing -Uri '%SCRIPT_URL%' -OutFile '%SCRIPT_FILE%'"
+if errorlevel 1 goto failed
 
-if not exist "%PS_SCRIPT%" goto missing_script
-
+echo.
 echo Refreshing homepage latest projects and lab notes...
 echo Website folder: %WEBSITE_FOLDER%
 echo.
 
-powershell -NoProfile -ExecutionPolicy Bypass -File "%PS_SCRIPT%" -WebsiteFolder "%WEBSITE_FOLDER%"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_FILE%" -WebsiteFolder "%WEBSITE_FOLDER%"
 if errorlevel 1 goto failed
 
 echo.
@@ -24,10 +24,10 @@ echo Homepage latest sections updated successfully.
 pause
 exit /b 0
 
-:missing_script
+:missing_folder
 echo.
-echo Could not find update-homepage-latest.ps1 next to this launcher.
-echo Put this BAT in the same folder as update-homepage-latest.ps1, or in the repository root.
+echo Website folder not found:
+echo %WEBSITE_FOLDER%
 pause
 exit /b 1
 

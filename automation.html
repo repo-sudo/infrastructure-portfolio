@@ -148,6 +148,15 @@
     .automation-table th{color:var(--blue);font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:#f8fafc}
     .automation-table td{color:var(--muted);font-size:14px}
     .automation-table td:first-child{color:#263d58;font-weight:700}
+    .automation-projects{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .automation-project{display:grid;grid-template-rows:auto auto 1fr auto;min-height:245px;padding:22px;background:var(--surface);border:1px solid var(--line)}
+    .automation-project-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:18px}
+    .automation-id{color:var(--blue);font:700 11px var(--mono)}
+    .automation-project h3{margin:0 0 9px;font-size:19px;letter-spacing:-.025em}
+    .automation-project p{margin:0;color:var(--muted);font-size:14px}
+    .automation-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+    .automation-meta span{display:inline-flex;padding:4px 8px;background:#f8fafc;border:1px solid #d9e3ef;color:#405873;font:11px var(--mono)}
+    @media(max-width:800px){.automation-projects{grid-template-columns:1fr}.automation-project{min-height:0}}
     @media(max-width:900px){.pipeline{grid-template-columns:1fr}.pipeline-step{min-height:0}.pipeline-step::after{display:none}.automation-hero,.runbook{grid-template-columns:1fr}}
     .topology-card{padding:24px;background:var(--surface);border:1px solid var(--line)}
     .topology-scroll{overflow-x:auto;margin-top:20px;padding-bottom:4px}
@@ -193,25 +202,53 @@
       </div>
     </section>
 
+
     <section class="section">
       <div class="section-head">
         <div>
           <p class="eyebrow">Projects / 02</p>
           <h2>Automation work</h2>
-          <p class="intro">A growing list of lab automation projects, starting with deployment and expanding into monitoring, backups, and routine operations.</p>
+          <p class="intro">A growing list of automation projects. The first one is active now; the others become projects as the lab needs them.</p>
         </div>
       </div>
-      <table class="automation-table">
-        <thead>
-          <tr><th>Project</th><th>Status</th><th>Purpose</th><th>Next step</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Website deployment automation</td><td>Active</td><td>Download the site from one GitHub commit, upload it to web01, and verify the served pages.</td><td>Keep the internal deployment script aligned as pages are added.</td></tr>
-          <tr><td>Backup verification routines</td><td>Planned</td><td>Make backup checks more consistent after VM, DNS, and firewall restore tests.</td><td>Define what must be verified after each backup or restore.</td></tr>
-          <tr><td>Monitoring checks</td><td>Planned</td><td>Use monitoring to confirm important lab services are reachable and behaving as expected.</td><td>Document Uptime Kuma checks and failure actions.</td></tr>
-          <tr><td>Configuration exports</td><td>Planned</td><td>Keep key service and firewall configurations easier to recover and compare over time.</td><td>Decide which exports should be manual, scheduled, or versioned.</td></tr>
-        </tbody>
-      </table>
+      <div class="automation-projects">
+        <article class="automation-project">
+          <div class="automation-project-top">
+            <span class="automation-id">AUT-001</span>
+            <span class="tag active">Active</span>
+          </div>
+          <h3>Website deployment automation</h3>
+          <p>Downloads the website from one GitHub commit, validates the files, uploads them to web01, and verifies that the served pages match what was deployed.</p>
+          <div class="automation-meta"><span>PowerShell</span><span>GitHub</span><span>SSH/SCP</span><span>Hash checks</span></div>
+        </article>
+        <article class="automation-project">
+          <div class="automation-project-top">
+            <span class="automation-id">AUT-002</span>
+            <span class="tag">Planned</span>
+          </div>
+          <h3>Backup verification routines</h3>
+          <p>Standard checks for VM, DNS, and firewall backup jobs so a backup is not treated as successful until recovery evidence exists.</p>
+          <div class="automation-meta"><span>Proxmox</span><span>Restore tests</span><span>Runbook</span></div>
+        </article>
+        <article class="automation-project">
+          <div class="automation-project-top">
+            <span class="automation-id">AUT-003</span>
+            <span class="tag">Planned</span>
+          </div>
+          <h3>Monitoring response checks</h3>
+          <p>Service checks and failure notes for the lab so monitoring is connected to action, not just a dashboard showing red or green.</p>
+          <div class="automation-meta"><span>Uptime Kuma</span><span>HTTP checks</span><span>Internal services</span></div>
+        </article>
+        <article class="automation-project">
+          <div class="automation-project-top">
+            <span class="automation-id">AUT-004</span>
+            <span class="tag">Planned</span>
+          </div>
+          <h3>Configuration export workflow</h3>
+          <p>A repeatable way to export and track important service or firewall configuration before and after meaningful lab changes.</p>
+          <div class="automation-meta"><span>OPNsense</span><span>Config exports</span><span>Change record</span></div>
+        </article>
+      </div>
     </section>
 
     <section class="section">

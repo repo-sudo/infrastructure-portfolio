@@ -32,7 +32,6 @@ try {
     }
     Write-Host "Deploying commit $revision"
     $baseUrl = "https://raw.githubusercontent.com/$repository/$revision/website"
-    $scriptUrl = "https://raw.githubusercontent.com/$repository/$revision/scripts/update-homepage-latest.ps1"
     $expectedHashes = @{}
 
     foreach ($page in $pages) {
@@ -49,24 +48,6 @@ try {
         if ($content -notmatch "(?i)<html\b" -or $content -notmatch "(?i)</html>") {
             throw "Downloaded $page is not a complete HTML document."
         }
-    }
-
-    Write-Host "Downloading homepage latest-content script"
-    $homepageScript = Join-Path $stagingFolder "update-homepage-latest.ps1"
-    Invoke-WebRequest -UseBasicParsing -Uri $scriptUrl -Headers $headers -TimeoutSec 60 -OutFile $homepageScript
-    if (-not (Test-Path -LiteralPath $homepageScript -PathType Leaf)) {
-        throw "Homepage latest-content script was not downloaded."
-    }
-
-    Write-Host "Refreshing homepage latest projects and lab notes..."
-    & powershell -NoProfile -ExecutionPolicy Bypass -File $homepageScript -WebsiteFolder $stagingFolder
-    if ($LASTEXITCODE -ne 0) {
-        throw "Homepage latest-content script failed with exit code $LASTEXITCODE."
-    }
-    Write-Host "Homepage latest sections refreshed."
-
-    foreach ($page in $pages) {
-        $destination = Join-Path $stagingFolder $page
         $expectedHashes[$page] = (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash
     }
 
@@ -77,7 +58,7 @@ try {
         Copy-Item -LiteralPath (Join-Path $stagingFolder $page) -Destination (Join-Path $LocalFolder $page) -Force
     }
 
-    Write-Host "All six pages downloaded, refreshed, and validated. Uploading..."
+    Write-Host "All six pages downloaded and validated. Uploading..."
     $uploadFiles = @($pages | ForEach-Object { Join-Path $stagingFolder $_ })
     & scp @uploadFiles "$($Server):$RemotePath"
     if ($LASTEXITCODE -ne 0) {
@@ -98,7 +79,7 @@ try {
     }
 
     Write-Host ""
-    Write-Host "SUCCESS: homepage latest sections refreshed and all six served pages match commit $revision" -ForegroundColor Green
+    Write-Host "SUCCESS: all six served pages match commit $revision" -ForegroundColor Green
     Write-Host ("Home:       " + $SiteUrl.TrimEnd("/") + "/?revision=" + $revision)
     Write-Host ("Projects:   " + $SiteUrl.TrimEnd("/") + "/projects.html?revision=" + $revision)
     Write-Host ("Automation: " + $SiteUrl.TrimEnd("/") + "/automation.html?revision=" + $revision)

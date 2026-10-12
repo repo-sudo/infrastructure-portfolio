@@ -13,6 +13,18 @@ This avoids relying on browser-side JavaScript for the most important preview se
 - Target homepage: `website/index.html`
 - Script: `scripts/update-homepage-latest.ps1`
 
+Run it from the repository root with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\update-homepage-latest.ps1"
+```
+
+Or run it from the website folder with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "..\scripts\update-homepage-latest.ps1" -WebsiteFolder "."
+```
+
 Projects and lab notes are kept oldest-to-newest in their source pages. The script takes the last three project cards and the last four lab-note entries, preserving that same ascending order.
 
 ## Decisions

@@ -66,6 +66,17 @@
     .project-meta{display:flex;flex:1;flex-wrap:wrap;gap:7px;margin:0}
     .project-meta span{display:inline-flex;align-items:center;min-height:24px;padding:3px 8px;background:#f8fafc;border:1px solid #d9e3ef;color:#405873;font:10px var(--mono);white-space:nowrap}
     .text-link:hover{text-decoration:underline}
+    .automation-projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;align-items:stretch;gap:14px}
+    .automation-project{display:flex;flex-direction:column;min-height:245px;padding:22px;background:var(--surface);border:1px solid var(--line);transition:border-color .15s,transform .15s}
+    .automation-project:hover{border-color:#9ab5e4;transform:translateY(-2px)}
+    .automation-project-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:18px}
+    .automation-id{color:var(--blue);font:700 11px var(--mono)}
+    .automation-project h3{margin:0 0 9px;font-size:19px;letter-spacing:-.025em}
+    .automation-project p{margin:0;color:var(--muted);font-size:14px}
+    .automation-footer{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-top:auto;padding-top:18px}
+    .automation-meta{display:flex;flex:1;flex-wrap:wrap;align-items:flex-start;gap:8px;margin:0;padding-top:0}
+    .automation-meta span{display:inline-flex;align-items:center;min-height:27px;padding:4px 8px;background:#f8fafc;border:1px solid #d9e3ef;color:#405873;font:11px var(--mono);white-space:nowrap}
+    .automation-project .text-link{align-self:auto;margin-top:0;padding-top:0;white-space:nowrap}
     .posts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;align-items:stretch;gap:14px}
     .post{display:grid;grid-template-columns:112px minmax(0,1fr);align-items:stretch;gap:18px;padding:22px;background:var(--surface);border:1px solid var(--line)}
     .date{color:var(--muted);font-size:10px;line-height:1.5}
@@ -83,7 +94,7 @@
     .about p{margin:0;color:#4f6175;font-size:14px}
     footer{margin-top:58px;padding:20px 0 30px;border-top:1px solid var(--line);color:var(--muted);font:10px var(--mono)}
     .footer-inner{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
-    @media(max-width:800px){.hero{grid-template-columns:1fr}.projects{grid-template-columns:1fr}.card p{min-height:0}.posts{grid-template-columns:1fr}.lessons{grid-template-columns:1fr}}
+    @media(max-width:800px){.hero{grid-template-columns:1fr}.projects,.automation-projects{grid-template-columns:1fr}.card p{min-height:0}.automation-project{min-height:0}.posts{grid-template-columns:1fr}.lessons{grid-template-columns:1fr}}
     @media(max-width:560px){.nav{align-items:flex-start;flex-direction:column}.links{gap:15px}.post{grid-template-columns:1fr;gap:7px}.section{padding-top:44px}.wrap{width:min(100% - 28px,1100px)}}
   </style>
 </head>
@@ -155,8 +166,38 @@
       </div>
     </section>
 
+    <section id="automation" class="section">
+      <div class="section-head"><div><p class="eyebrow">Automation / 02</p><h2>Latest automation</h2><p class="intro">Small scripts and repeatable checks that make the lab easier to update, verify, and maintain.</p></div><a class="text-link" href="automation.html">VIEW AUTOMATION →</a></div>
+      <div class="automation-projects" id="latest-automation">
+        <!-- latest-automation:start -->
+        <article class="automation-project">
+          <div class="automation-project-top">
+            <span class="automation-id">AUT-001</span>
+            <span class="tag active">Active</span>
+          </div>
+          <h3>Website deployment automation</h3>
+          <p>Downloads the website from one GitHub commit, validates the files, uploads them to web01, and verifies that the served pages match what was deployed.</p>
+          <div class="automation-footer">
+          <div class="automation-meta"><span>PowerShell</span><span>GitHub</span><span>SSH/SCP</span><span>Hash checks</span></div>
+            <a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/automation/01-website-deployment-automation/README.md" target="_blank" rel="noopener noreferrer">OPEN PROJECT ↗</a></div>
+        </article>
+        <article class="automation-project">
+          <div class="automation-project-top">
+            <span class="automation-id">AUT-002</span>
+            <span class="tag active">Active</span>
+          </div>
+          <h3>Homepage latest content sync</h3>
+          <p>Refreshes the homepage with the latest three projects and latest four lab notes as static HTML, independently from the deployment script.</p>
+          <div class="automation-footer">
+          <div class="automation-meta"><span>PowerShell</span><span>Static HTML</span><span>Homepage</span><span>Content sync</span></div>
+            <a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/automation/02-homepage-latest-content-sync/README.md" target="_blank" rel="noopener noreferrer">OPEN PROJECT ↗</a></div>
+        </article>
+        <!-- latest-automation:end -->
+      </div>
+    </section>
+
     <section id="journal" class="section">
-      <div class="section-head"><div><p class="eyebrow">Field notes / 02</p><h2>Progress log</h2><p class="intro">Latest logs from the lab.</p></div><a class="text-link" href="lab-notes.html">VIEW LAB NOTES →</a></div>
+      <div class="section-head"><div><p class="eyebrow">Field notes / 03</p><h2>Progress log</h2><p class="intro">Latest logs from the lab.</p></div><a class="text-link" href="lab-notes.html">VIEW LAB NOTES →</a></div>
       <div class="posts" id="latest-notes">
         <!-- latest-notes:start -->
         <article class="post"><time class="date" datetime="2026-10-11">2026-10-11<br>ENTRY 041</time><div><h3>Installing Uptime Kuma with Docker</h3><p>I installed Docker on <code>mon01</code> and deployed Uptime Kuma with a persistent Docker volume. The first container used an outdated image tag, so I replaced it with the maintained v2 image before continuing with the setup.</p><a class="text-link" href="https://github.com/repo-sudo/infrastructure-portfolio/blob/main/projects/13-lab-monitoring-uptime-kuma/README.md" target="_blank" rel="noopener noreferrer">READ PROJECT ↗</a></div></article>
@@ -174,11 +215,11 @@
     </section>
 
     <section id="about" class="section">
-      <div class="about"><div><p class="eyebrow">Purpose / 03</p><h2>Practice. Record. Iterate.</h2></div><p>This is my personal infrastructure learning lab. I use it to practise administration tasks, understand how systems fit together, and keep a clear record of progress across servers, networking, firewall rules, deployment automation, and recovery planning.</p></div>
+      <div class="about"><div><p class="eyebrow">Purpose / 04</p><h2>Practice. Record. Iterate.</h2></div><p>This is my personal infrastructure learning lab. I use it to practise administration tasks, understand how systems fit together, and keep a clear record of progress across servers, networking, firewall rules, deployment automation, and recovery planning.</p></div>
     </section>
   </main>
 
   <footer class="wrap"><div class="footer-inner"><span>DAVID GARCIARENA / HOME LAB JOURNAL</span><span>STATIC HTML · BUILT WITH CODEX</span></div></footer>
 </body>
-<!-- homepage-static-latest: 2026-10-12T19:49:55.059Z -->
+<!-- homepage-static-latest: 2026-10-12T20:49:17.015Z -->
 </html>

@@ -123,6 +123,32 @@
     .contact-actions .button:hover{background:#dfeaff;color:var(--blue-dark)}
     @media(max-width:800px){.hero-blueprint{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.build-row,.stack-layer,.contact-block{grid-template-columns:1fr;gap:8px}.stack-layer{padding:18px}.timeline .post{grid-template-columns:1fr}}
 
+    .automation-hero{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:stretch;padding:38px;background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 32px rgba(24,48,78,.06)}
+    .automation-hero h1{font-size:clamp(34px,5vw,58px)}
+    .automation-panel{display:grid;align-content:center;gap:10px;padding:20px;background:#f8fafc;border:1px solid var(--line)}
+    .automation-stat{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #e3ebf3;font:12px var(--mono)}
+    .automation-stat:last-child{border-bottom:0}
+    .automation-stat span:first-child{color:var(--muted)}
+    .automation-stat span:last-child{font-weight:700;text-align:right}
+    .pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+    .pipeline-step{position:relative;min-height:142px;padding:16px;background:var(--surface);border:1px solid var(--line)}
+    .pipeline-step::after{content:"";position:absolute;top:50%;right:-8px;width:8px;border-top:1px solid #9fb4ce}
+    .pipeline-step:last-child::after{display:none}
+    .pipeline-step .step-no{display:block;margin-bottom:18px;color:var(--blue);font:700 11px var(--mono);letter-spacing:.08em}
+    .pipeline-step h3{margin:0 0 7px;font-size:16px;letter-spacing:-.02em}
+    .pipeline-step p{margin:0;color:var(--muted);font-size:13px}
+    .runbook{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .runbook-block{padding:22px;background:var(--surface);border:1px solid var(--line)}
+    .runbook-block h3{margin:0 0 12px;font-size:18px;letter-spacing:-.025em}
+    .runbook-list{display:grid;gap:9px;margin:0;padding:0;list-style:none}
+    .runbook-list li{display:flex;gap:10px;color:var(--muted);font-size:14px}
+    .runbook-list li::before{content:"";width:7px;height:7px;margin-top:8px;background:var(--blue);flex:0 0 auto}
+    .automation-table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line)}
+    .automation-table th,.automation-table td{padding:14px 16px;border-bottom:1px solid #e3ebf3;text-align:left;vertical-align:top}
+    .automation-table th{color:var(--blue);font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;background:#f8fafc}
+    .automation-table td{color:var(--muted);font-size:14px}
+    .automation-table td:first-child{color:#263d58;font-weight:700}
+    @media(max-width:900px){.pipeline{grid-template-columns:1fr}.pipeline-step{min-height:0}.pipeline-step::after{display:none}.automation-hero,.runbook{grid-template-columns:1fr}}
     .topology-card{padding:24px;background:var(--surface);border:1px solid var(--line)}
     .topology-scroll{overflow-x:auto;margin-top:20px;padding-bottom:4px}
     .topology-svg{display:block;min-width:760px;width:100%;height:auto}
@@ -151,91 +177,104 @@
   <main class="wrap">
 
     <section class="section purpose-section">
-      <div class="section-head">
+      <div class="automation-hero">
         <div>
           <p class="eyebrow">Automation / 01</p>
+          <h1>Repeatable work, verified results.</h1>
+          <p class="page-copy">This page tracks the scripts and operating routines that reduce fragile manual work in the lab. The focus is practical: update the site, verify what changed, keep recovery steps repeatable, and make routine checks easier to trust.</p>
         </div>
-      </div>
-      <div class="page-hero">
-        <h1>Automation in the lab</h1>
-        <p class="page-copy">This page tracks the repeatable workflows that keep the lab easier to update, verify, and recover. The goal is not to automate everything at once; it is to remove fragile manual steps where they already caused mistakes or wasted time.</p>
-        <p class="page-copy">Current work focuses on website deployment, GitHub publishing, monitoring checks, backup routines, and small scripts that make operational tasks consistent.</p>
-        <dl class="hero-blueprint">
-          <div class="blueprint-item"><dt>Deployments</dt><dd>Website updates are pulled from GitHub and pushed to the internal web server.</dd></div>
-          <div class="blueprint-item"><dt>Publishing</dt><dd>GitHub Pages provides the public HTTPS mirror while web01 remains the lab target.</dd></div>
-          <div class="blueprint-item"><dt>Checks</dt><dd>Pages and services are verified after changes instead of assuming a deployment worked.</dd></div>
-          <div class="blueprint-item"><dt>Recovery</dt><dd>Backups and restore tests are documented so recovery is repeatable, not improvised.</dd></div>
-        </dl>
+        <aside class="automation-panel" aria-label="Automation snapshot">
+          <div class="automation-stat"><span>Current scope</span><span>Website deployment</span></div>
+          <div class="automation-stat"><span>Public mirror</span><span>GitHub Pages</span></div>
+          <div class="automation-stat"><span>Internal target</span><span>web01 / Nginx</span></div>
+          <div class="automation-stat"><span>Verification</span><span>Hash checks</span></div>
+          <div class="automation-stat"><span>Next area</span><span>Backups + monitoring</span></div>
+        </aside>
       </div>
     </section>
 
     <section class="section">
       <div class="section-head">
         <div>
-          <p class="eyebrow">Workflows / 02</p>
-          <h2>What is being automated</h2>
-          <p class="intro">Small operational improvements that make the lab easier to maintain.</p>
+          <p class="eyebrow">Deployment flow / 02</p>
+          <h2>How website updates move</h2>
+          <p class="intro">The workflow now resolves the latest GitHub commit, downloads the pages from that exact revision, uploads them to web01, and checks the served files afterward.</p>
         </div>
       </div>
-      <div class="stack-map">
-        <div class="stack-layers">
-          <article class="stack-layer">
-            <div class="layer-index">01</div>
-            <div class="layer-title"><h3>Website update flow</h3><p>Source to web01</p></div>
-            <div>
-              <div class="tool-line"><span>GitHub</span><span>PowerShell</span><span>SSH/SCP</span><span>Nginx</span><span>Post-deploy checks</span></div>
-            </div>
-          </article>
-          <article class="stack-layer">
-            <div class="layer-index">02</div>
-            <div class="layer-title"><h3>Public mirror</h3><p>Safe external hosting</p></div>
-            <div>
-              <div class="tool-line"><span>GitHub Pages</span><span>gh-pages branch</span><span>HTTPS</span><span>Static HTML</span></div>
-            </div>
-          </article>
-          <article class="stack-layer">
-            <div class="layer-index">03</div>
-            <div class="layer-title"><h3>Monitoring checks</h3><p>Service visibility</p></div>
-            <div>
-              <div class="tool-line"><span>Uptime Kuma</span><span>HTTP checks</span><span>Internal services</span><span>Failure visibility</span></div>
-            </div>
-          </article>
-          <article class="stack-layer">
-            <div class="layer-index">04</div>
-            <div class="layer-title"><h3>Backup routines</h3><p>Recovery confidence</p></div>
-            <div>
-              <div class="tool-line"><span>Proxmox backups</span><span>Config exports</span><span>Restore testing</span><span>Documented results</span></div>
-            </div>
-          </article>
-        </div>
+      <div class="pipeline">
+        <article class="pipeline-step">
+          <span class="step-no">01</span>
+          <h3>Resolve commit</h3>
+          <p>Get the current main branch SHA before downloading files.</p>
+        </article>
+        <article class="pipeline-step">
+          <span class="step-no">02</span>
+          <h3>Stage files</h3>
+          <p>Download all site pages into a temporary local folder.</p>
+        </article>
+        <article class="pipeline-step">
+          <span class="step-no">03</span>
+          <h3>Validate HTML</h3>
+          <p>Reject empty or incomplete pages before upload.</p>
+        </article>
+        <article class="pipeline-step">
+          <span class="step-no">04</span>
+          <h3>Upload to web01</h3>
+          <p>Copy the staged files to the internal Nginx document root.</p>
+        </article>
+        <article class="pipeline-step">
+          <span class="step-no">05</span>
+          <h3>Verify served copy</h3>
+          <p>Fetch each live page and compare it with the staged hash.</p>
+        </article>
       </div>
     </section>
 
     <section class="section">
       <div class="section-head">
         <div>
-          <p class="eyebrow">Principles / 03</p>
-          <h2>How I use automation</h2>
+          <p class="eyebrow">Runbook / 03</p>
+          <h2>What the automation protects against</h2>
         </div>
       </div>
-      <div class="detail-grid">
-        <article class="detail-card">
-          <h3>Automate after the manual path is understood</h3>
-          <p>I first learn the task by doing it manually, then script the parts that are repetitive, easy to forget, or likely to fail under pressure.</p>
+      <div class="runbook">
+        <article class="runbook-block">
+          <h3>Problems already found</h3>
+          <ul class="runbook-list">
+            <li>Browser cache made old pages look like failed deployments.</li>
+            <li>Downloading individual files without a commit reference could mix versions.</li>
+            <li>Scripts reported success before proving the website was serving the new files.</li>
+          </ul>
         </article>
-        <article class="detail-card">
-          <h3>Verify the result, not only the command</h3>
-          <p>A script is only useful if it confirms the service, file, or page was actually updated. The lab is moving toward checks that prove the outcome.</p>
-        </article>
-        <article class="detail-card">
-          <h3>Keep scripts readable</h3>
-          <p>The automation should be simple enough to troubleshoot later. Clear commands and visible status messages matter more than clever shortcuts.</p>
-        </article>
-        <article class="detail-card">
-          <h3>Document what changed</h3>
-          <p>Automation belongs in the project record: what it does, why it exists, what it verifies, and where it still needs improvement.</p>
+        <article class="runbook-block">
+          <h3>Current rules</h3>
+          <ul class="runbook-list">
+            <li>Deploy from one resolved commit, not a moving branch URL.</li>
+            <li>Validate every page before upload.</li>
+            <li>Verify every served page after upload before calling the run successful.</li>
+          </ul>
         </article>
       </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Backlog / 04</p>
+          <h2>Automation roadmap</h2>
+        </div>
+      </div>
+      <table class="automation-table">
+        <thead>
+          <tr><th>Area</th><th>Current state</th><th>Next improvement</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Website deployment</td><td>Scripted download, upload, and verification for the static site.</td><td>Add automation.html to the internal deployment script and keep page checks consistent.</td></tr>
+          <tr><td>Public publishing</td><td>GitHub Pages mirrors the site publicly over HTTPS.</td><td>Keep public and internal copies aligned after every site change.</td></tr>
+          <tr><td>Monitoring</td><td>Uptime Kuma is part of the lab stack.</td><td>Document checks for core services and turn failures into clear action steps.</td></tr>
+          <tr><td>Backups</td><td>Restore tests are documented in project records.</td><td>Standardise backup schedules and add verification notes after each restore test.</td></tr>
+        </tbody>
+      </table>
     </section>
 
   </main>

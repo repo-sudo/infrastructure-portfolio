@@ -78,9 +78,9 @@
     footer{margin-top:58px;padding:20px 0 30px;border-top:1px solid var(--line);color:var(--muted);font:10px var(--mono)}
     .footer-inner{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
     @media(max-width:800px){.hero{grid-template-columns:1fr}.projects{grid-template-columns:1fr}.card p{min-height:0}.posts{grid-template-columns:1fr}.lessons{grid-template-columns:1fr}}
-    @media(max-width:560px){.nav{align-items:flex-start;flex-direction:column}.links{gap:15px}.post{grid-template-columns:1fr;gap:7px}.section{padding-top:44px}.wrap{width:min(100% - 28px,1100px)}}
+    @media(max-width:560px){.nav{align-items:flex-start;flex-direction:column}.links{gap:15px}.post{grid-template-columns:1fr;gap:7px}.section{padding-top:44px}.page-hero{min-height:210px;padding:30px}.wrap{width:min(100% - 28px,1100px)}}
   
-    .page-hero{padding:42px;background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 32px rgba(24,48,78,.06)}
+    .page-hero{min-height:230px;display:flex;flex-direction:column;justify-content:center;padding:42px;background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 32px rgba(24,48,78,.06)}
     .page-hero h1{font-size:clamp(34px,5vw,56px)}
     .page-copy{max-width:760px;margin:16px 0 0;color:var(--muted);font-size:16px}
     .page-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
@@ -182,15 +182,10 @@
   </header>
   <main class="wrap">
 
-    <section class="section purpose-section">
-      <div class="page-hero">
-        <div>
-          <p class="eyebrow">Automation / 01</p>
-          <h1>Automation work from the lab.</h1>
-          <p class="page-copy">This page collects the scripts, scheduled tasks, checks, and repeatable workflows I build around the lab. Some are active now, while others are planned as the environment grows.</p>
-          <p class="page-copy">The goal is practical automation: reduce repeated manual steps, make changes safer, and prove that important services, backups, and deployments behave the way they should.</p>
-        </div>
-      </div>
+    <section class="page-hero">
+      <p class="eyebrow">Automation / 01</p>
+      <h1>Automation</h1>
+      <p class="page-copy">Scripts, checks, and repeatable workflows that make lab updates, recovery steps, monitoring, and routine operations easier to trust.</p>
     </section>
 
 

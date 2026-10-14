@@ -1,52 +1,46 @@
-# Website deployment scripts
+# Website scripts
 
-This directory contains the maintained deployment implementation used by [LAB-002](../projects/02-proxmox-debian-web-server/README.md) and [AUT-001](../automation/01-website-deployment-automation/README.md).
+The complete [review and publication runbook](../docs/website-review-and-publication.md) covers GitHub setup, Windows setup, review, approval, and publication without ChatGPT.
 
-- [deploy-web01.ps1](deploy-web01.ps1): downloads, validates, uploads, and verifies all six website pages.
-- [update-web01.bat](update-web01.bat): Windows launcher for the lab's configured deployment folder.
-- [update-homepage-latest.ps1](update-homepage-latest.ps1) and [its launcher](update-homepage-latest.bat): the separate [AUT-002 homepage content refresh](../automation/02-homepage-latest-content-sync/README.md).
+| Script | Role |
+| --- | --- |
+| `deploy-web01.ps1` | AUT-001: deploy a prepared draft or main commit to web01 and verify all six served pages |
+| `update-web01.bat` | Windows launcher; defaults to draft; accepts main as its first argument |
+| `update-homepage-latest.ps1` | AUT-002: generate static homepage previews; `-Check` validates without writing |
+| `update-homepage-latest.bat` | Optional local generator launcher; not part of normal draft deployment |
+| `test-website-workflow.ps1` | Generator tests and simulated deployment failure checks; no real upload |
 
-## Windows setup
+## Normal Windows workflow
 
-For the existing lab workflow, save the current repository versions of both deployment files under:
+Save the deployment PowerShell script and BAT under `C:\Users\admin\Documents\Labs\Web\scripts\`. Double-click the BAT after the draft workflow succeeds. It downloads the website to `C:\Users\admin\Documents\Labs\Web`, deploys to web01, and saves `web01-deployment.json` after verification.
 
-```text
-C:\Users\admin\Documents\Labs\Web\scripts\deploy-web01.ps1
-C:\Users\admin\Documents\Labs\Web\scripts\update-web01.bat
-```
+The launcher uses the lab's existing server, folder and URL settings. Update both script files when tooling changes; old Windows copies are not upgraded automatically. Running `update-web01.bat main` deploys approved main instead.
 
-Double-click `update-web01.bat`. It uses `C:\Users\admin\Documents\Labs\Web` for the downloaded HTML files and invokes the PowerShell script in that folder's `scripts` subdirectory. The launcher does not update its own local script copy; refresh both files from this directory when the deployment tooling changes. Retire any old shortcut to `update-and-deploy-web01.bat`.
-
-For a repository checkout, run from its root:
+From a repository checkout:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\deploy-web01.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\deploy-web01.ps1 -Branch draft
 ```
 
-The PowerShell default local folder is the checkout's `website/` directory. Its current connection defaults target `webadmin@10.10.10.147`, `/var/www/html/`, and `http://10.10.10.147`. Override `-LocalFolder`, `-Server`, `-RemotePath`, and `-SiteUrl` for another environment.
+The default download folder is the checkout's `website` folder. These downloads overwrite local HTML; use a separate deployment copy if you have uncommitted edits. The parameters `-LocalFolder`, `-Server`, `-RemotePath`, and `-SiteUrl` can override the lab defaults.
 
-## Update process
+## Homepage generation
 
-1. Resolve the current `main` commit through GitHub's API.
-2. Download `index.html`, `projects.html`, `automation.html`, `topology.html`, `lab-notes.html`, and `about.html` from that exact commit.
-3. Reject missing, empty, or incomplete HTML files before upload.
-4. Save local copies and upload the six staged files through SCP.
-5. Fetch each served page with unique query parameters.
-6. Compare its SHA256 hash with the downloaded file.
-7. Report success only when every served page matches, printing the deployed commit and page links.
-8. Remove temporary files on success or failure.
+GitHub Actions normally runs AUT-002 on draft and commits changed output. Local use remains available:
 
-This deploys the committed GitHub website. It replaces local HTML copies; it does not publish uncommitted local edits.
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\update-homepage-latest.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\update-homepage-latest.ps1 -Check
+```
 
-## Progression
-
-The first goal was to serve one page from Debian/Nginx. PowerShell, a clickable launcher, and SSH keys made the growing multi-page site easier to update. As stale pages became harder to diagnose, the process gained commit-pinned downloads, validation, and served-file hash checks. The Automation page brought the total to six pages. The five-page copy previously stored under Project 002 has been retired so both project records point to this implementation.
+Local generation does not push or deploy. Commit and push any intended local changes to draft, then follow the normal review process.
 
 ## Requirements and limits
 
-- Windows PowerShell 5.1 or later and OpenSSH SCP.
-- Access to GitHub's API, raw file hosting, the SSH server, and the website.
-- Existing SSH authentication, a verified host key, and write permission for the remote directory.
-- Public repository access; unauthenticated GitHub API rate limits apply.
+Windows PowerShell 5.1+, OpenSSH SCP, GitHub/HTTP access, and working SSH authentication are required for internal deployment. The public GitHub API is rate-limited. The deployer requires a successful `homepage-sync` status on the exact commit and refuses a branch that moves during download.
 
-Download failures stop before upload. Upload or verification failures return exit code 1. An interrupted upload can leave a partially updated website; the script does not provide atomic deployment or rollback. Hash verification checks exact served content, not appearance or browser cache.
+All six pages are downloaded from one commit and validated before upload. Served files are checked with SHA256. A failed upload may be partial; deployment is not atomic and does not provide automatic rollback. A receipt proves file verification, not visual review or human approval.
+
+## Progression
+
+Manual file copying became scripted multi-page uploads, then gained SSH keys, commit-pinned downloads and served-file hashes. Automation increased the page count from five to six. The draft workflow now separates private review from publication while preserving the same verified file-transfer process.

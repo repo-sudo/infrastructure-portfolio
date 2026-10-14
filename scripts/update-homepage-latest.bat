@@ -12,7 +12,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "Invoke-WebRequest -UseBa
 if errorlevel 1 goto failed
 
 echo.
-echo Refreshing homepage latest projects and lab notes...
+echo Optional local refresh only - this does not publish or deploy.
+echo Normal draft updates are refreshed automatically in GitHub.
+echo Refreshing homepage projects, automation entries and lab notes...
 echo Website folder: %WEBSITE_FOLDER%
 echo.
 
@@ -36,3 +38,4 @@ echo.
 echo Homepage latest update failed. Check the error above.
 pause
 exit /b 1
+

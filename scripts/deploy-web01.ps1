@@ -1,5 +1,7 @@
 [CmdletBinding()]
 param(
+    [ValidateSet("draft", "main")]
+    [string]$Branch = "draft",
     [string]$LocalFolder = (Join-Path $PSScriptRoot "..\website"),
     [string]$Server = "webadmin@10.10.10.147",
     [string]$RemotePath = "/var/www/html/",
@@ -23,14 +25,19 @@ try {
     [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
     New-Item -ItemType Directory -Path $stagingFolder | Out-Null
 
-    Write-Host "Resolving the latest main commit..."
+    Write-Host "Resolving the latest $Branch commit..."
     $nonce = [guid]::NewGuid().ToString("N")
-    $commit = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/main?nocache=$nonce" -Headers $headers -TimeoutSec 60
+    $commit = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/${Branch}?nocache=$nonce" -Headers $headers -TimeoutSec 60
     $revision = [string]$commit.sha
     if ($revision -notmatch "^[0-9a-f]{40}$") {
         throw "GitHub did not return a valid commit SHA. Deployment stopped."
     }
-    Write-Host "Deploying commit $revision"
+    Write-Host "Deploying $Branch commit $revision"
+    $status = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/$revision/status?nocache=$nonce" -Headers $headers -TimeoutSec 60
+    $ready = @($status.statuses | Where-Object { $_.context -eq "homepage-sync" } | Sort-Object updated_at -Descending | Select-Object -First 1)
+    if ($ready.Count -ne 1 -or $ready[0].state -ne "success") {
+        throw "This commit has not passed homepage sync. Wait for the GitHub Actions workflow to succeed, then retry."
+    }
     $baseUrl = "https://raw.githubusercontent.com/$repository/$revision/website"
     $expectedHashes = @{}
 
@@ -58,6 +65,8 @@ try {
         Copy-Item -LiteralPath (Join-Path $stagingFolder $page) -Destination (Join-Path $LocalFolder $page) -Force
     }
 
+    $latest = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/${Branch}?nocache=$([guid]::NewGuid().ToString('N'))" -Headers $headers -TimeoutSec 60
+    if ($latest.sha -ne $revision) { throw "The branch changed during download. Run deployment again to review the latest complete version." }
     Write-Host "All six pages downloaded and validated. Uploading..."
     $uploadFiles = @($pages | ForEach-Object { Join-Path $stagingFolder $_ })
     & scp @uploadFiles "$($Server):$RemotePath"
@@ -79,7 +88,10 @@ try {
     }
 
     Write-Host ""
-    Write-Host "SUCCESS: all six served pages match commit $revision" -ForegroundColor Green
+    $receipt = @{ branch = $Branch; commit = $revision; site = $SiteUrl; verified_at = [DateTime]::UtcNow.ToString("o"); hashes = $expectedHashes }
+    $receipt | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $LocalFolder "web01-deployment.json") -Encoding UTF8
+    Write-Host "Review receipt saved to web01-deployment.json"
+    Write-Host "SUCCESS: all six served pages match $Branch commit $revision" -ForegroundColor Green
     Write-Host ("Home:       " + $SiteUrl.TrimEnd("/") + "/?revision=" + $revision)
     Write-Host ("Projects:   " + $SiteUrl.TrimEnd("/") + "/projects.html?revision=" + $revision)
     Write-Host ("Automation: " + $SiteUrl.TrimEnd("/") + "/automation.html?revision=" + $revision)
@@ -97,3 +109,4 @@ finally {
         Remove-Item -LiteralPath $stagingFolder -Recurse -Force -ErrorAction SilentlyContinue
     }
 }
+

@@ -107,6 +107,7 @@ When the public mirror is enabled, verify:
 
 - Homepage loads over HTTPS.
 - Projects page loads.
+- Automation page loads.
 - Lab notes page loads.
 - Topology page loads.
 - About page loads.
@@ -122,9 +123,15 @@ When the public mirror is enabled, verify:
 - Keeping a public mirror outside the lab reduces risk while keeping the internal deployment meaningful.
 - The best architecture is not always the most technically impressive one; it is the one that fits the purpose safely.
 
+## Publication workflow
+
+The recorded public mirror originally used the root of the `gh-pages` branch. The draft review workflow introduces an Actions publication job for approved `main` commits. Switch **Settings → Pages → Source** to **GitHub Actions** when enabling it; until that setting is changed and a publication succeeds, the old publishing setup remains in use.
+
+Draft commits are deployed to web01 for private review. After approval, merge the exact reviewed version into main. The workflow validates the committed homepage and publishes the `website/` folder without rebuilding approved content. See the [review and publication runbook](../../docs/website-review-and-publication.md).
+
 ## Next Steps
 
-- Enable GitHub Pages or Cloudflare Pages.
+- Complete the Pages source setting and verify the first approved Actions publication.
 - Add the public URL to the repository and website.
 - Add a short note explaining: "the lab hosts the working copy; the cloud publishes the public copy."
 - Consider adding this public mirror to monitoring as an external availability check.
@@ -132,3 +139,4 @@ When the public mirror is enabled, verify:
 ## AI assistance
 
 AI was used to compare the trade-offs between exposing `web01` and using static hosting, then structure the project documentation. The final architecture decision keeps the lab server internal and uses public static hosting for external access.
+

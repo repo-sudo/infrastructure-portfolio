@@ -1,0 +1,90 @@
+name: Website sync and publication
+
+on:
+  push:
+    branches: [draft, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: website-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/draft' || github.ref == 'refs/heads/main'
+    runs-on: windows-latest
+    permissions:
+      contents: write
+      statuses: write
+    outputs:
+      revision: ${{ steps.ready.outputs.revision }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Test homepage generation and deployment guards
+        shell: powershell
+        run: ./scripts/test-website-workflow.ps1
+      - name: Refresh draft or validate approved main
+        shell: powershell
+        env:
+          SOURCE_BRANCH: ${{ github.ref_name }}
+        run: |
+          if ($env:SOURCE_BRANCH -eq 'draft') {
+            ./scripts/update-homepage-latest.ps1 -WebsiteFolder ./website
+            git add website/index.html
+            git diff --cached --quiet
+            if ($LASTEXITCODE -eq 1) {
+              git config user.name 'github-actions[bot]'
+              git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+              git commit -m 'Refresh homepage previews'
+              if ($LASTEXITCODE -ne 0) { throw 'Commit failed' }
+              git push origin HEAD:refs/heads/draft
+              if ($LASTEXITCODE -ne 0) { throw 'Draft changed during sync; the newer push will run sync again.' }
+            } elseif ($LASTEXITCODE -ne 0) { throw 'Unable to inspect generated changes' }
+          }
+          ./scripts/update-homepage-latest.ps1 -WebsiteFolder ./website -Check
+      - name: Mark exact prepared commit ready
+        id: ready
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          SOURCE_BRANCH: ${{ github.ref_name }}
+        run: |
+          $revision = (git rev-parse HEAD).Trim()
+          $headers = @{ Authorization = "Bearer $env:GH_TOKEN"; Accept = 'application/vnd.github+json' }
+          $latest = Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/repos/$env:REPOSITORY/commits/$env:SOURCE_BRANCH"
+          if ($latest.sha -ne $revision) { throw 'Branch advanced; wait for its newer workflow.' }
+          $runUrl = "https://github.com/$env:REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
+          $body = @{ state = 'success'; context = 'homepage-sync'; description = 'Homepage current; workflow tests passed'; target_url = $runUrl } | ConvertTo-Json
+          Invoke-RestMethod -Method Post -Headers $headers -ContentType 'application/json' -Uri "https://api.github.com/repos/$env:REPOSITORY/statuses/$revision" -Body $body | Out-Null
+          "revision=$revision" >> $env:GITHUB_OUTPUT
+          "Prepared commit: $revision" >> $env:GITHUB_STEP_SUMMARY
+          "Drafts are reviewed on web01. Only main can publish to Pages." >> $env:GITHUB_STEP_SUMMARY
+
+  publish:
+    if: github.ref == 'refs/heads/main'
+    needs: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prepare.outputs.revision }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: website
+      - name: Publish approved website
+        id: deployment
+        uses: actions/deploy-pages@v4

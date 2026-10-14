@@ -1,57 +1,35 @@
-# AUT-002 - Homepage latest content sync
+# AUT-002: Homepage latest content sync
 
 ## Goal
 
-Keep the homepage useful as plain static HTML by copying the latest three project cards, latest two active automation entries, and latest four lab-note entries into `website/index.html`.
+Keep homepage previews current automatically: the latest three projects, two active automation entries, and four lab notes are stored directly in HTML.
 
-This avoids relying on browser-side JavaScript for the most important preview sections. A normal browser still works, but link previews, crawlers, and applicant-tracking tools can also see the current projects and lab notes directly in the HTML.
+## Sources and output
 
-## Setup
+| Source | Selection |
+| --- | --- |
+| `website/projects.html` | Last three project cards |
+| `website/automation.html` | Last two active automation entries |
+| `website/lab-notes.html` | Last four notes |
 
-- Source project cards: `website/projects.html`
-- Source automation entries: `website/automation.html`
-- Source lab notes: `website/lab-notes.html`
-- Target homepage: `website/index.html`
-- Script: `scripts/update-homepage-latest.ps1`
-- Double-click launcher: `scripts/update-homepage-latest.bat`
+The sources stay oldest-to-newest. The generator replaces the three marked sections of `website/index.html`, preserving that order and leaving other homepage content alone.
 
-Double-click `update-homepage-latest.bat` for the normal Windows workflow.
+## Automatic workflow
 
-Run the PowerShell script from the repository root with:
+[Website sync and publication](../../.github/workflows/website.yml) runs after pushes to draft or main. On draft it runs the [generator](../../scripts/update-homepage-latest.ps1), commits index.html only if changed, validates the result, and marks that exact commit with a successful `homepage-sync` status. AUT-001 will deploy only a prepared commit.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\update-homepage-latest.ps1"
-```
+On main the generator runs in check-only mode. A stale homepage blocks publication rather than changing the approved website. Only main can enter the public Pages deployment job.
 
-Or run it from the website folder with:
+The [runbook](../../docs/website-review-and-publication.md) explains draft editing, review, approval and publication, including how to operate without ChatGPT.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "..\scripts\update-homepage-latest.ps1" -WebsiteFolder "."
-```
+## Progression
 
-Projects and lab notes are kept oldest-to-newest in their source pages. The script takes the last three project cards, the last two active automation entries, and the last four lab-note entries, preserving that same ascending order.
+The homepage first loaded previews with browser JavaScript. Static generation made the content available directly in HTML. The first Windows launcher updated only local files, which did not fit the GitHub-first editing workflow. Generation now runs in GitHub on the draft branch before review, so it no longer depends on a separate local action or somebody remembering to refresh the homepage.
 
-## Decisions
+## Local use
 
-- Keep the homepage static instead of loading latest content with JavaScript.
-- Use marker comments in `index.html` so the generated sections are easy to find and replace.
-- Treat `projects.html`, `automation.html`, and `lab-notes.html` as the source of truth instead of maintaining duplicate homepage cards manually.
-- Keep this automation independent from the web01 deployment script so the content-refresh step can be tested on its own.
+The [PowerShell script](../../scripts/update-homepage-latest.ps1) remains independently runnable. Use `-WebsiteFolder` to select a folder and `-Check` to report stale previews without modifying files. The [local BAT](../../scripts/update-homepage-latest.bat) is optional and neither publishes nor deploys.
 
-## Problems found
+## Validation
 
-- The homepage previously showed placeholder text until JavaScript fetched the content.
-- A crawler or link preview could see "Loading the latest projects..." instead of the real project cards.
-- The lab notes source file had a stale comment saying newest entries were first, even though entries are kept oldest-to-newest.
-
-## Verification
-
-After running the script, verify that:
-
-- `website/index.html` contains LAB-012, LAB-013, and LAB-014 in order.
-- `website/index.html` contains AUT-001 and AUT-002 in order.
-- `website/index.html` contains ENTRY 041, ENTRY 042, ENTRY 043, and ENTRY 044 in order.
-- The homepage no longer depends on the JavaScript fetch block for those sections.
-- The output confirms: `Homepage latest sections updated.`
-
-A separate launcher can run this script first and then run the web01 deployment automation.
+The generator rejects missing files, missing or duplicate marker blocks, and too few entries. Repeated generation is idempotent. The [workflow tests](../../scripts/test-website-workflow.ps1) cover new notes, stale detection, literal dollar signs, malformed markers and unchanged output. GitHub's readiness status is attached to the generated commit, not merely the original triggering commit.

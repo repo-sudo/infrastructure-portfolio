@@ -23,3 +23,8 @@ The [current logical topology](docs/network-topology.md) shows the home LAN, VLA
 13. [Lab monitoring with Uptime Kuma](projects/13-lab-monitoring-uptime-kuma/README.md)  built `mon01` in the infrastructure VLAN, installed Docker and Uptime Kuma, added service, gateway, DNS, and internet checks, and published the dashboard through `mon.internal`.
 
 More project documentation will be added as the lab grows.
+
+
+## Website editing and publication
+
+Use the `draft` branch for changes. AUT-002 refreshes the homepage automatically; AUT-001 deploys the prepared draft to web01 for review. Merge the reviewed version into main to publish through GitHub Pages. See the [complete runbook](docs/website-review-and-publication.md) and [script instructions](scripts/README.md).

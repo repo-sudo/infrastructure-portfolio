@@ -22,10 +22,14 @@ Use the root [deployment script](../../scripts/deploy-web01.ps1), [Windows launc
 
 The workflow grew from manually copying one page to scripted multi-page uploads with SSH keys. As the goal expanded to verifying the deployed version, it gained commit-pinned downloads, HTML validation, and served-file hash checks. Adding Automation increased coverage from five pages to six. The older Project 002 script copies have been retired to keep one maintained implementation.
 
+## Draft review and publication
+
+The [review runbook](../../docs/website-review-and-publication.md) separates draft deployment from public release. AUT-001 deploys a prepared draft to web01; after review, the same draft is merged into main and GitHub Actions publishes it. AUT-002 refreshes the homepage before draft deployment. The existing local launcher must be replaced with the current version to use the branch option and readiness guard.
+
 ## Current Setup
 
 - Source repository: `repo-sudo/infrastructure-portfolio`
-- Source branch: `main`
+- Source branch: `draft` by default; `main` for the approved version
 - Website source folder: `website/`
 - Internal target: `web01`
 - Web root: `/var/www/html/`
@@ -35,14 +39,14 @@ The workflow grew from manually copying one page to scripted multi-page uploads 
 
 ## Workflow
 
-1. Resolve the latest `main` commit SHA through the GitHub API.
+1. Resolve the selected branch commit SHA and require its successful `homepage-sync` status through the GitHub API.
 2. Download each website page from that exact commit.
 3. Validate that each downloaded file is non-empty HTML.
 4. Copy the staged files into the local website folder.
 5. Upload the staged files to `web01` with `scp`.
 6. Fetch each served page from `web01`.
 7. Compare served-page hashes against the staged files.
-8. Report success only when every served page matches.
+8. Report success only when every served page matches, and save the branch, commit and hashes in `web01-deployment.json` for review.
 
 ## Pages Covered
 
@@ -69,3 +73,4 @@ The deployment script now validates local downloads, uploads all tracked pages, 
 - Keep the page list updated as the site grows.
 - Consider moving the page list into one shared config file.
 - Add clearer failure messages for network, GitHub API, SSH, and web-server errors.
+

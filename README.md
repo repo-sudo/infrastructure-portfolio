@@ -14,7 +14,7 @@ The [current logical topology](docs/network-topology.md) shows the home LAN, VLA
 4. [Windows Server domain controller migration](projects/04-windows-server-domain-controller-migration/README.md)  completed the move to DC02, resolved replication, DNS, and RPC issues, transferred all FSMO roles, joined a client, and demoted DC01.
 5. [Windows domain backup and recovery](projects/05-windows-domain-backup-and-recovery/README.md)  configured daily Windows Server Backup for DC02 and verified the first full-server backup; the scheduled run and restore test remain to be verified.
 6. [Managed switch, VLAN, and OPNsense firewall lab](projects/06-managed-switch-vlan-lab/README.md)  configured VLAN 10 for web services in Proxmox, added OPNsense routing, DHCP and firewall rules, and troubleshot controlled access from the home LAN. The project also records the physical switch setup and distinguishes its role from virtual VLAN separation.
-7. [OPNsense config backup + recovery](projects/07-opnsense-configuration-backup/README.md)  downloaded and stored an encrypted firewall configuration backup privately, documented sensitive-data handling, and planned a safe restore test.
+7. [OPNsense config backup + recovery](projects/07-opnsense-configuration-backup/README.md)  stored the firewall configuration backup privately and completed an isolated restore test without publishing the XML export.
 8. [Home Control Hub with Frigate](projects/08-home-control-frigate-server/README.md)  created `hch01` as a Debian-based Home Control Hub in VLAN 20, installed Docker and Frigate, connected `cam01` and `cam02`, and controlled local stream access through OPNsense.
 9. [Home Control Hub backup and recovery test](projects/09-home-control-hub-backup-and-recovery/README.md)  created a Proxmox backup of `hch01`, restored it as a separate test VM, and verified the recovered Debian, Docker, and Frigate state without overwriting the live service.
 10. [Remote VPN access to Home Control Hub with WireGuard](projects/10-remote-vpn-access-opnsense-wireguard/README.md)  configured OPNsense WireGuard so a phone on mobile data can securely reach Frigate on `hch01` in VLAN 20, using a Virgin Hub UDP 51820 port forward and a scoped VPN firewall rule instead of exposing the service publicly.
@@ -29,10 +29,10 @@ Project records describe the build, current state, and remaining checks.
 
 ## Current website workflow
 
-1. Edit the website on the GitHub `draft` branch.
-2. GitHub Actions runs AUT-002 to refresh homepage previews.
-3. Run the single review launcher, `update-web01.bat`. AUT-001 deploys the prepared commit to internal `web01` and verifies the six served pages.
-4. Review the site on `web01`. If ready, merge that same reviewed commit into `main`.
-5. GitHub Actions publishes `website/` to GitHub Pages, once Pages is configured to use GitHub Actions.
+1. We agree the website changes in ChatGPT.
+2. The changes are committed to GitHub `draft`.
+3. Run `update-web01.bat`. GitHub Actions automatically runs AUT-002 after the draft update; the launcher waits for it, then AUT-001 deploys the prepared commit to internal `web01` (`web.internal`) and verifies all six pages.
+4. Review the site on `web01`. If it is ready, merge that same reviewed commit into `main`.
+5. GitHub Actions checks that the reviewed homepage is current, then publishes the exact `website/` files to GitHub Pages. It does not regenerate approved content after review.
 
 The [review and publication runbook](docs/website-review-and-publication.md) covers setup and recovery. Because the repository is public, draft source is publicly readable.

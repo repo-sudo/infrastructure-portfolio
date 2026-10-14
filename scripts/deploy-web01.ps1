@@ -25,19 +25,37 @@ try {
     [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
     New-Item -ItemType Directory -Path $stagingFolder | Out-Null
 
-    Write-Host "Resolving the latest $Branch commit..."
-    $nonce = [guid]::NewGuid().ToString("N")
-    $commit = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/${Branch}?nocache=$nonce" -Headers $headers -TimeoutSec 60
-    $revision = [string]$commit.sha
-    if ($revision -notmatch "^[0-9a-f]{40}$") {
-        throw "GitHub did not return a valid commit SHA. Deployment stopped."
+    Write-Host "Waiting for GitHub Actions AUT-002 to prepare the latest $Branch commit..."
+    $syncDeadline = [DateTime]::UtcNow.AddMinutes(15)
+    $revision = $null
+    while ([DateTime]::UtcNow -lt $syncDeadline) {
+        $nonce = [guid]::NewGuid().ToString("N")
+        $commit = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/${Branch}?nocache=$nonce" -Headers $headers -TimeoutSec 60
+        $candidate = [string]$commit.sha
+        if ($candidate -notmatch "^[0-9a-f]{40}$") {
+            throw "GitHub did not return a valid commit SHA. Deployment stopped."
+        }
+
+        $status = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/$candidate/status?nocache=$nonce" -Headers $headers -TimeoutSec 60
+        $ready = @($status.statuses | Where-Object { $_.context -eq "homepage-sync" } | Sort-Object updated_at -Descending | Select-Object -First 1)
+        if ($ready.Count -eq 1 -and $ready[0].state -eq "success") {
+            $latest = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/${Branch}?nocache=$([guid]::NewGuid().ToString('N'))" -Headers $headers -TimeoutSec 60
+            if ($latest.sha -eq $candidate) {
+                $revision = $candidate
+                break
+            }
+            Write-Host "The branch advanced during homepage sync; waiting for its latest commit."
+        } elseif ($ready.Count -eq 1 -and $ready[0].state -in @("failure", "error")) {
+            throw "AUT-002 or its validation failed for commit $candidate. Check the GitHub Actions run."
+        }
+
+        Write-Host "AUT-002 is still running. Checking again in 10 seconds..."
+        Start-Sleep -Seconds 10
     }
-    Write-Host "Deploying $Branch commit $revision"
-    $status = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/$revision/status?nocache=$nonce" -Headers $headers -TimeoutSec 60
-    $ready = @($status.statuses | Where-Object { $_.context -eq "homepage-sync" } | Sort-Object updated_at -Descending | Select-Object -First 1)
-    if ($ready.Count -ne 1 -or $ready[0].state -ne "success") {
-        throw "This commit has not passed homepage sync. Wait for the GitHub Actions workflow to succeed, then retry."
+    if (-not $revision) {
+        throw "Timed out waiting for AUT-002. Check GitHub Actions, then run the launcher again."
     }
+    Write-Host "Deploying prepared $Branch commit $revision"
     $baseUrl = "https://raw.githubusercontent.com/$repository/$revision/website"
     $expectedHashes = @{}
 

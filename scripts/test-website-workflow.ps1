@@ -42,21 +42,26 @@ try {
     # No network request or real upload is made by these tests.
     $deploySource = Get-Content (Join-Path $PSScriptRoot 'deploy-web01.ps1') -Raw
     $deploySource = $deploySource.Replace('exit 0', 'return').Replace('exit 1', 'throw')
-    foreach ($case in @('ready', 'pending', 'moved', 'bad-hash', 'scp-failure')) {
+    foreach ($case in @('ready', 'pending-then-ready', 'sync-failure', 'moved', 'bad-hash', 'scp-failure')) {
         & {
             param($CaseName, $Source, $OutputFolder)
             $script:uploaded = $false
             $script:apiCalls = 0
+            $script:statusCalls = 0
+            function Start-Sleep { param($Seconds) }
             function scp { $script:uploaded = $true; $global:LASTEXITCODE = 0; if ($CaseName -eq 'scp-failure') { $global:LASTEXITCODE = 1 } }
             function Invoke-RestMethod {
                 param($Uri, $Headers, $TimeoutSec)
                 if ($Uri -match '/status\?') {
-                    $state = 'success'; if ($CaseName -eq 'pending') { $state = 'pending' }
+                    $script:statusCalls++
+                    $state = 'success'
+                    if ($CaseName -eq 'pending-then-ready' -and $script:statusCalls -eq 1) { $state = 'pending' }
+                    if ($CaseName -eq 'sync-failure') { $state = 'failure' }
                     return @{ statuses = @(@{ context = 'homepage-sync'; state = $state; updated_at = '2026-01-01' }) }
                 }
                 $script:apiCalls++
                 $sha = 'a' * 40
-                if ($CaseName -eq 'moved' -and $script:apiCalls -gt 1) { $sha = 'b' * 40 }
+                if ($CaseName -eq 'moved' -and $script:apiCalls -gt 2) { $sha = 'b' * 40 }
                 return @{ sha = $sha }
             }
             function Invoke-WebRequest {
@@ -67,13 +72,13 @@ try {
             }
             $failed = $false
             try { & ([scriptblock]::Create($Source)) -Branch draft -LocalFolder $OutputFolder } catch { $failed = $true }
-            Assert-True ($failed -eq ($CaseName -ne 'ready')) "Unexpected deployment outcome: $CaseName"
-            if ($CaseName -in @('pending', 'moved')) { Assert-True (-not $script:uploaded) "Unsafe upload: $CaseName" }
+            Assert-True ($failed -eq ($CaseName -notin @('ready', 'pending-then-ready'))) "Unexpected deployment outcome: $CaseName"
+            if ($CaseName -in @('sync-failure', 'moved')) { Assert-True (-not $script:uploaded) "Unsafe upload: $CaseName" }
             $receipt = Join-Path $OutputFolder 'web01-deployment.json'
-            Assert-True ((Test-Path $receipt) -eq ($CaseName -eq 'ready')) "Incorrect receipt: $CaseName"
+            Assert-True ((Test-Path $receipt) -eq ($CaseName -in @('ready', 'pending-then-ready'))) "Incorrect receipt: $CaseName"
         } $case $deploySource (Join-Path $temp $case)
     }
-    Write-Host 'PASS: generation, stale detection, idempotence, markers, deployment readiness, branch movement, hashes, upload failures and receipts.'
+    Write-Host 'PASS: generation, stale detection, idempotence, markers, deployment readiness polling, sync failure, branch movement, hashes, upload failures and receipts.'
 } finally {
     Remove-Item $temp -Recurse -Force
 }

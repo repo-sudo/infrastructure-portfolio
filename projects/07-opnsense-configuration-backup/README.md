@@ -1,6 +1,6 @@
 # Project 007: OPNsense config backup + recovery
 
-**Status:** Backup export saved privately; isolated restore test pending.
+**Status:** Encrypted backup saved privately; isolated configuration restore test complete.
 
 **Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
 
@@ -75,19 +75,11 @@ An OPNsense configuration export can include internal network details and may in
 - [x] Backup naming convention defined.
 - [x] Decision made not to publish XML configuration exports.
 - [x] Configuration export stored privately; a fresh export was recorded on 11 October 2026.
-- [ ] Restore process tested in a safe environment.
+- [x] Restored the configuration in an isolated test environment.
 
-## Recovery plan
+## Recovery test
 
-The restore process should be tested later in a separate temporary OPNsense VM, not directly on the working firewall. That allows the backup to be verified without risking the current lab network.
-
-A safe recovery test would confirm:
-
-- the encrypted backup can be selected for restore
-- the backup password works
-- interface assignments can be reviewed after restore
-- firewall, DHCP, and VLAN configuration are present
-- the restored VM is kept isolated until verified
+The configuration restore was completed in an isolated test environment, separate from the working firewall. The test confirms the restore process was exercised without risking the live lab network. Detailed test results are not recorded here.
 
 ## AI assistance
 

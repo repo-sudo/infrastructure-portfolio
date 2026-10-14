@@ -38,18 +38,21 @@ I wanted a dedicated place to host my portfolio and to practise creating a VM, i
 
 ## Deployment workflow
 
-At first, I updated the website manually: copy the file, log in to the server, move it into `/var/www/html`, and reload Nginx. I replaced those manual steps with a PowerShell deployment script from the main PC.
+Deployment began with manually copying a single HTML page. As the site gained separate pages, I introduced PowerShell and a Windows launcher, then SSH keys to remove repeated password prompts. The goal later expanded from uploading files to proving that the correct version was being served: the updater now downloads from one GitHub commit, validates the HTML, and checks the served files with SHA256 hashes. Adding the Automation page expanded deployment from five pages to six.
 
-The current workflow is:
+The maintained implementation is now shared with [AUT-001: Website deployment automation](../../automation/01-website-deployment-automation/README.md). Both projects use the same [deployment script](../../scripts/deploy-web01.ps1) and [Windows launcher](../../scripts/update-web01.bat); the older project-local copies have been retired.
 
 | Step | Action |
 | --- | --- |
 | 1 | Update and commit the HTML files in this repository's `website/` directory |
-| 2 | Run `update-and-deploy-web01.bat` to download the pages and invoke `deploy-web01.ps1` |
-| 3 | Use `scp` over SSH to copy all `.html` files to `/var/www/html/` |
-| 4 | Verify the homepage and subpages in a browser |
+| 2 | Run the maintained `update-web01.bat` launcher using the [setup instructions](../../scripts/README.md) |
+| 3 | The script resolves `main`, downloads all six pages from that commit, and validates them |
+| 4 | The script uploads those staged pages to `/var/www/html/` over SSH |
+| 5 | The script fetches each served page and compares its SHA256 hash before reporting success |
 
-Because this is a static Nginx site, replacing the HTML files does not require a service reload. SSH key-based authentication is now configured, so deployment runs without entering the `webadmin` password.
+The six pages are Home, Projects, Automation, Topology, Lab Notes, and About. A browser check remains useful for appearance; the hash checks verify file content.
+
+Because this is a static Nginx site, replacing the HTML files does not require a service reload. SSH key-based authentication is configured for deployment from the admin workstation.
 
 ## Firewall configuration
 
@@ -114,4 +117,4 @@ This project is intentionally closed at the local hosting stage. Public DNS, HTT
 
 ## Published deployment scripts
 
-[Sanitised deployment scripts and run instructions](scripts/README.md) are committed alongside this project. Personal connection details are placeholders. The workflow stages and validates every download before deployment, stops on failure, and returns a nonzero exit code to the launcher.
+The maintained [deployment script](../../scripts/deploy-web01.ps1), [Windows launcher](../../scripts/update-web01.bat), and [run instructions](../../scripts/README.md) live in the root `scripts/` directory. The current defaults target this lab; other users should supply their own connection settings. Earlier implementations remain available in Git history.

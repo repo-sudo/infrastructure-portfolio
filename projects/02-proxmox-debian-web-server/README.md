@@ -52,6 +52,10 @@ The maintained implementation is now shared with [AUT-001: Website deployment au
 
 Review the deployed draft before merging it into main for public release. See the [review and publication runbook](../../docs/website-review-and-publication.md).
 
+### The role of `web01`
+
+`web01` serves two roles: it is the internal review environment for testing draft website changes, and it retains the last version successfully deployed there as a practical local fallback copy. It is not a formal backup system because deployment can overwrite the previous version and no automatic rollback is provided.
+
 The six pages are Home, Projects, Automation, Topology, Lab Notes, and About. A browser check remains useful for appearance; the hash checks verify file content.
 
 Because this is a static Nginx site, replacing the HTML files does not require a service reload. SSH key-based authentication is configured for deployment from the admin workstation.
@@ -120,4 +124,5 @@ This project is intentionally closed at the local hosting stage. Public DNS, HTT
 ## Published deployment scripts
 
 The maintained [deployment script](../../scripts/deploy-web01.ps1), [Windows launcher](../../scripts/update-web01.bat), and [run instructions](../../scripts/README.md) live in the root `scripts/` directory. The current defaults target this lab; other users should supply their own connection settings. Earlier implementations remain available in Git history.
+
 

@@ -5,7 +5,7 @@ param(
     [string]$LocalFolder = (Join-Path $PSScriptRoot "..\website"),
     [string]$Server = "webadmin@10.10.10.147",
     [string]$RemotePath = "/var/www/html/",
-    [string]$SiteUrl = "http://10.10.10.147"
+    [string]$SiteUrl = "http://web.internal"
 )
 
 $ErrorActionPreference = "Stop"
@@ -25,37 +25,14 @@ try {
     [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
     New-Item -ItemType Directory -Path $stagingFolder | Out-Null
 
-    Write-Host "Waiting for GitHub Actions AUT-002 to prepare the latest $Branch commit..."
-    $syncDeadline = [DateTime]::UtcNow.AddMinutes(15)
-    $revision = $null
-    while ([DateTime]::UtcNow -lt $syncDeadline) {
-        $nonce = [guid]::NewGuid().ToString("N")
-        $commit = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/${Branch}?nocache=$nonce" -Headers $headers -TimeoutSec 60
-        $candidate = [string]$commit.sha
-        if ($candidate -notmatch "^[0-9a-f]{40}$") {
-            throw "GitHub did not return a valid commit SHA. Deployment stopped."
-        }
-
-        $status = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/$candidate/status?nocache=$nonce" -Headers $headers -TimeoutSec 60
-        $ready = @($status.statuses | Where-Object { $_.context -eq "homepage-sync" } | Sort-Object updated_at -Descending | Select-Object -First 1)
-        if ($ready.Count -eq 1 -and $ready[0].state -eq "success") {
-            $latest = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/${Branch}?nocache=$([guid]::NewGuid().ToString('N'))" -Headers $headers -TimeoutSec 60
-            if ($latest.sha -eq $candidate) {
-                $revision = $candidate
-                break
-            }
-            Write-Host "The branch advanced during homepage sync; waiting for its latest commit."
-        } elseif ($ready.Count -eq 1 -and $ready[0].state -in @("failure", "error")) {
-            throw "AUT-002 or its validation failed for commit $candidate. Check the GitHub Actions run."
-        }
-
-        Write-Host "AUT-002 is still running. Checking again in 10 seconds..."
-        Start-Sleep -Seconds 10
+    Write-Host "Resolving the latest $Branch commit..."
+    $nonce = [guid]::NewGuid().ToString("N")
+    $commit = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/${Branch}?nocache=$nonce" -Headers $headers -TimeoutSec 60
+    $revision = [string]$commit.sha
+    if ($revision -notmatch "^[0-9a-f]{40}$") {
+        throw "GitHub did not return a valid commit SHA. Deployment stopped."
     }
-    if (-not $revision) {
-        throw "Timed out waiting for AUT-002. Check GitHub Actions, then run the launcher again."
-    }
-    Write-Host "Deploying prepared $Branch commit $revision"
+    Write-Host "Preparing $Branch commit $revision"
     $baseUrl = "https://raw.githubusercontent.com/$repository/$revision/website"
     $expectedHashes = @{}
 
@@ -75,6 +52,20 @@ try {
         }
         $expectedHashes[$page] = (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash
     }
+
+    $generatorPath = Join-Path $stagingFolder "update-homepage-latest.ps1"
+    Write-Host "Running AUT-002 on the downloaded website..."
+    Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/$repository/$revision/scripts/update-homepage-latest.ps1" -Headers $headers -TimeoutSec 60 -OutFile $generatorPath
+    if (-not (Test-Path -LiteralPath $generatorPath -PathType Leaf) -or (Get-Item -LiteralPath $generatorPath).Length -eq 0) {
+        throw "Could not download AUT-002 from commit $revision."
+    }
+    & $generatorPath -WebsiteFolder $stagingFolder
+    $indexPath = Join-Path $stagingFolder "index.html"
+    $indexContent = Get-Content -LiteralPath $indexPath -Raw -Encoding UTF8
+    if ($indexContent -notmatch "(?i)<html\b" -or $indexContent -notmatch "(?i)</html>") {
+        throw "AUT-002 did not produce a complete homepage."
+    }
+    $expectedHashes["index.html"] = (Get-FileHash -LiteralPath $indexPath -Algorithm SHA256).Hash
 
     if (-not (Test-Path -LiteralPath $LocalFolder -PathType Container)) {
         New-Item -ItemType Directory -Path $LocalFolder -Force | Out-Null

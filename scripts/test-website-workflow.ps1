@@ -38,47 +38,70 @@ try {
     Remove-Item (Join-Path $temp 'automation.html')
     Must-Fail { & $sync -WebsiteFolder $temp }
 
-    # Run deployment in a child scope with fake GitHub, HTTP and SCP endpoints.
-    # No network request or real upload is made by these tests.
+        # Run deployment with fake GitHub, HTTP and SCP endpoints.
+    # The real AUT-002 generator runs on the downloaded staging files; no network request or real upload is made.
+    $deploySourceFolder = Join-Path $temp 'deploy-source'
+    New-Item -ItemType Directory -Path $deploySourceFolder | Out-Null
+    Copy-Item (Join-Path $root 'website/*') $deploySourceFolder
+    Add-Content (Join-Path $deploySourceFolder 'lab-notes.html') '<article class="post"><time>TEST</time><div><h3>AUT002 deployment integration test</h3><p>Generated during review deployment.</p></div></article>' -Encoding UTF8
     $deploySource = Get-Content (Join-Path $PSScriptRoot 'deploy-web01.ps1') -Raw
     $deploySource = $deploySource.Replace('exit 0', 'return').Replace('exit 1', 'throw')
-    foreach ($case in @('ready', 'pending-then-ready', 'sync-failure', 'moved', 'bad-hash', 'scp-failure')) {
+    foreach ($case in @('ready', 'moved', 'bad-hash', 'scp-failure')) {
         & {
-            param($CaseName, $Source, $OutputFolder)
+            param($CaseName, $Source, $OutputFolder, $SourceFolder, $GeneratorSource)
             $script:uploaded = $false
             $script:apiCalls = 0
-            $script:statusCalls = 0
-            function Start-Sleep { param($Seconds) }
-            function scp { $script:uploaded = $true; $global:LASTEXITCODE = 0; if ($CaseName -eq 'scp-failure') { $global:LASTEXITCODE = 1 } }
+            $script:uploadSnapshotFolder = $OutputFolder + '-remote'
+            $ErrorActionPreference = 'Stop'
+            function scp {
+                $script:uploaded = $true
+                $global:LASTEXITCODE = 0
+                if ($CaseName -eq 'scp-failure') { $global:LASTEXITCODE = 1; return }
+                New-Item -ItemType Directory -Path $script:uploadSnapshotFolder -Force | Out-Null
+                foreach ($file in @($args | Where-Object { $_ -match '\.html$' })) {
+                    Copy-Item -LiteralPath $file -Destination (Join-Path $script:uploadSnapshotFolder ([IO.Path]::GetFileName($file))) -Force
+                }
+            }
             function Invoke-RestMethod {
                 param($Uri, $Headers, $TimeoutSec)
-                if ($Uri -match '/status\?') {
-                    $script:statusCalls++
-                    $state = 'success'
-                    if ($CaseName -eq 'pending-then-ready' -and $script:statusCalls -eq 1) { $state = 'pending' }
-                    if ($CaseName -eq 'sync-failure') { $state = 'failure' }
-                    return @{ statuses = @(@{ context = 'homepage-sync'; state = $state; updated_at = '2026-01-01' }) }
-                }
                 $script:apiCalls++
                 $sha = 'a' * 40
-                if ($CaseName -eq 'moved' -and $script:apiCalls -gt 2) { $sha = 'b' * 40 }
+                if ($CaseName -eq 'moved' -and $script:apiCalls -gt 1) { $sha = 'b' * 40 }
                 return @{ sha = $sha }
             }
             function Invoke-WebRequest {
                 param([switch]$UseBasicParsing, $Uri, $Headers, $TimeoutSec, $OutFile)
-                $body = '<html><body>test</body></html>'
-                if ($CaseName -eq 'bad-hash' -and $Uri -match '^http://') { $body = '<html>stale</html>' }
-                [IO.File]::WriteAllText($OutFile, $body)
+                $uriObject = [Uri]$Uri
+                $page = [IO.Path]::GetFileName($uriObject.AbsolutePath)
+                if ($uriObject.Host -eq 'raw.githubusercontent.com') {
+                    if ($page -eq 'update-homepage-latest.ps1') {
+                        Copy-Item -LiteralPath $GeneratorSource -Destination $OutFile -Force
+                    } else {
+                        Copy-Item -LiteralPath (Join-Path $SourceFolder $page) -Destination $OutFile -Force
+                    }
+                    return
+                }
+                if ($CaseName -eq 'bad-hash') {
+                    [IO.File]::WriteAllText($OutFile, '<html>stale</html>')
+                    return
+                }
+                Copy-Item -LiteralPath (Join-Path $script:uploadSnapshotFolder $page) -Destination $OutFile -Force
             }
             $failed = $false
             try { & ([scriptblock]::Create($Source)) -Branch draft -LocalFolder $OutputFolder } catch { $failed = $true }
-            Assert-True ($failed -eq ($CaseName -notin @('ready', 'pending-then-ready'))) "Unexpected deployment outcome: $CaseName"
-            if ($CaseName -in @('sync-failure', 'moved')) { Assert-True (-not $script:uploaded) "Unsafe upload: $CaseName" }
-            $receipt = Join-Path $OutputFolder 'web01-deployment.json'
-            Assert-True ((Test-Path $receipt) -eq ($CaseName -in @('ready', 'pending-then-ready'))) "Incorrect receipt: $CaseName"
-        } $case $deploySource (Join-Path $temp $case)
+            Assert-True ($failed -eq ($CaseName -ne 'ready')) "Unexpected deployment outcome: $CaseName"
+            if ($CaseName -eq 'moved') { Assert-True (-not $script:uploaded) 'Branch movement must stop before upload.' }
+            if ($CaseName -eq 'ready') {
+                $receipt = Join-Path $OutputFolder 'web01-deployment.json'
+                Assert-True (Test-Path $receipt) 'Successful deployment must save a receipt.'
+                $generatedIndex = Get-Content (Join-Path $script:uploadSnapshotFolder 'index.html') -Raw
+                Assert-True ($generatedIndex -match 'AUT002 deployment integration test') 'AUT-002 must refresh the homepage before upload.'
+            } else {
+                Assert-True (-not (Test-Path (Join-Path $OutputFolder 'web01-deployment.json'))) "Failed deployment must not save a receipt: $CaseName"
+            }
+        } $case $deploySource (Join-Path $temp $case) $deploySourceFolder (Join-Path $PSScriptRoot 'update-homepage-latest.ps1')
     }
-    Write-Host 'PASS: generation, stale detection, idempotence, markers, deployment readiness polling, sync failure, branch movement, hashes, upload failures and receipts.'
+    Write-Host 'PASS: generation, stale detection, idempotence, markers, local AUT-002 deployment generation, branch movement, hashes, upload failures and receipts.'
 } finally {
     Remove-Item $temp -Recurse -Force
 }

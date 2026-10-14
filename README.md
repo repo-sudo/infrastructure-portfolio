@@ -30,9 +30,9 @@ Project records describe the build, current state, and remaining checks.
 ## Current website workflow
 
 1. We agree the website changes in ChatGPT.
-2. The changes are committed to GitHub `draft`.
-3. Run `update-web01.bat`. GitHub Actions automatically runs AUT-002 after the draft update; the launcher waits for it, then AUT-001 deploys the prepared commit to internal `web01` (`web.internal`) and verifies all six pages.
-4. Review the site on `web01`. If it is ready, merge that same reviewed commit into `main`.
-5. GitHub Actions checks that the reviewed homepage is current, then publishes the exact `website/` files to GitHub Pages. It does not regenerate approved content after review.
+2. I update the website files on GitHub `draft`.
+3. Run `update-web01.bat`. The launcher runs AUT-002 on the downloaded draft pages, then AUT-001 deploys and verifies all six pages on internal `web.internal`.
+4. Review the site. If it is ready, merge the same website changes into `main`.
+5. GitHub Actions runs AUT-002 on `main` and publishes the generated site to GitHub Pages.
 
 The [review and publication runbook](docs/website-review-and-publication.md) covers setup and recovery. Because the repository is public, draft source is publicly readable.

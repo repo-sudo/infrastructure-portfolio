@@ -25,10 +25,10 @@ The portfolio is recorded as live on GitHub Pages. Earlier publication used the 
 ## Website update and release
 
 1. Agree the website changes in ChatGPT.
-2. Commit the changes to `draft`.
-3. Run `update-web01.bat`. GitHub Actions runs AUT-002 automatically after the draft update; the launcher waits for its prepared commit, then AUT-001 deploys it to internal `web01` for review.
-4. After review, merge the same commit into `main`.
-5. GitHub Actions checks the reviewed homepage and publishes those exact `website/` files to GitHub Pages. It does not regenerate approved content after review.
+2. I update the website files on GitHub `draft`.
+3. Run `update-web01.bat`. The launcher runs AUT-002 on the downloaded draft pages, then AUT-001 deploys all six pages to internal `web.internal` for review.
+4. If ready, merge the same website changes into `main`.
+5. GitHub Actions runs AUT-002 on `main` and publishes the generated site to GitHub Pages.
 
 The [review and publication runbook](../../docs/website-review-and-publication.md) covers setup and failure handling. The repository is public, so draft content is publicly readable even before publication.
 

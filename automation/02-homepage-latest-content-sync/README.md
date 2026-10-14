@@ -22,15 +22,15 @@ The homepage therefore contains three generated preview areas:
 
 ## Automatic workflow
 
-[Website sync and publication](../../.github/workflows/website.yml) runs after pushes to `draft` or `main`. A draft update starts AUT-002, which refreshes the homepage, commits `website/index.html` if needed, validates the result, and marks the prepared commit with a successful `homepage-sync` status. When you run `update-web01.bat`, it waits for that status before AUT-001 deploys to internal `web01`.
+On review, the launcher downloads the generator from the selected draft commit and runs AUT-002 on the downloaded pages before deploying them to internal `web.internal`. Draft updates do not start GitHub Actions.
 
-On `main`, AUT-002 runs in check-only mode. A stale homepage blocks publication rather than changing the approved website. Actions then publishes the reviewed files to GitHub Pages.
+After a merge to `main`, the website workflow runs the tests, runs AUT-002, and publishes the generated output to GitHub Pages.
 
 The [runbook](../../docs/website-review-and-publication.md) explains draft editing, review, approval and publication, including how to operate without ChatGPT.
 
 ## Progression
 
-The homepage first loaded previews with browser JavaScript. Static generation made the content available directly in HTML. The first Windows launcher updated only local files, which did not fit the GitHub-first editing workflow. Generation runs automatically in GitHub after a draft update. The review launcher waits for it, so there is no separate Actions step or local refresh to remember.
+The homepage first loaded previews with browser JavaScript. Static generation made the content available directly in HTML. The first Windows launcher updated only local files, which did not fit the GitHub-first editing workflow. The review launcher runs AUT-002 during internal implementation. GitHub Actions runs the same generator again on `main` when publishing the approved website.
 
 ## Local use
 

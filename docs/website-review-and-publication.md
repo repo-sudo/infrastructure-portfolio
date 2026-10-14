@@ -2,7 +2,7 @@
 
 ## Working model
 
-Agree the website changes in ChatGPT, then commit them to `draft`. GitHub Actions starts AUT-002 automatically; when you run `update-web01.bat`, it waits for the prepared commit and AUT-001 deploys it to internal `web01` for review. After approval, merge that same commit into `main`. GitHub Actions checks the reviewed homepage and publishes those exact `website/` files to GitHub Pages. Drafts never enter the publication job.
+Agree the website changes in ChatGPT, then commit them to `draft`. When you run `update-web01.bat`, the launcher downloads those pages, runs AUT-002 on the downloaded copy, and AUT-001 deploys it to internal `web.internal` for review. After approval, merge the same website changes into `main`. GitHub Actions runs AUT-002 on `main` and publishes the generated `website/` to GitHub Pages. Draft changes do not trigger the publication workflow.
 
 GitHub remains the source repository. The PC folder is a deployment copy, and `web01` is the private review server. Both are refreshed from a single commit. Draft source remains publicly readable because this repository is public.
 
@@ -17,11 +17,11 @@ The public site is recorded as live from the earlier `gh-pages` setup. The Pages
 
 ## Edit and review, with or without ChatGPT
 
-1. We agree the website changes in ChatGPT.
-2. The changes are committed to GitHub `draft`; Actions starts AUT-002 automatically and refreshes the homepage if needed.
-3. Double-click `update-web01.bat`. It waits for the latest draft commit to pass homepage sync, then AUT-001 deploys and verifies all six pages on internal `web01`.
-4. Review the pages on `web01`, including mobile layouts where relevant. `web01-deployment.json` records the reviewed branch, commit, and hashes.
-5. If corrections are needed, make them in ChatGPT and repeat. Each new commit must be deployed and reviewed again.
+1. We agree the changes in ChatGPT and update `draft`.
+2. Double-click `update-web01.bat`. It downloads the latest draft pages, runs AUT-002 to refresh homepage previews, and deploys all six pages to internal `web.internal`.
+3. Review the website on `web.internal`. The deployment receipt records the reviewed branch, commit, and file hashes.
+4. If corrections are needed, make them in ChatGPT and repeat the review.
+5. When ready, merge the same website changes into `main`. GitHub Actions runs AUT-002 and publishes the generated site to GitHub Pages.
 
 ## Publish the reviewed version yourself
 
@@ -29,7 +29,7 @@ The public site is recorded as live from the earlier `gh-pages` setup. The Pages
 2. Compare the current draft head commit with the commit in `web01-deployment.json`. They must match. Record the reviewed commit in the pull request description.
 3. Inspect the Files changed tab and confirm there are no changes beyond what you reviewed. If GitHub asks to update the branch or resolve conflicts, do that first, then repeat preparation and review on `web01`.
 4. Choose **Create a merge commit**, then merge after approval. Keep the `draft` branch. Avoid squash/rebase here so the ongoing draft branch retains shared history with main.
-5. Watch the **Website sync and publication** run for `main`. It checks AUT-002's generated homepage is current, then publishes those exact reviewed website files. It does not regenerate approved content after review.
+5. Watch the **Website build and publication** run for `main`. It runs AUT-002 on the merged website files, then publishes the generated output. The `draft` branch does not start this workflow.
 6. Check the public URL and the deployment result. A successful merge is not proof of successful publication.
 7. Before the next editing cycle, merge the latest `main` into `draft` without overwriting draft work. The connector can do this; locally use `git switch draft`, `git fetch origin`, `git merge origin/main`, then `git push origin draft`. Never force-push to bypass a conflict.
 
@@ -49,7 +49,7 @@ Wait for main preparation to succeed first. Publication and internal deployment 
 
 - **Homepage sync fails:** inspect the Actions log; missing files, malformed markers, or insufficient entries stop the run. Fix draft and push again.
 - **Draft advances during sync:** the push is rejected rather than forced; the newer workflow processes the newer commit.
-- **Launcher is waiting:** AUT-002 is still preparing the latest draft commit. The launcher checks again automatically for up to 15 minutes; if it times out, inspect Actions and run it again after the workflow finishes.
+- **Homepage generation fails:** AUT-002 stops before upload. Check the error from the launcher, correct the missing or malformed source content, and run it again.
 - **SCP or served-file hashes fail:** treat the internal deployment as unverified. Retry after resolving the error; an interrupted upload can leave partial updates.
 - **Pages fails:** inspect the publication job and confirm Pages uses GitHub Actions. The previously published site is not evidence that the new publication succeeded.
 - **Rollback:** revert the unwanted change on draft, review the resulting website, and merge through the same process. Preserve history.

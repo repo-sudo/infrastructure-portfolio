@@ -38,6 +38,9 @@
     .hero-copy{max-width:630px;margin:20px 0 26px;color:var(--muted);font-size:17px}
     .button{display:inline-flex;align-items:center;gap:10px;padding:11px 15px;background:var(--blue);color:#fff;text-decoration:none;font:12px var(--mono);font-weight:700}
     .button:hover{background:var(--blue-dark)}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:10px}
+    .button.secondary{background:#eef4ff;color:var(--blue);border:1px solid #c8d8f5}
+    .button.secondary:hover{background:#dfeaff;color:var(--blue-dark)}
     .snapshot{align-self:center;border:1px solid var(--line);background:#f8fafc}
     .snapshot-head{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);font:10px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
     .live{color:var(--green)}
@@ -118,7 +121,10 @@
         <p class="eyebrow">Infrastructure lab / build log</p>
         <h1>Learning infrastructure by building it.</h1>
         <p class="hero-copy">A live infrastructure lab where I build, secure, monitor, and recover real services across networking, Linux, Windows Server, DNS, VPN access, backups, and daily operations.</p>
-        <a class="button" href="projects.html">BROWSE PROJECTS <span aria-hidden="true">→</span></a>
+        <div class="hero-actions">
+          <a class="button" href="projects.html">BROWSE PROJECTS <span aria-hidden="true">→</span></a>
+          <a class="button secondary" href="mailto:davidleon.g@outlook.com">EMAIL ME <span aria-hidden="true">↗</span></a>
+        </div>
       </div>
       <aside class="snapshot" aria-label="Current lab snapshot">
         <div class="snapshot-head"><span>Lab snapshot</span><span class="live">● ONLINE</span></div>

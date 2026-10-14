@@ -77,3 +77,5 @@ try {
 } finally {
     Remove-Item $temp -Recurse -Force
 }
+exit 0
+

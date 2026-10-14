@@ -24,7 +24,7 @@ The workflow grew from manually copying one page to scripted multi-page uploads 
 
 ## Draft review and publication
 
-The [review runbook](../../docs/website-review-and-publication.md) separates draft deployment from public release. AUT-001 deploys a prepared draft to web01; after review, the same draft is merged into main and GitHub Actions publishes it. AUT-002 refreshes the homepage before draft deployment. Save the current launcher and PowerShell script locally; they do not update themselves. For normal review, use only `update-web01.bat`.
+The [review runbook](../../docs/website-review-and-publication.md) separates review from public release. The `update-web01.bat` launcher runs AUT-002 on downloaded draft pages, then AUT-001 deploys the generated homepage and five other pages to internal `web.internal`. After review, merge the same website changes into `main`; Actions runs AUT-002 and publishes the generated output. For normal review, use only `update-web01.bat`.
 
 ## Current Setup
 
@@ -39,7 +39,7 @@ The [review runbook](../../docs/website-review-and-publication.md) separates dra
 
 ## Workflow
 
-1. Resolve the selected branch commit SHA and require its successful `homepage-sync` status through the GitHub API.
+1. Resolve the selected branch commit SHA through the GitHub API.
 2. Download each website page from that exact commit.
 3. Validate that each downloaded file is non-empty HTML.
 4. Copy the staged files into the local website folder.

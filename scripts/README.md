@@ -12,13 +12,13 @@ The complete [review and publication runbook](../docs/website-review-and-publica
 
 ## Normal review workflow: one launcher
 
-Save `deploy-web01.ps1` and `update-web01.bat` under `C:\Users\admin\Documents\Labs\Web\scripts\` on the admin PC. After the draft workflow succeeds, double-click `update-web01.bat`. It defaults to `draft`; use `update-web01.bat main` only to deploy an approved version.
+Save `deploy-web01.ps1` and `update-web01.bat` under `C:\Users\admin\Documents\Labs\Web\scripts\` on the admin PC. Double-click `update-web01.bat` for the normal review. It defaults to `draft`.
 
-The launcher downloads and deploys all six pages to internal `web01`, verifies the served hashes, and saves `web01-deployment.json`. The local scripts do not update themselves.
+When the launcher runs, it downloads the six pages from the latest draft commit and runs AUT-002 on the downloaded copy before deploying it to internal `web.internal`. It verifies the six served-page hashes and saves `web01-deployment.json`. Use `update-web01.bat main` only to deploy an approved version. The local scripts do not update themselves.
 
 ## Homepage generation
 
-GitHub Actions normally runs AUT-002 on draft and commits changed output. Local use remains available:
+The review launcher runs AUT-002 locally on the downloaded draft pages. GitHub Actions does not run AUT-002 on draft updates. After a merge to `main`, Actions runs AUT-002 to generate the public site. Local use remains available:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\update-homepage-latest.ps1

@@ -6,7 +6,7 @@ if not "%~1"=="" set "DEPLOY_BRANCH=%~1"
 cd /d "C:\Users\admin\Documents\Labs\Web"
 if errorlevel 1 goto failed
 
-powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\deploy-web01.ps1" -Branch "%DEPLOY_BRANCH%" -LocalFolder "C:\Users\admin\Documents\Labs\Web" -Server "webadmin@10.10.10.147" -RemotePath "/var/www/html/" -SiteUrl "http://10.10.10.147"
+powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\deploy-web01.ps1" -Branch "%DEPLOY_BRANCH%" -LocalFolder "C:\Users\admin\Documents\Labs\Web" -Server "webadmin@10.10.10.147" -RemotePath "/var/www/html/" -SiteUrl "http://web.internal"
 if errorlevel 1 goto failed
 
 echo.

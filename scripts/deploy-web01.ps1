@@ -5,7 +5,7 @@ param(
     [string]$LocalFolder = (Join-Path $PSScriptRoot "..\website"),
     [string]$Server = "webadmin@10.10.10.147",
     [string]$RemotePath = "/var/www/html/",
-    [string]$SiteUrl = "http://10.10.10.147"
+    [string]$SiteUrl = "http://web.internal"
 )
 
 $ErrorActionPreference = "Stop"
@@ -32,12 +32,7 @@ try {
     if ($revision -notmatch "^[0-9a-f]{40}$") {
         throw "GitHub did not return a valid commit SHA. Deployment stopped."
     }
-    Write-Host "Deploying $Branch commit $revision"
-    $status = Invoke-RestMethod -Uri "https://api.github.com/repos/$repository/commits/$revision/status?nocache=$nonce" -Headers $headers -TimeoutSec 60
-    $ready = @($status.statuses | Where-Object { $_.context -eq "homepage-sync" } | Sort-Object updated_at -Descending | Select-Object -First 1)
-    if ($ready.Count -ne 1 -or $ready[0].state -ne "success") {
-        throw "This commit has not passed homepage sync. Wait for the GitHub Actions workflow to succeed, then retry."
-    }
+    Write-Host "Preparing $Branch commit $revision"
     $baseUrl = "https://raw.githubusercontent.com/$repository/$revision/website"
     $expectedHashes = @{}
 
@@ -57,6 +52,20 @@ try {
         }
         $expectedHashes[$page] = (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash
     }
+
+    $generatorPath = Join-Path $stagingFolder "update-homepage-latest.ps1"
+    Write-Host "Running AUT-002 on the downloaded website..."
+    Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/$repository/$revision/scripts/update-homepage-latest.ps1" -Headers $headers -TimeoutSec 60 -OutFile $generatorPath
+    if (-not (Test-Path -LiteralPath $generatorPath -PathType Leaf) -or (Get-Item -LiteralPath $generatorPath).Length -eq 0) {
+        throw "Could not download AUT-002 from commit $revision."
+    }
+    & $generatorPath -WebsiteFolder $stagingFolder
+    $indexPath = Join-Path $stagingFolder "index.html"
+    $indexContent = Get-Content -LiteralPath $indexPath -Raw -Encoding UTF8
+    if ($indexContent -notmatch "(?i)<html\b" -or $indexContent -notmatch "(?i)</html>") {
+        throw "AUT-002 did not produce a complete homepage."
+    }
+    $expectedHashes["index.html"] = (Get-FileHash -LiteralPath $indexPath -Algorithm SHA256).Hash
 
     if (-not (Test-Path -LiteralPath $LocalFolder -PathType Container)) {
         New-Item -ItemType Directory -Path $LocalFolder -Force | Out-Null

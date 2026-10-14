@@ -1,5 +1,9 @@
 # Project 010: Remote VPN access to Home Control Hub with WireGuard
 
+**Status:** Complete — WireGuard phone access to Frigate verified on mobile data.
+
+**Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
+
 ## Goal
 
 Create secure remote access from a phone on mobile data to the Home Control Hub in VLAN 20 using OPNsense WireGuard, without exposing Frigate, cameras, or internal web interfaces directly to the internet.
@@ -131,7 +135,7 @@ Remote access works from the phone over mobile data. The phone can establish a W
 - Keep the WAN rule limited to UDP `51820`.
 - Keep the phone peer limited to the internal services it needs.
 - Consider adding a second peer for another trusted device instead of sharing the same phone peer.
-- Export a fresh OPNsense configuration backup now that the VPN is working.
+- Keep the OPNsense export current after future firewall changes; see [LAB-007](../07-opnsense-configuration-backup/README.md).
 - Document any future remote-access services as separate rules rather than broad VPN access.
 
 ## AI assistance

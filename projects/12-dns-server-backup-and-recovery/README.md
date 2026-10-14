@@ -1,5 +1,9 @@
 # Project 012: DNS server backup and recovery test
 
+**Status:** Complete — isolated DNS restore and BIND checks passed; weekly backup standard documented.
+
+**Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
+
 ## Goal
 
 Prove that the internal DNS server can be restored from backup without risking the live `dns01` service.
@@ -80,7 +84,7 @@ OPNsense remains a separate case: its configuration export should be saved after
 
 - Keep `dns01-restore-test` powered off unless needed for future recovery checks.
 - Use this backup pattern for other important lab VMs.
-- Add monitoring so DNS availability can be checked automatically.
+- DNS monitoring is now covered by [LAB-013](../13-lab-monitoring-uptime-kuma/README.md), including internal and external lookups.
 - Repeat the restore test after major DNS or VLAN changes.
 
 ## AI assistance

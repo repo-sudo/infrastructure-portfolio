@@ -1,5 +1,7 @@
 # Deployment scripts moved
 
+`web01` is the internal deployment target for this portfolio; GitHub Pages serves the public site.
+
 The maintained six-page deployment scripts now live in the repository's root `scripts/` directory:
 
 - [Deployment script](../../../scripts/deploy-web01.ps1)

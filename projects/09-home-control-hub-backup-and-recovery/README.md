@@ -1,5 +1,9 @@
 # Project 009: Home Control Hub backup and recovery test
 
+**Status:** Complete — isolated restore booted with Docker and Frigate state verified.
+
+**Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
+
 ## Goal
 
 Prove that the Home Control Hub can be recovered from backup, not just backed up. The test used `hch01`, the Debian VM running Docker and Frigate for local camera monitoring.
@@ -53,7 +57,7 @@ The recovery test succeeded. The restored VM booted correctly, and the expected 
 ## Next Steps
 
 - Keep `hch01-restore-test` powered off unless needed for evidence or another recovery check.
-- Add a scheduled backup policy for `hch01`.
+- Confirm `hch01` is covered by the weekly Proxmox backup standard in [LAB-012](../12-dns-server-backup-and-recovery/README.md).
 - Review whether Frigate video storage should be included in every backup or handled with a separate retention plan.
 - Repeat the restore test after major Frigate or VLAN changes.
 

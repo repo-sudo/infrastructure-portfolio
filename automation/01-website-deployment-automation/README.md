@@ -24,14 +24,14 @@ The workflow grew from manually copying one page to scripted multi-page uploads 
 
 ## Draft review and publication
 
-The [review runbook](../../docs/website-review-and-publication.md) separates draft deployment from public release. AUT-001 deploys a prepared draft to web01; after review, the same draft is merged into main and GitHub Actions publishes it. AUT-002 refreshes the homepage before draft deployment. The existing local launcher must be replaced with the current version to use the branch option and readiness guard.
+The [review runbook](../../docs/website-review-and-publication.md) separates draft deployment from public release. AUT-001 deploys a prepared draft to web01; after review, the same draft is merged into main and GitHub Actions publishes it. AUT-002 refreshes the homepage before draft deployment. Save the current launcher and PowerShell script locally; they do not update themselves. For normal review, use only `update-web01.bat`.
 
 ## Current Setup
 
 - Source repository: `repo-sudo/infrastructure-portfolio`
 - Source branch: `draft` by default; `main` for the approved version
 - Website source folder: `website/`
-- Internal target: `web01`
+- Internal deployment and review target: `web01`
 - Web root: `/var/www/html/`
 - Deployment host: Windows admin workstation
 - Transfer method: `scp`

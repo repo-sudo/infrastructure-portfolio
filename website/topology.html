@@ -155,7 +155,7 @@
 
     <section class="section">
       <div class="topology-card">
-        <div class="topology-scroll" role="img" aria-label="Internet connects to the ISP router and home LAN. The home LAN contains the admin workstation and connects to the OPNsense virtual machine hosted on the HP Z2 Proxmox server. OPNsense controls VLAN 10 for web services, VLAN 20 for home control, and VLAN 30 for infrastructure services. Trusted mobile devices connect through remote VPN access.">
+        <div class="topology-scroll" role="img" aria-label="Internet connects to the ISP router and home LAN. The home LAN contains the admin workstation and connects to the OPNsense virtual machine hosted on the HP Z2 Proxmox server. OPNsense controls VLAN 10 for the internal `web01` review site, VLAN 20 for home control, and VLAN 30 for infrastructure services. GitHub Pages serves the public portfolio. Trusted mobile devices connect through remote VPN access.">
           <svg class="topology-svg topology-desktop-svg" viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs>
               <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
@@ -213,7 +213,7 @@
               <rect class="topology-node" x="60" y="500" width="220" height="82" rx="4"/>
               <text class="topology-title" x="170" y="527">VLAN 10</text>
               <text class="topology-vm" x="170" y="547">WEB01</text>
-              <text class="topology-label" x="170" y="562">PERSONAL PORTFOLIO WEBSITE</text>
+              <text class="topology-label" x="170" y="562">WEB01 INTERNAL REVIEW SITE</text>
             </g>
             <g>
               <rect class="topology-node" x="370" y="500" width="220" height="82" rx="4"/>
@@ -291,7 +291,7 @@
               <rect class="topology-node" x="38" y="658" width="108" height="86" rx="4"/>
               <text class="topology-title" x="92" y="686">VLAN 10</text>
               <text class="topology-vm" x="92" y="707">WEB01</text>
-              <text class="topology-label" x="92" y="726">PORTFOLIO</text>
+              <text class="topology-label" x="92" y="726">WEB01 REVIEW COPY</text>
             </g>
             <g>
               <rect class="topology-node" x="126" y="772" width="108" height="86" rx="4"/>

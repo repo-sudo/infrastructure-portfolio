@@ -1,7 +1,11 @@
 # HP Z2 infrastructure host and Proxmox installation
 
-I set up an HP Z2 workstation bought in Ebay as a dedicated virtualization host and installed Proxmox VE directly on it. This is the foundation for the VMs and services documented in the rest of this portfolio.
+I set up an HP Z2 workstation bought on eBay as a dedicated virtualization host and installed Proxmox VE directly on it. This is the foundation for the VMs and services documented in the rest of this portfolio.
 
+
+**Status:** Complete — Proxmox host and initial Debian VM deployed.
+
+**Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
 ## Goal
 
 Set up my lab in a dedicated machine that can run multiple isolated systems while I practise virtualization, Linux and Windows Server administration, networking, and service hosting.
@@ -13,7 +17,7 @@ Set up my lab in a dedicated machine that can run multiple isolated systems whil
 | System model | HP Z2 SFF G4 Workstation |
 | Processor | Intel Core i7-8700 @ 3.20 GHz; 6 cores, 12 logical processors |
 | Installed RAM | 24 GB |
-| Storage |  Samsung SSD 860 EVO 500 GB and an HGST HDD of approximately 1 TB.|
+| Storage | Samsung SSD 860 EVO 500 GB and an HGST HDD of approximately 1 TB |
 | Hypervisor | Proxmox VE 9.2.2, installed on the host |
 | Proxmox node | `pve01` |
 | Network bridge | `vmbr0` |

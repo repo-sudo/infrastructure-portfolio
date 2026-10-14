@@ -1,5 +1,9 @@
 # Home Control Hub with Frigate
 
+**Status:** Live — Frigate runs on `hch01`; remote access is documented in LAB-010.
+
+**Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
+
 ## Goal
 
 Build a Linux-based home control server for local camera monitoring and future smart-home services. This project starts with Frigate as the first workload and uses Docker Compose so the service can be backed up, changed, and restarted cleanly.
@@ -65,4 +69,4 @@ This project keeps the camera platform local-first. The cameras are not exposed 
 - Keep camera naming consistent: `cam01`, `cam02`, and future cameras in the same format.
 - Consider moving cameras to a dedicated camera/IoT VLAN with no direct internet access.
 - Tighten the temporary broad camera rule to only the required stream ports after testing is complete.
-- Build a separate VPN project so remote access reaches Frigate through OPNsense instead of exposing cameras directly.
+- Remote WireGuard access is documented in [LAB-010](../10-remote-vpn-access-opnsense-wireguard/README.md); keep access limited to the required service.

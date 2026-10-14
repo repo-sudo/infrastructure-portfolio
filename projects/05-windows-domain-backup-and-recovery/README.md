@@ -2,8 +2,10 @@
 
 **Project:** 005
 
-**Status:** In progress — scheduled backup configured; restore testing pending.
+**Status:** In progress — manual backup succeeded; scheduled-run and restore evidence remain unrecorded.
 
+
+**Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
 ## Goal
 
 Create and verify a dependable backup and recovery process for the Elephant SA Windows domain after its domain-controller migration. The domain is `elephant.test`, and DC02 is its sole domain controller.
@@ -36,7 +38,7 @@ The live VMs are on the SSD and the backup destination is on a separate HDD, so 
 
 ## Remaining validation
 
-1. Check that the first automatic run on 30 September completes successfully.
+1. Check Windows Server Backup history for successful scheduled runs and record the latest result.
 2. Perform a controlled restore test in an isolated environment, with the recovered domain controller disconnected from the live network.
 3. Record the restore procedure, results, and evidence before marking the project complete.
 

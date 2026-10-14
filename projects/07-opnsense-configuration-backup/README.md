@@ -1,5 +1,9 @@
 # Project 007: OPNsense config backup + recovery
 
+**Status:** Encrypted backup saved privately; isolated configuration restore test complete.
+
+**Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
+
 ## Goal
 
 Create a repeatable backup and recovery habit for the OPNsense firewall/router VM so working firewall, DHCP, VLAN, and access-control settings can be restored after a mistake, reboot issue, or future network change.
@@ -8,7 +12,7 @@ This project documents the process. The actual OPNsense configuration XML is not
 
 ## Why this matters
 
-The firewall has become a core part of the lab. It now controls traffic between the home LAN and the infrastructure VLAN, including access to the web server and the OPNsense GUI. Once a firewall becomes the routing and policy point, its configuration needs to be treated like important infrastructure state.
+OPNsense routes and filters traffic between the home LAN, VLANs, and WireGuard clients. Its configuration is important recovery data.
 
 A configuration backup helps with:
 
@@ -47,12 +51,7 @@ fw01-config-YYYY-MM-DD-after-dhcp-change-encrypted.xml
 
 ## Current backup
 
-A first encrypted backup was downloaded and stored privately on the admin workstation.
-
-```text
-Downloaded file size: 57 KB
-Public repository copy: none
-```
+The first encrypted export was 57 KB and stored privately. A fresh export was recorded on 11 October 2026 after network and firewall changes. Its size and encryption status are not recorded here; no XML is stored in this repository.
 
 ## Storage decision
 
@@ -75,20 +74,12 @@ An OPNsense configuration export can include internal network details and may in
 - [x] Configuration backup option identified in the GUI.
 - [x] Backup naming convention defined.
 - [x] Decision made not to publish XML configuration exports.
-- [x] First encrypted backup file downloaded and stored privately.
-- [ ] Restore process tested in a safe environment.
+- [x] Configuration export stored privately; a fresh export was recorded on 11 October 2026.
+- [x] Restored the configuration in an isolated test environment.
 
-## Recovery plan
+## Recovery test
 
-The restore process should be tested later in a separate temporary OPNsense VM, not directly on the working firewall. That allows the backup to be verified without risking the current lab network.
-
-A safe recovery test would confirm:
-
-- the encrypted backup can be selected for restore
-- the backup password works
-- interface assignments can be reviewed after restore
-- firewall, DHCP, and VLAN configuration are present
-- the restored VM is kept isolated until verified
+The configuration restore was completed in an isolated test environment, separate from the working firewall. The test confirms the restore process was exercised without risking the live lab network. Detailed test results are not recorded here.
 
 ## AI assistance
 

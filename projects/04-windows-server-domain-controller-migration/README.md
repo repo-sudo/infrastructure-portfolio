@@ -1,7 +1,9 @@
 # Windows Server domain controller migration
 
-**Status:** Complete
+**Status:** Complete. DC02 is the sole domain controller; FSMO roles and client access are verified.
 
+
+**Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
 ## Overview
 
 I moved the domain-controller workload for `elephant.test` from DC01, a VMware Windows Server VM, to DC02 on Proxmox. The migration involved more than promoting a replacement server: the VMs were on different virtual networks, Windows Firewall interfered with connectivity tests, and DNS locator records had to work before Active Directory replication could stay healthy.

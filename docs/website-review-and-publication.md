@@ -2,7 +2,7 @@
 
 ## Working model
 
-Edit the `draft` branch, automatically refresh its homepage, deploy that exact draft to `web01`, review it, then merge the approved version into `main`. GitHub Actions publishes `website/` from `main` to GitHub Pages. Drafts never enter the publication job.
+Edit `draft`; GitHub Actions runs AUT-002 to refresh the homepage, then AUT-001 deploys that prepared commit to internal `web01` for review. After approval, merge the same commit into `main`; GitHub Actions publishes `website/` to GitHub Pages. Drafts never enter the publication job.
 
 GitHub remains the source repository. The PC folder is a deployment copy, and `web01` is the private review server. Both are refreshed from a single commit. Draft source remains publicly readable because this repository is public.
 
@@ -13,7 +13,7 @@ GitHub remains the source repository. The PC folder is a deployment copy, and `w
 3. Keep existing SSH key authentication to `web01`. No GitHub token is needed on the PC to download this public repository.
 4. For enforced review, optionally protect `main` with a rule requiring pull requests and disallowing direct pushes. The workflow itself does not enforce a human approval or prevent an owner from pushing directly to `main`.
 
-The Pages setting must be changed before the first approved merge can publish through the new workflow. No new service account or personal access token is required.
+The public site is recorded as live from the earlier `gh-pages` setup. The Pages setting must be changed before the first approved merge can publish through the Actions workflow; its first successful publication is not recorded here. No new service account or personal access token is required.
 
 ## Edit and review, with or without ChatGPT
 

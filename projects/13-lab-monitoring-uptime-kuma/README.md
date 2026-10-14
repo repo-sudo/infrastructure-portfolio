@@ -1,10 +1,14 @@
 # Project 013: Lab monitoring with Uptime Kuma
 
+**Status:** Live — Uptime Kuma checks services, gateways, DNS, and internet reachability.
+
+**Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
+
 ## Goal
 
 Add a lightweight monitoring service so the lab can show whether important systems, gateways, DNS records, and web services are reachable.
 
-The goal was not to add another isolated project for its own sake. The goal was to make the existing lab easier to operate and troubleshoot before adding more services.
+The aim is visibility into existing services and network paths, so failures are easier to find.
 
 ## Environment
 
@@ -15,7 +19,7 @@ The goal was not to add another isolated project for its own sake. The goal was 
 | Monitoring software | Uptime Kuma |
 | Container runtime | Docker |
 | Network segment | VLAN 30 / Infrastructure |
-| Internal DNS name | Internal monitoring hostname |
+| Internal DNS name | `mon.internal` |
 | Web interface | Internal Uptime Kuma web interface |
 | Firewall/router | OPNsense VM `fw01` |
 
@@ -32,7 +36,7 @@ The goal was not to add another isolated project for its own sake. The goal was 
 
 | Monitor | Type | Purpose |
 | --- | --- | --- |
-| `web01 portfolio website` | HTTP | Confirms the portfolio site is reachable |
+| `web01 internal portfolio site` | HTTP | Confirms the portfolio site is reachable |
 | `hch01 Frigate` | HTTP | Confirms the Home Control Hub web service is reachable |
 | `mon01 Uptime Kuma` | HTTP | Confirms the monitoring dashboard itself is reachable |
 | `internet reachability` | Ping | Confirms the lab has upstream connectivity |

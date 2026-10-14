@@ -1,5 +1,9 @@
 # Project 011: Internal DNS server with BIND
 
+**Status:** Live — BIND resolves internal service names from the tested clients.
+
+**Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
+
 ## Goal
 
 Create a dedicated internal DNS server so lab services can be reached by clear names instead of memorised IP addresses.
@@ -43,7 +47,7 @@ The final goal was to make names such as `web.internal`, `hch.internal`, and `dn
 | `dns.internal` | Internal DNS server |
 | `fw.internal` | OPNsense firewall/router |
 | `pve.internal` | Proxmox host |
-| `web.internal` | Debian/Nginx portfolio web server |
+| `web.internal` | Debian/Nginx internal portfolio copy |
 | `hch.internal` | Home Control Hub / Frigate server |
 
 ## Final Traffic Pattern
@@ -183,7 +187,7 @@ Internal DNS is live. Lab services can now be reached by names instead of IP add
 - Consider moving more service access to names instead of IP addresses.
 - Decide whether the main PC should permanently use `dns01` as its primary resolver.
 - Include future infrastructure services in the `internal` zone.
-- Take a fresh OPNsense configuration backup after the DNS rules are stable.
+- Keep the OPNsense export current after future DNS or firewall changes; see [LAB-007](../07-opnsense-configuration-backup/README.md).
 
 ## AI assistance
 

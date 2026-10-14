@@ -2,6 +2,10 @@
 
 I set up backup storage for a Proxmox virtual machine and tested a restore of my Debian web server. The goal was to verify that a backup could start and serve the website, rather than rely on a successful backup task alone.
 
+
+**Status:** Complete — isolated restore booted and served the site.
+
+**Portfolio website:** `web01` is the internal deployment target; GitHub Pages serves the public site.
 ## What I did
 
 1. Identified a separate disk for backups and checked its health before preparing it. I reserved part of its capacity for future lab projects.

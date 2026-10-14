@@ -22,7 +22,7 @@ The homepage therefore contains three generated preview areas:
 
 ## Automatic workflow
 
-[Website sync and publication](../../.github/workflows/website.yml) runs after pushes to draft or main. On draft it runs the [generator](../../scripts/update-homepage-latest.ps1), commits index.html only if changed, validates the result, and marks that exact commit with a successful `homepage-sync` status. AUT-001 will deploy only a prepared commit.
+[Website sync and publication](../../.github/workflows/website.yml) runs after pushes to draft or main. On draft it runs the [generator](../../scripts/update-homepage-latest.ps1), commits index.html only if changed, validates the result, and marks that exact commit with a successful `homepage-sync` status. `web01` is the internal deployment and review target; AUT-001 deploys only a prepared commit.
 
 On main the generator runs in check-only mode. A stale homepage blocks publication rather than changing the approved website. Only main can enter the public Pages deployment job.
 

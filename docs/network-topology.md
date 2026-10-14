@@ -48,8 +48,8 @@ The physical switch connects external wired devices and the home LAN to the host
 | Network | Current role |
 | --- | --- |
 | Home LAN | Admin workstation and upstream network for OPNsense |
-| VLAN 10 | Web services: `web01` and Nginx |
+| VLAN 10 | Internal portfolio deployment and review copy: `web01` and Nginx |
 | VLAN 20 | Home-control services: `hch01` and Frigate |
 | VLAN 30 | Infrastructure services: `dns01` with BIND and `mon01` with Uptime Kuma |
 
-This topology document omits addresses, public-facing connection details, VPN configuration, management endpoints, device identifiers and camera connection details. Individual project records may retain private RFC1918 addresses when they explain a historical build or troubleshooting step.
+The public portfolio is served from GitHub Pages; `web01` is the internal deployment target, not the public web host. This topology document omits addresses, public-facing connection details, VPN configuration, management endpoints, device identifiers and camera connection details. Individual project records may retain private RFC1918 addresses when they explain a historical build or troubleshooting step.

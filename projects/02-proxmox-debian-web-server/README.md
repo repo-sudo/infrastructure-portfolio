@@ -1,6 +1,8 @@
 # Debian web server on Proxmox
 
-A Debian virtual machine running Nginx and serving a small static HTML portfolio on the local network. This project covers the first web server build, host firewall setup, multi-page static site deployment, SSH key-based authentication, and a repeatable deployment workflow from Windows.
+`web01` runs Debian and Nginx as the portfolio's internal deployment and review target. GitHub Pages serves the public copy.
+
+**Status:** Core server setup complete; the current deployment workflow is documented below.
 
 ## Why I built it
 
@@ -36,29 +38,21 @@ I wanted a dedicated place to host my portfolio and to practise creating a VM, i
 11. Created an ED25519 SSH key pair and added the public key to `web01` for passwordless deployment.
 12. Created a clickable `.bat` launcher so the deployment can be run from Windows without typing the command each time.
 
-## Deployment workflow
+## Website update workflow
 
-Deployment began with manually copying a single HTML page. As the site gained separate pages, I introduced PowerShell and a Windows launcher, then SSH keys to remove repeated password prompts. The goal later expanded from uploading files to proving that the correct version was being served: the updater now downloads from one GitHub commit, validates the HTML, and checks the served files with SHA256 hashes. Adding the Automation page expanded deployment from five pages to six.
+1. Edit website files on the GitHub `draft` branch.
+2. GitHub Actions runs AUT-002 to refresh homepage previews and mark the prepared commit ready.
+3. Run `update-web01.bat` on the admin PC. It downloads all six pages from that commit, deploys them to `web01` over SSH, and verifies the served-file hashes.
+4. Review the internal site at `http://web.internal`.
+5. If satisfied, merge that same reviewed commit from `draft` into `main`. GitHub Actions publishes `website/` to GitHub Pages once Pages is configured to use Actions.
 
-The maintained implementation is now shared with [AUT-001: Website deployment automation](../../automation/01-website-deployment-automation/README.md). Both projects use the same [deployment script](../../scripts/deploy-web01.ps1) and [Windows launcher](../../scripts/update-web01.bat); the older project-local copies have been retired.
-
-| Step | Action |
-| --- | --- |
-| 1 | Update and commit the HTML files in the `draft` branch; wait for automatic homepage sync |
-| 2 | Run the maintained `update-web01.bat` launcher using the [setup instructions](../../scripts/README.md) |
-| 3 | The script resolves the selected branch (draft by default), requires successful homepage sync, downloads all six pages from that commit, and validates them |
-| 4 | The script uploads those staged pages to `/var/www/html/` over SSH |
-| 5 | The script fetches each served page and compares its SHA256 hash before reporting success |
-
-Review the deployed draft before merging it into main for public release. See the [review and publication runbook](../../docs/website-review-and-publication.md).
+Use only `update-web01.bat` for normal review. The homepage generator launcher is optional. See the [full runbook](../../docs/website-review-and-publication.md) for setup and recovery.
 
 ### The role of `web01`
 
-`web01` serves two roles: it is the internal review environment for testing draft website changes, and it retains the last version successfully deployed there as a practical local fallback copy. It is not a formal backup system because deployment can overwrite the previous version and no automatic rollback is provided.
+`web01` is the internal deployment and review target. It serves the Nginx copy from `/var/www/html/`; GitHub Pages serves the public copy. Deployment verifies files but is not a backup or automatic rollback.
 
-The six pages are Home, Projects, Automation, Topology, Lab Notes, and About. A browser check remains useful for appearance; the hash checks verify file content.
-
-Because this is a static Nginx site, replacing the HTML files does not require a service reload. SSH key-based authentication is configured for deployment from the admin workstation.
+The six pages are Home, Projects, Automation, Topology, Lab Notes, and About. Hash checks verify file content; a browser check verifies appearance. Static HTML changes do not require an Nginx reload.
 
 ## Firewall configuration
 

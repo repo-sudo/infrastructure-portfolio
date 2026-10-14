@@ -1,142 +1,41 @@
 # Project 014: Public portfolio mirror
 
-## Goal
+**Status:** Public site is live. The first publication through the repository's GitHub Actions workflow is not recorded.
 
-Publish the portfolio publicly without exposing the home lab web server directly to the internet.
+**Portfolio website:** `web01` is the internal deployment and review target; GitHub Pages serves the public site.
 
-The lab still runs the working copy on `web01`, but the public copy should be served from static hosting such as GitHub Pages or Cloudflare Pages.
+## Purpose
 
-This keeps the portfolio easy to share while preserving the security story of the lab.
+Publish the static portfolio without exposing the home lab to public traffic.
 
-## Why This Matters
-
-Opening `web01` directly to the internet would turn the lab web server into a public-facing service. That would require public firewall exposure, HTTPS management, hardening, logging, monitoring, and a stronger DMZ-style design.
-
-For a static portfolio, that is not necessary.
-
-The better design is:
-
-| Layer | Role |
+| Component | Role |
 | --- | --- |
-| GitHub repository | Source of truth for the website files |
-| `web01` | Internal lab deployment target for Linux, Nginx, SSH, VLAN, backup, and recovery practice |
-| GitHub Pages or Cloudflare Pages | Public HTTPS mirror for recruiters and external viewers |
+| GitHub repository | Source of truth for website files |
+| `web01` | Internal Nginx deployment and review target |
+| GitHub Pages | Public HTTPS site |
 
-## Design Decision
+The public and internal copies serve different purposes. `web01` remains useful for Linux, Nginx, SSH, VLAN, backup, and recovery practice. Public traffic goes to GitHub Pages and does not enter the home network.
 
-The public website should be a static mirror of the `website/` folder.
-
-The home lab server remains part of the project because it proves local infrastructure skills:
-
-- Debian server administration
-- Nginx hosting
-- SSH deployment
-- VLAN placement
-- firewall rules
-- backup and restore testing
-- monitoring
-
-The cloud-hosted copy proves a different skill: choosing the right platform for the right exposure level.
-
-## Public / Private Split
-
-| Question | Decision |
-| --- | --- |
-| Should `web01` be public? | No, keep it internal |
-| Should the portfolio be public? | Yes |
-| Should public traffic enter the home lab? | No |
-| Should the public copy use HTTPS? | Yes |
-| Should the GitHub repo remain the source of truth? | Yes |
-
-## Target Flow
-
-```text
-Local edits or GitHub updates
-        |
-        v
-GitHub repository
-        |
-        +--> web01 internal lab copy
-        |
-        +--> public static mirror
-```
-
-## What This Proves
-
-- I can separate lab infrastructure from public-facing delivery.
-- I understand that just because a service can be exposed does not mean it should be.
-- I can keep `web01` as a meaningful lab server without making it the public attack surface.
-- I can use static hosting for the public version while continuing to operate the internal version.
-- I can explain the trade-off between self-hosting, public availability, HTTPS, and security.
-
-## Implementation Options
-
-### Option 1: GitHub Pages
-
-Best first option because the repository already exists and the site is static HTML.
-
-Expected setup:
-
-- Publish the `website/` folder using GitHub Pages.
-- Use the GitHub Pages URL as the public portfolio link.
-- Keep `web01` as the internal deployment target.
-
-### Option 2: Cloudflare Pages
-
-Better later if a custom domain, DNS management, analytics, redirects, or extra edge controls become useful.
-
-Expected setup:
-
-- Connect Cloudflare Pages to the GitHub repository.
-- Set the build output to the static `website/` folder.
-- Use the Cloudflare Pages URL or a custom domain.
-
-## Current Status
-
-Live.
-
-The portfolio now has a public GitHub Pages mirror:
+## Current public site
 
 [https://repo-sudo.github.io/infrastructure-portfolio/](https://repo-sudo.github.io/infrastructure-portfolio/)
 
-The public version is served over HTTPS from GitHub Pages, while `web01` remains the internal lab deployment target.
+The portfolio is recorded as live on GitHub Pages. Earlier publication used the `gh-pages` branch. The repository now contains an Actions workflow for approved `main` commits; confirm Pages is set to **GitHub Actions** and verify its first successful publication before considering that path complete.
 
-## Verification Checklist
+## Website update and release
 
-When the public mirror is enabled, verify:
+1. Make changes on `draft`.
+2. AUT-002 refreshes the homepage previews in GitHub Actions.
+3. AUT-001 deploys the prepared commit to internal `web01` for review.
+4. After visual approval, merge the same reviewed commit into `main`.
+5. GitHub Actions publishes `website/` to GitHub Pages.
 
-- Homepage loads over HTTPS.
-- Projects page loads.
-- Automation page loads.
-- Lab notes page loads.
-- Topology page loads.
-- About page loads.
-- Links between pages work.
-- GitHub project links open correctly.
-- `web01` remains reachable only through the lab network/VPN path.
-- The public version does not expose private IPs, credentials, or sensitive config exports.
+The [review and publication runbook](../../docs/website-review-and-publication.md) covers setup and failure handling. The repository is public, so draft content is publicly readable even before publication.
 
-## Lessons Learned
+## Checks
 
-- Public availability and self-hosting are separate design decisions.
-- A static site does not need to be served from the home lab to prove infrastructure skill.
-- Keeping a public mirror outside the lab reduces risk while keeping the internal deployment meaningful.
-- The best architecture is not always the most technically impressive one; it is the one that fits the purpose safely.
-
-## Publication workflow
-
-The recorded public mirror originally used the root of the `gh-pages` branch. The draft review workflow introduces an Actions publication job for approved `main` commits. Switch **Settings → Pages → Source** to **GitHub Actions** when enabling it; until that setting is changed and a publication succeeds, the old publishing setup remains in use.
-
-Draft commits are deployed to web01 for private review. After approval, merge the exact reviewed version into main. The workflow validates the committed homepage and publishes the `website/` folder without rebuilding approved content. See the [review and publication runbook](../../docs/website-review-and-publication.md).
-
-## Next Steps
-
-- Complete the Pages source setting and verify the first approved Actions publication.
-- Add the public URL to the repository and website.
-- Add a short note explaining: "the lab hosts the working copy; the cloud publishes the public copy."
-- Consider adding this public mirror to monitoring as an external availability check.
+For a release, confirm the six site pages and their links work, the public site uses HTTPS, and the internal `web01` copy remains private to the lab/VPN. Do not publish private addresses, credentials, or OPNsense XML exports.
 
 ## AI assistance
 
-AI was used to compare the trade-offs between exposing `web01` and using static hosting, then structure the project documentation. The final architecture decision keeps the lab server internal and uses public static hosting for external access.
-
+Codex helped compare public hosting options and document the workflow. The lab server remains internal; GitHub Pages serves the public copy.

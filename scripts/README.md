@@ -7,22 +7,14 @@ The complete [review and publication runbook](../docs/website-review-and-publica
 | `deploy-web01.ps1` | AUT-001: deploy a prepared draft or main commit to web01 and verify all six served pages |
 | `update-web01.bat` | Windows launcher; defaults to draft; accepts main as its first argument |
 | `update-homepage-latest.ps1` | AUT-002: generate static homepage previews; `-Check` validates without writing |
-| `update-homepage-latest.bat` | Optional local generator launcher; not part of normal draft deployment |
+| `update-homepage-latest.bat` | Optional local-only generator; not for the normal review cycle |
 | `test-website-workflow.ps1` | Generator tests and simulated deployment failure checks; no real upload |
 
-## Normal Windows workflow
+## Normal review workflow: one launcher
 
-Save the deployment PowerShell script and BAT under `C:\Users\admin\Documents\Labs\Web\scripts\`. Double-click the BAT after the draft workflow succeeds. It downloads the website to `C:\Users\admin\Documents\Labs\Web`, deploys to web01, and saves `web01-deployment.json` after verification.
+Save `deploy-web01.ps1` and `update-web01.bat` under `C:\Users\admin\Documents\Labs\Web\scripts\` on the admin PC. After the draft workflow succeeds, double-click `update-web01.bat`. It defaults to `draft`; use `update-web01.bat main` only to deploy an approved version.
 
-The launcher uses the lab's existing server, folder and URL settings. Update both script files when tooling changes; old Windows copies are not upgraded automatically. Running `update-web01.bat main` deploys approved main instead.
-
-From a repository checkout:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\deploy-web01.ps1 -Branch draft
-```
-
-The default download folder is the checkout's `website` folder. These downloads overwrite local HTML; use a separate deployment copy if you have uncommitted edits. The parameters `-LocalFolder`, `-Server`, `-RemotePath`, and `-SiteUrl` can override the lab defaults.
+The launcher downloads and deploys all six pages to internal `web01`, verifies the served hashes, and saves `web01-deployment.json`. The local scripts do not update themselves.
 
 ## Homepage generation
 

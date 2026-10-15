@@ -46,10 +46,10 @@
     .snapshot-head{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);font:10px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
     .live{color:var(--green)}
     .snapshot dl{margin:0;padding:8px 14px}
-    .snapshot dl div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #e8edf2}
+    .snapshot dl div{display:grid;grid-template-columns:108px minmax(0,1fr);align-items:start;gap:12px;padding:9px 0;border-bottom:1px solid #e8edf2}
     .snapshot dl div:last-child{border:0}
-    .snapshot dt{color:var(--muted);font:11px var(--mono)}
-    .snapshot dd{margin:0;text-align:right;font:11px var(--mono);font-weight:700}
+    .snapshot dt{color:var(--muted);font:12px var(--mono)}
+    .snapshot dd{min-width:0;margin:0;display:flex;flex-wrap:wrap;justify-content:flex-end;align-content:flex-start;gap:4px}.snapshot dd span{display:inline-flex;align-items:center;padding:4px 7px;border:1px solid #d9e3ef;background:#fff;color:#405873;font:10px/1.3 var(--mono);font-weight:700;white-space:nowrap}
     .section{padding-top:58px}
     .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:19px}
     h2{margin:0;font-size:30px;letter-spacing:-.045em}
@@ -107,6 +107,7 @@
     <nav class="nav wrap" aria-label="Main navigation">
       <a class="brand" href="index.html"><span class="logo">DG</span><span>David Garciarena<small>Infrastructure lab / personal portfolio</small></span></a>
       <div class="links">
+        <a href="index.html">00 / HOME</a>
         <a href="projects.html">01 / PROJECTS</a>
         <a href="automation.html">02 / AUTOMATION</a>
         <a href="topology.html">03 / TOPOLOGY</a>
@@ -131,13 +132,14 @@
       <aside class="snapshot" aria-label="Current lab snapshot">
         <div class="snapshot-head"><span>Lab snapshot</span><span class="live">● ONLINE</span></div>
         <dl>
-          <div><dt>Host</dt><dd>HP Z2 SFF G4</dd></div>
-          <div><dt>Hypervisor</dt><dd>Proxmox VE</dd></div>
-          <div><dt>Boundary</dt><dd>OPNsense firewall</dd></div>
-          <div><dt>Networks</dt><dd>Home LAN + VLANs 10 / 20 / 30</dd></div>
-          <div><dt>Access</dt><dd>SSH + WireGuard</dd></div>
-          <div><dt>Services</dt><dd>Web, DNS, monitoring, home control</dd></div>
-          <div><dt>Focus</dt><dd>Segmentation, backups, recovery</dd></div>
+          <div><dt>Platform</dt><dd><span>Proxmox VE</span><span>HP Z2 SFF G4</span></dd></div>
+          <div><dt>Network</dt><dd><span>OPNsense</span><span>3 VLANs</span><span>WireGuard</span></dd></div>
+          <div><dt>Services</dt><dd><span>Website staging</span><span>Smart home</span><span>DNS</span><span>Service monitoring</span></dd></div>
+          <div><dt>Stack</dt><dd><span>Debian</span><span>Nginx</span><span>BIND</span><span>Docker</span><span>Frigate</span><span>Uptime Kuma</span></dd></div>
+          <div><dt>Projects</dt><dd><span>14 infrastructure</span><span>2 automation</span></dd></div>
+          <div><dt>Backup + recovery</dt><dd><span>4 completed</span></dd></div>
+          <div><dt>Last updated</dt><dd><span>15 Oct 2026</span></dd></div>
+          <div><dt>Running since</dt><dd><span>September 2026</span></dd></div>
         </dl>
       </aside>
     </section>

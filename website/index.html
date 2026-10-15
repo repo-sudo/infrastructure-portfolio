@@ -46,10 +46,10 @@
     .snapshot-head{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);font:10px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
     .live{color:var(--green)}
     .snapshot dl{margin:0;padding:8px 14px}
-    .snapshot dl div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #e8edf2}
+    .snapshot dl div{display:grid;grid-template-columns:108px minmax(0,1fr);align-items:start;gap:12px;padding:9px 0;border-bottom:1px solid #e8edf2}
     .snapshot dl div:last-child{border:0}
     .snapshot dt{color:var(--muted);font:11px var(--mono)}
-    .snapshot dd{margin:0;text-align:right;font:11px var(--mono);font-weight:700}
+    .snapshot dd{min-width:0;margin:0;text-align:right;font:11px/1.45 var(--mono);font-weight:700;overflow-wrap:anywhere}
     .section{padding-top:58px}
     .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:19px}
     h2{margin:0;font-size:30px;letter-spacing:-.045em}
@@ -134,10 +134,10 @@
           <div><dt>Host</dt><dd>HP Z2 SFF G4</dd></div>
           <div><dt>Hypervisor</dt><dd>Proxmox VE</dd></div>
           <div><dt>Firewall + DHCP</dt><dd>OPNsense</dd></div>
-          <div><dt>Services</dt><dd>Website staging · Smart home · DNS · Monitoring</dd></div>
           <div><dt>Network</dt><dd>Home LAN + 3 active VLANs</dd></div>
-          <div><dt>Infrastructure projects</dt><dd>14</dd></div>
-          <div><dt>Automation projects</dt><dd>2</dd></div>
+          <div><dt>Services</dt><dd>Website staging · Smart home · DNS · Monitoring</dd></div>
+          <div><dt>Technology</dt><dd>Nginx · Frigate · Docker · BIND · Uptime Kuma</dd></div>
+          <div><dt>Projects</dt><dd>14 infrastructure · 2 automation</dd></div>
           <div><dt>Lab notes</dt><dd>48</dd></div>
           <div><dt>Running since</dt><dd>September 2026</dd></div>
         </dl>

@@ -100,6 +100,11 @@
     .footer-inner{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
     @media(max-width:800px){.hero{grid-template-columns:1fr}.projects,.automation-projects{grid-template-columns:1fr}.card p{min-height:0}.automation-project{min-height:0}.posts{grid-template-columns:1fr}.lessons{grid-template-columns:1fr}}
     @media(max-width:560px){.nav{align-items:flex-start;flex-direction:column}.links{gap:15px}.post{grid-template-columns:1fr;gap:7px}.section{padding-top:44px}.wrap{width:min(100% - 28px,1100px)}}
+    @media(max-width:560px){
+      .snapshot dl div{grid-template-columns:minmax(0,1fr);gap:8px;padding:14px 0}
+      .snapshot dd{justify-content:flex-start;gap:6px}
+      .snapshot dd span{max-width:100%;font-size:11px;white-space:normal;overflow-wrap:anywhere}
+    }
   </style>
 </head>
 <body>

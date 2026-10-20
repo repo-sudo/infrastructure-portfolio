@@ -31,7 +31,7 @@ Project records describe the build, current state, and remaining checks.
 
 - [AUT-001: Website deployment automation](automation/01-website-deployment-automation/README.md)
 - [AUT-002: Homepage latest content sync](automation/02-homepage-latest-content-sync/README.md)
-- [AUT-006: Web server configuration and deployment with Ansible](automation/06-ansible-web-server-deployment/README.md) — deployed the portfolio to a fresh Debian VM, verified idempotence and restored a stopped nginx service.
+- [AUT-003: Web server configuration and deployment with Ansible](automation/03-ansible-web-server-deployment/README.md) — deployed the portfolio to a fresh Debian VM, verified idempotence and restored a stopped nginx service.
 
 ## Current website workflow
 

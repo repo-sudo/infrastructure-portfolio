@@ -17,7 +17,7 @@ The sources stay oldest-to-newest. The generator replaces the three marked secti
 The homepage therefore contains three generated preview areas:
 
 - **Latest projects:** the newest three project cards.
-- **Latest automation:** the newest two entries using the `tag active` class on `automation.html` (currently AUT-002 and AUT-006, including entries labelled Tested).
+- **Latest automation:** the newest two entries using the `tag active` class on `automation.html` (currently AUT-002 and AUT-003, including entries labelled Tested).
 - **Latest lab notes:** the newest four notes from `lab-notes.html`.
 
 ## Automatic workflow

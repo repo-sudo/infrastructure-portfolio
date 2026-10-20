@@ -1,4 +1,4 @@
-# AUT-006: Web server configuration and deployment with Ansible
+# AUT-003: Web server configuration and deployment with Ansible
 
 **Status:** Tested on a dedicated Debian VM  
 **Build:** 19–20 October 2026  

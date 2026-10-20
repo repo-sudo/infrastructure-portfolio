@@ -1,4 +1,4 @@
-# AUT-006 validation record
+# AUT-003 validation record
 
 Results below were supplied from the user's lab execution on 20 October 2026.
 

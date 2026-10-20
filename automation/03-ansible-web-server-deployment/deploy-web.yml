@@ -1,0 +1,102 @@
+---
+- name: Configure nginx and deploy the portfolio
+  hosts: webservers
+  become: true
+
+  vars:
+    repo_url: https://github.com/repo-sudo/infrastructure-portfolio.git
+    repo_version: draft
+    repo_path: /opt/infrastructure-portfolio
+    website_pages:
+      - index.html
+      - projects.html
+      - automation.html
+      - topology.html
+      - lab-notes.html
+      - about.html
+
+  tasks:
+    - name: Install nginx and Git
+      ansible.builtin.apt:
+        name:
+          - nginx
+          - git
+          - ca-certificates
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Download the website repository
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ repo_path }}"
+        version: "{{ repo_version }}"
+        umask: "0022"
+      register: website_checkout
+      environment:
+        GIT_TERMINAL_PROMPT: "0"
+
+    - name: Configure the nginx website
+      ansible.builtin.copy:
+        dest: /etc/nginx/sites-available/portfolio
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          server {
+              listen 80 default_server;
+              server_name _;
+              root {{ repo_path }}/website;
+              index index.html;
+
+              location / {
+                  try_files $uri $uri/ =404;
+              }
+
+              location ~ /\. {
+                  deny all;
+              }
+          }
+      notify: Reload nginx
+
+    - name: Disable the default nginx site
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Reload nginx
+
+    - name: Enable the portfolio site
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/portfolio
+        dest: /etc/nginx/sites-enabled/portfolio
+        state: link
+      notify: Reload nginx
+
+    - name: Validate nginx configuration
+      ansible.builtin.command: nginx -t
+      changed_when: false
+
+    - name: Start nginx and enable it at boot
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Apply pending configuration changes
+      ansible.builtin.meta: flush_handlers
+
+    - name: Verify all six website pages respond
+      ansible.builtin.uri:
+        url: "http://127.0.0.1/{{ item }}"
+        status_code: 200
+      loop: "{{ website_pages }}"
+
+    - name: Show the deployed Git commit
+      ansible.builtin.debug:
+        msg: "Deployed commit: {{ website_checkout.after }}"
+
+  handlers:
+    - name: Reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded

@@ -1,6 +1,6 @@
 # Infrastructure portfolio
 
-Hands-on projects from a Proxmox lab: Linux, Windows Server, OPNsense, VLANs, DNS, monitoring, backup/recovery, and deployment automation. Cloud and infrastructure-as-code work is on the roadmap.
+Hands-on projects from a Proxmox lab: Linux, Windows Server, OPNsense, VLANs, DNS, monitoring, backup/recovery, and deployment automation. Ansible configuration and deployment is now tested; cloud provisioning is on the roadmap.
 
 ## Network topology
 
@@ -26,6 +26,12 @@ The [current logical topology](docs/network-topology.md) shows the home LAN, VLA
 
 Project records describe the build, current state, and remaining checks.
 
+
+## Automation
+
+- [AUT-001: Website deployment automation](automation/01-website-deployment-automation/README.md)
+- [AUT-002: Homepage latest content sync](automation/02-homepage-latest-content-sync/README.md)
+- [AUT-006: Web server configuration and deployment with Ansible](automation/06-ansible-web-server-deployment/README.md) — deployed the portfolio to a fresh Debian VM, verified idempotence and restored a stopped nginx service.
 
 ## Current website workflow
 

@@ -2,7 +2,7 @@
 
 ## Goal
 
-Keep homepage previews current automatically: the latest three projects, two active automation entries, and four lab notes are stored directly in HTML.
+Keep homepage previews current automatically: the latest three projects, two implemented automation entries, and four lab notes are stored directly in HTML.
 
 ## Sources and output
 
@@ -17,7 +17,7 @@ The sources stay oldest-to-newest. The generator replaces the three marked secti
 The homepage therefore contains three generated preview areas:
 
 - **Latest projects:** the newest three project cards.
-- **Latest automation:** the newest two entries marked `Active` on `automation.html` (currently AUT-001 and AUT-002).
+- **Latest automation:** the newest two entries using the `tag active` class on `automation.html` (currently AUT-002 and AUT-006, including entries labelled Tested).
 - **Latest lab notes:** the newest four notes from `lab-notes.html`.
 
 ## Automatic workflow

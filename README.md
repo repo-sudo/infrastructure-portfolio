@@ -1,10 +1,10 @@
 # Infrastructure portfolio
 
-Hands-on projects from a Proxmox lab: Linux, Windows Server, OPNsense, VLANs, DNS, monitoring, backup/recovery, and deployment automation. Ansible configuration and deployment is now tested; cloud provisioning is on the roadmap.
+Hands-on projects from a Proxmox lab: Linux, Windows Server, OPNsense, VLANs, DNS, monitoring, media streaming, backup/recovery, and deployment automation. Ansible configuration and deployment is now tested; cloud provisioning is on the roadmap.
 
 ## Network topology
 
-The [current logical topology](docs/network-topology.md) shows the home LAN, VLANs 10/20/30, OPNsense boundaries, internal DNS and restricted remote VPN access without publishing addressing or configuration details.
+The [current logical topology](docs/network-topology.md) shows the home LAN, VLANs 10/20/30/40, OPNsense boundaries, internal DNS, media streaming and restricted remote VPN access without publishing addressing or configuration details.
 
 ## Projects
 
@@ -24,6 +24,8 @@ The [current logical topology](docs/network-topology.md) shows the home LAN, VLA
 
 14. [Public portfolio mirror](projects/14-public-portfolio-mirror/README.md)  serves the public site from GitHub Pages while keeping `web01` internal.
 
+15. [Jellyfin media server](projects/15-jellyfin-media-server/README.md)  deployed media01 in VLAN 40, separated SSD configuration from HDD media storage, resolved DNS recursion permissions, and verified phone access and TV casting.
+
 Project records describe the build, current state, and remaining checks.
 
 
@@ -42,3 +44,4 @@ Project records describe the build, current state, and remaining checks.
 5. GitHub Actions runs AUT-002 on `main` and publishes the generated site to GitHub Pages.
 
 The [review and publication runbook](docs/website-review-and-publication.md) covers setup and recovery. Because the repository is public, draft source is publicly readable.
+
